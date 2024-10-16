@@ -11,7 +11,7 @@ module.exports = {
         'normal': '1.5rem',
         'mnormal': '1rem',
         'nav': '1rem',
-        'mnav': '0.75rem',
+        'mnav': '0.6rem',
         'imgcap': '0.75rem',
         'mimgcap': '0.5rem',
         'h3' : '2rem',
