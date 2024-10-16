@@ -1,6 +1,5 @@
 import './index.css';
 import React, { useState } from 'react';
-import { useHistory  } from 'react-router-dom';
 
 const AddPost = () => {
   const [caption, setCaption] = useState('');
@@ -9,7 +8,7 @@ const AddPost = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const correctPassword = 'MyPortfolioJA20242002'; 
-  const navigate = useHistory();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
@@ -37,7 +36,7 @@ const AddPost = () => {
       setCaption('');
       setImage(null);
 
-      navigate.push('/mini-blog');
+     
     } catch (error) {
       console.error(error);  
     }
