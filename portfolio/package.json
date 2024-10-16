@@ -39,6 +39,5 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.13"
-  },
-  "homepage": "https://portfolio-zeta-gold-80.vercel.app/"
+  }
 }
