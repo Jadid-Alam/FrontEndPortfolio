@@ -151,7 +151,7 @@ const ContactMe = () => {
                           ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
                       
 
-                      <li className={`p-1 md:p-2  transform transition  hover:text-purple-600 
+                      <li className={`p-1 md:p-2  transform transition  hover:text-purple-600 text-right md:text-left
                       hover:translate-y-1 hover:transform hover:transition ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
                         <Link to='/contact-me'>Contact Me</Link>
                       </li>
