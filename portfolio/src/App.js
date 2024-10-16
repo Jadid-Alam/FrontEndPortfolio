@@ -33,6 +33,9 @@ function App() {
             <Route path='/add-post'>
               <AddPost />
             </Route>
+            <Route >
+              <Home />
+            </Route>
           </Switch>
       </div>
     </Router>
