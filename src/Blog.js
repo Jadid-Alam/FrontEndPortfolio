@@ -269,7 +269,7 @@ const Blog = () => {
                         </div>
                     </div>
                     ))) : (
-                      <p className='py-40'>No posts available</p>
+                      <p className={`py-40 w-[100vw] h-[100vh] ${darkMode ? 'text-yellow-100' : 'text-black'}`}>No posts available</p>
                   )}
                   
                 </div>
