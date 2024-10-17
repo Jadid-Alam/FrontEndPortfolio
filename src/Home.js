@@ -12,7 +12,7 @@ const Home = () => {
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
     const [darkMode, setDarkMode] = useState(() => {
-      const savedMode = sessionStorage.getItem('darkMode');
+      const savedMode = localStorage.getItem('darkMode');
       return savedMode ? JSON.parse(savedMode) : false;
     });
 
@@ -38,7 +38,7 @@ const Home = () => {
         {
             setDarkMode(true);
         }
-        sessionStorage.setItem('darkMode', JSON.stringify(darkMode));
+        localStorage.setItem('darkMode', JSON.stringify(darkMode));
     };
     
     const changeColor = () => {
@@ -152,7 +152,8 @@ const Home = () => {
                             ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
                         <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition text-right md:text-left
                             ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
-                        <button onClick={toggleDarkMode}><img src={darkMode ? lightModeImage : darkModeImage} style={{ width: '35px', height: 'auto' }} /></button>
+                        <button onClick={toggleDarkMode}><img className='w-[15px] md:w-[35px] h-auto'
+                         src={darkMode ? lightModeImage : darkModeImage}/></button>
                         
                     </ul>
                   </nav>

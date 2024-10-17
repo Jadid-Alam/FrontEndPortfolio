@@ -15,7 +15,7 @@ const ContactMe = () => {
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
     const [darkMode, setDarkMode] = useState(() => {
-      const savedMode = sessionStorage.getItem('darkMode');
+      const savedMode = localStorage.getItem('darkMode');
       return savedMode ? JSON.parse(savedMode) : false;
     });
 
@@ -41,7 +41,7 @@ const ContactMe = () => {
       {
           setDarkMode(true);
       }
-      sessionStorage.setItem('darkMode', JSON.stringify(darkMode));
+      localStorage.setItem('darkMode', JSON.stringify(darkMode));
     };
     
     const changeColor = () => {
@@ -155,7 +155,7 @@ const ContactMe = () => {
                       hover:translate-y-1 hover:transform hover:transition ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
                         <Link to='/contact-me'>Contact Me</Link>
                       </li>
-                      <button onClick={toggleDarkMode}><img  src={darkMode ? lightModeImage : darkModeImage} style={{ width: '35px', height: 'auto' }} alt='DarkMode button' /></button>
+                      <button onClick={toggleDarkMode}><img  src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' alt='DarkMode button' /></button>
                       
                   </ul>
                 </nav>
