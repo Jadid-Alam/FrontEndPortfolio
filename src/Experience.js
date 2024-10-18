@@ -1,6 +1,5 @@
 import './index.css';
 import React , {useState, useEffect} from 'react';
-import myImage from './images/LeetcodeProfile.PNG';
 import darkModeImage from './images/night-mode.png';
 import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
@@ -125,7 +124,7 @@ const Experience = () => {
   
     const colorString = `rgb(${color.r}, ${color.g}, ${color.b})`;
   return (
-      <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
+      <div className={` fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
         
         <header className={`fixed z-20 top-0 left-0 w-full text-mnav font-semibold md:text-nav  md:font-semibold fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
               <h4 className="p-1 max-w-40 md:p-2" style={{ color: colorString }}>Jadid Alam</h4>
@@ -156,7 +155,7 @@ const Experience = () => {
                           ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
                       <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition text-right md:text-left
                           ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
-                      <button onClick={toggleDarkMode}><img src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' /></button>
+                      <button onClick={toggleDarkMode}><img className='w-[15px] md:w-[35px] h-auto' src={darkMode ? lightModeImage : darkModeImage} /></button>
                       
                   </ul>
                 </nav>
