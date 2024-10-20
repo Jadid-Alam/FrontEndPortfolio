@@ -202,7 +202,7 @@ const Home = () => {
                       <p id='p4' className={`p-1 py-2 md:p-3 md:py-4 text-left
                       fade-in duration-1000 ease-in-out ${fading['p4'] ? 'opacity-100' : 'opacity-0'}
                       ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
-                          After a year at the <b style={{ color: colorString }}>University of Oxford</b> studing <b style={{ color: colorString }}>Engineering</b>, I realized my true interest lay in Computer Science, prompting my transfer to Queen Mary. Here, I am excited to deepen my technical 
+                          After a year at the <b style={{ color: colorString }}>University of Oxford</b> studing <b style={{ color: colorString }}>Engineering</b>, I realised my true interest lay in Computer Science, prompting my transfer to Queen Mary. Here, I am excited to deepen my technical 
                           knowledge and gain practical experience, particularly through an individual project in my final year that will allow me to explore my specific interests within the field.
                       </p>
                   </div>
