@@ -126,7 +126,7 @@ const Experience = () => {
   return (
       <div className={` fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
         
-        <header className={`fixed z-20 top-0 left-0 w-full text-mnav font-semibold md:text-nav  md:font-semibold fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
+        <header className={`fixed z-20 top-0 left-0 w-[99vw] text-mnav font-semibold md:text-nav  md:font-semibold fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
               <h4 className="p-1 max-w-40 md:p-2" style={{ color: colorString }}>Jadid Alam</h4>
                 <nav className="mr-auto">
                   <ul className="flex">
