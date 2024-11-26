@@ -4,6 +4,7 @@ import myImage from './images/LeetcodeProfile.PNG';
 import darkModeImage from './images/night-mode.png';
 import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Home = () => {
 
@@ -12,8 +13,12 @@ const Home = () => {
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
     const [darkMode, setDarkMode] = useState(() => {
+      //const savedMode = Cookies.get('darkMode');
       const savedMode = localStorage.getItem('darkMode');
-      return savedMode ? JSON.parse(savedMode) : false;
+      if (savedMode !== undefined && savedMode !== null) {
+        return savedMode;
+      }
+      return false;
     });
 
     const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
@@ -31,14 +36,21 @@ const Home = () => {
     };
 
     const toggleDarkMode = () => {
-        if (darkMode) {
-            setDarkMode(false);
-        }
-        else
-        {
-            setDarkMode(true);
-        }
-        localStorage.setItem('darkMode', JSON.stringify(darkMode));
+      if (darkMode) {
+          setDarkMode(false);
+          // Cookies.remove('darkMode');
+          // Cookies.set('darkMode', false, { expires: 1 });
+          localStorage.removeItem('darkMode');
+          localStorage.setItem('darkMode', false);
+      }
+      else
+      {
+          setDarkMode(true);
+          // Cookies.remove('darkMode');
+          // Cookies.set('darkMode', true, { expires: 1 });
+          localStorage.removeItem('darkMode');
+          localStorage.setItem('darkMode', true);
+      }  
     };
     
     const changeColor = () => {
@@ -140,7 +152,7 @@ const Home = () => {
                         hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
 
                         <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/mini-blog'>Mini-Blog</Link></li>
+                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/mini-blog'>Blog</Link></li>
                         
                         
                     </ul>
