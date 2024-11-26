@@ -4,6 +4,7 @@ import darkModeImage from './images/night-mode.png';
 import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
 import sendIcon from './images/send.png';
+import Cookies from 'js-cookie';
 
 const Blog = () => {
 
@@ -12,8 +13,12 @@ const Blog = () => {
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
     const [darkMode, setDarkMode] = useState(() => {
+      //const savedMode = Cookies.get('darkMode');
       const savedMode = localStorage.getItem('darkMode');
-      return savedMode ? JSON.parse(savedMode) : false;
+      if (savedMode !== undefined && savedMode !== null) {
+        return savedMode;
+      }
+      return false;
     });
     const [posts, setPosts] = useState([]);
     const [comments, setComments] = useState([]);
@@ -25,13 +30,21 @@ const Blog = () => {
     const toggleDarkMode = () => {
       if (darkMode) {
           setDarkMode(false);
+          Cookies.remove('darkMode');
+          // Cookies.set('darkMode', false, { expires: 1 });
+          localStorage.removeItem('darkMode');
+          localStorage.setItem('darkMode', false);
       }
       else
       {
           setDarkMode(true);
-      }
-      localStorage.setItem('darkMode', JSON.stringify(darkMode));
-    };
+          // Cookies.remove('darkMode');
+          // Cookies.set('darkMode', true, { expires: 1 });
+          localStorage.removeItem('darkMode');
+          localStorage.setItem('darkMode', true);
+      }  
+  };
+
 
     const handleDownload = () => {
       const fileUrl = "/Jadid-Alam-CV.pdf";
@@ -217,7 +230,7 @@ const Blog = () => {
                         
                         <li className={`p-1 md:p-2  transform transition  hover:text-purple-600 
                         hover:translate-y-1 hover:transform hover:transition ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
-                          <Link to='/mini-blog'>Mini-Blog</Link>
+                          <Link to='/mini-blog'>Blog</Link>
                         </li>
                         
                     </ul>

@@ -7,6 +7,7 @@ import gmailImage from './images/gmail.png';
 import linkedinImage from './images/linkedin.png';
 import githubImage from './images/github.png';
 import phoneImage from './images/telephone.png';
+import Cookies from 'js-cookie';
 
 const ContactMe = () => {
 
@@ -15,8 +16,12 @@ const ContactMe = () => {
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
     const [darkMode, setDarkMode] = useState(() => {
+      //const savedMode = Cookies.get('darkMode');
       const savedMode = localStorage.getItem('darkMode');
-      return savedMode ? JSON.parse(savedMode) : false;
+      if (savedMode !== undefined && savedMode !== null) {
+        return savedMode;
+      }
+      return false;
     });
 
     const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
@@ -35,13 +40,20 @@ const ContactMe = () => {
 
     const toggleDarkMode = () => {
       if (darkMode) {
-          setDarkMode(false);
+        setDarkMode(false);
+        // Cookies.remove('darkMode');
+        // Cookies.set('darkMode', false, { expires: 1 });
+        localStorage.removeItem('darkMode');
+        localStorage.setItem('darkMode', false);
       }
       else
       {
           setDarkMode(true);
-      }
-      localStorage.setItem('darkMode', JSON.stringify(darkMode));
+          // Cookies.remove('darkMode');
+          // Cookies.set('darkMode', true, { expires: 1 });
+          localStorage.removeItem('darkMode');
+          localStorage.setItem('darkMode', true);
+      }  
     };
     
     const changeColor = () => {
@@ -139,7 +151,7 @@ const ContactMe = () => {
                       hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
 
                       <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                      hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/mini-blog'>Mini-Blog</Link></li>
+                      hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/mini-blog'>Blog</Link></li>
                       
                       
                   </ul>
