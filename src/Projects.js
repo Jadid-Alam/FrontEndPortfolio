@@ -360,7 +360,7 @@ const Projects = ({darkMode, setDarkMode}) => {
             </main>
 
             <footer>
-                <h6 className={`content z-10 mt-16 mb-2 text-center md:mt-44 md:mb-4 ${darkMode ? 'text-yellow-100' : 'text-black'}`}>&copy; 2024 Jadid Alam. All rights reserved.</h6>
+                <h6 className={`content z-10 mt-16 mb-2 text-center md:mt-44 md:mb-4 ${darkMode ? 'text-yellow-100' : 'text-black'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
             </footer>
       </div>
   );
