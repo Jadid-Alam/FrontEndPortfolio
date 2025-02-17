@@ -10,32 +10,23 @@ import AddPost from './AddPost';
 
 function App() {
 
+  const [darkMode, setDarkMode] = useState(false);
+
+  const renderWithProps = (Component) => (props) => {
+    window.scrollTo(0, 0);
+    return <Component {...props} darkMode={darkMode} setDarkMode={setDarkMode} />;
+  };
+
   return (
     <Router>
       <div className='App'> 
-          
           <Switch>
-            <Route exact path='/'>
-              <Home />
-            </Route>
-            <Route path='/mini-blog'>
-              <Blog />
-            </Route>
-            <Route path='/experience'>
-              <Experience />
-            </Route>
-            <Route path='/projects'>
-              <Projects />
-            </Route>
-            <Route path='/contact-me'>
-              <ContactMe />
-            </Route>
-            <Route path='/add-post'>
-              <AddPost />
-            </Route>
-            <Route >
-              <Home />
-            </Route>
+            <Route exact path="/" render={renderWithProps(Home)} />
+            <Route path="/mini-blog" render={renderWithProps(Blog)} />
+            <Route path="/experience" render={renderWithProps(Experience)} />
+            <Route path="/projects" render={renderWithProps(Projects)} />
+            <Route path="/contact-me" render={renderWithProps(ContactMe)} />
+            <Route path="/add-post" component={AddPost} />
           </Switch>
       </div>
     </Router>

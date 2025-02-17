@@ -5,46 +5,20 @@ import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
 import sendIcon from './images/send.png';
 import Cookies from 'js-cookie';
+import downImg from './images/downArrow.png';
 
-const Blog = () => {
+const Blog = ({darkMode, setDarkMode}) => {
 
     const [color, setColor] = useState({r:64, g:0, b:140});
     const [inverse, setInverse] = useState(false);
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
-    const [darkMode, setDarkMode] = useState(() => {
-      //const savedMode = Cookies.get('darkMode');
-      const savedMode = localStorage.getItem('darkMode');
-      if (savedMode !== undefined && savedMode !== null) {
-        return savedMode;
-      }
-      return false;
-    });
     const [posts, setPosts] = useState([]);
     const [comments, setComments] = useState([]);
     const [reload, setReload] = useState(false);
 
     const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
     const apiUrl = process.env.REACT_APP_API_URL;
-
-    const toggleDarkMode = () => {
-      if (darkMode) {
-          setDarkMode(false);
-          Cookies.remove('darkMode');
-          // Cookies.set('darkMode', false, { expires: 1 });
-          localStorage.removeItem('darkMode');
-          localStorage.setItem('darkMode', false);
-      }
-      else
-      {
-          setDarkMode(true);
-          // Cookies.remove('darkMode');
-          // Cookies.set('darkMode', true, { expires: 1 });
-          localStorage.removeItem('darkMode');
-          localStorage.setItem('darkMode', true);
-      }  
-  };
-
 
     const handleDownload = () => {
       const fileUrl = "/Jadid-Alam-CV.pdf";
@@ -208,41 +182,38 @@ const Blog = () => {
     };
   }, []);
 
-
+    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold md:text-nav md:font-semibold fade-in duration-1000 ease-in-out';
+    const logoStyle = 'p-1 max-w-40 md:p-2';
+    const navlinkStyle = 'p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
+    const [hideNav, setHideNav] = useState(true);
+        useEffect(() => {
+          if (window.innerWidth > 768) {
+            setHideNav(true);
+          }
+        }
+        , [window.innerWidth]);
   return (
       <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
 
         <div className={`${darkMode ? 'gradient-dark' : 'gradient'}`} style={fadingCircle}></div>
 
-          <header className={`fixed z-30 top-0 left-0 w-full text-mnav font-semibold md:text-nav md:font-semibold fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
-                <h4 className="p-1 max-w-40 md:p-2" style={{ color: colorString }}>Jadid Alam</h4>
-                  <nav className="mr-auto">
-                    <ul className="flex">
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/'>Home</Link></li>
-
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
-
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
-
-                        
-                        <li className={`p-1 md:p-2  transform transition  hover:text-purple-600 
-                        hover:translate-y-1 hover:transform hover:transition ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
-                          <Link to='/mini-blog'>Blog</Link>
-                        </li>
-                        
+          <header className={`${headerStyle} ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
+                <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
+                <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
+                  <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={downImg}/></button>
+                  <ul id='navBarMobile' className={` md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block bg-yellow-50 w-[30%] sm:w-[15%] text-center"}`}>
+                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/'>Home</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}><Link to='/mini-blog'>Blog</Link></li>
                     </ul>
                   </nav>
                   
                   <nav className="mr-1 items-end sm:mr-2 md:mr-4">
                     <ul className="flex justify-end">
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition
-                            ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition text-right md:text-left
-                            ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
-                        <button onClick={toggleDarkMode}><img src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' /></button>
+                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
+                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
+                        <button onClick={() => setDarkMode(prevMode => !prevMode)}><img src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' /></button>
                         
                     </ul>
                   </nav>

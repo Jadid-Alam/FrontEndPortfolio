@@ -5,22 +5,15 @@ import darkModeImage from './images/night-mode.png';
 import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import downImg from './images/downArrow.png';
+import { use } from 'react';
 
-const Home = () => {
-
+const Home = ({darkMode, setDarkMode}) => { 
     const [color, setColor] = useState({r:64, g:0, b:140});
     const [inverse, setInverse] = useState(false);
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
-    const [darkMode, setDarkMode] = useState(() => {
-      //const savedMode = Cookies.get('darkMode');
-      const savedMode = localStorage.getItem('darkMode');
-      if (savedMode !== undefined && savedMode !== null) {
-        return savedMode;
-      }
-      return false;
-    });
-
+    const [hideNav, setHideNav] = useState(true);
     const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
 
     const handleDownload = () => {
@@ -33,24 +26,6 @@ const Home = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    };
-
-    const toggleDarkMode = () => {
-      if (darkMode) {
-          setDarkMode(false);
-          // Cookies.remove('darkMode');
-          // Cookies.set('darkMode', false, { expires: 1 });
-          localStorage.removeItem('darkMode');
-          localStorage.setItem('darkMode', false);
-      }
-      else
-      {
-          setDarkMode(true);
-          // Cookies.remove('darkMode');
-          // Cookies.set('darkMode', true, { expires: 1 });
-          localStorage.removeItem('darkMode');
-          localStorage.setItem('darkMode', true);
-      }  
     };
     
     const changeColor = () => {
@@ -131,69 +106,68 @@ const Home = () => {
     };
 
     const colorString = `rgb(${color.r}, ${color.g}, ${color.b})`;
+    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold md:text-nav md:font-semibold fade-in duration-1000 ease-in-out';
+    const logoStyle = 'p-1 max-w-40 md:p-2';
+    const navlinkStyle = 'p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
+    const textStyle = 'py-96 p-2 text-mheading md:p-3 md:py-96 md:text-heading fade-in duration-1000 ease-in-out';
+    const textStyle1 = 'p-1 py-2 md:p-3 md:py-5 fade-in duration-1000 ease-in-out';
+    const textStyle2 = 'p-1 py-2 md:p-3 md:py-4 text-left fade-in duration-1000 ease-in-out';
+
+    useEffect(() => {
+      if (window.innerWidth > 768) {
+        setHideNav(true);
+      }
+    }
+    , [window.innerWidth]);
+
   return (
       <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
 
         <div className={`${darkMode ? 'gradient-dark' : 'gradient'}`} style={fadingCircle}></div>
 
-          <header className={`fixed z-20 top-0 left-0 w-full text-mnav font-semibold md:text-nav md:font-semibold fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
-                <h4 className="p-1 max-w-40 md:p-2" style={{ color: colorString }}>Jadid Alam</h4>
-                  <nav className="mr-auto">
-                    <ul className="flex">
-                        <li className={`p-1 md:p-2  transform transition  hover:text-purple-600 
-                        hover:translate-y-1 hover:transform hover:transition ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
-                          <Link to='/'>Home</Link>
-                        </li>
-
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
-
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
-
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 
-                        hover:transform hover:transition ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/mini-blog'>Blog</Link></li>
-                        
-                        
-                    </ul>
-                  </nav>
-                  
-                  <nav className="mr-1 items-end sm:mr-2 md:mr-4">
-                    <ul className="flex justify-end">
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition
-                            ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
-                        <li className={`p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition text-right md:text-left
-                            ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
-                        <button onClick={toggleDarkMode}><img className='w-[15px] md:w-[35px] h-auto'
-                         src={darkMode ? lightModeImage : darkModeImage}/></button>
-                        
-                    </ul>
-                  </nav>
+          <header className={`${headerStyle} ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
+                <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
+                <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
+                  <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={downImg}/></button>
+                  <ul id='navBarMobile' className={` md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block bg-yellow-50 w-[30%] sm:w-[15%] text-center"}`}>
+                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}><Link to='/'>Home</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/mini-blog'>Blog</Link></li>
+                  </ul>
+                </nav>
+                
+                <nav className="mr-1 items-end sm:mr-2 md:mr-4">
+                  <ul className="flex justify-end">
+                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
+                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
+                      <button onClick={() => setDarkMode(prevMode => !prevMode)}>
+                        <img className='w-[15px] md:w-[35px] h-auto' src={darkMode ? lightModeImage : darkModeImage}/>
+                      </button>
+                  </ul>
+                </nav>
+                
             </header>
 
             <main>
                 <div className='content z-10 text-center text-mnormal md:text-normal'>
                   <div>
-                      <h2 id='title' className={`py-96 p-2 text-mheading md:p-3 md:py-96 md:text-heading 
-                        fade-in duration-1000 ease-in-out ${fading['title'] ? 'opacity-100' : 'opacity-0'} 
+                      <h2 id='title' className={`${textStyle} ${fading['title'] ? 'opacity-100' : 'opacity-0'} 
                         ${darkMode ? 'text-yellow-100' : 'text-black'}`}>I am <b style={{ color: colorString }}>Jadid Alam</b>, 
                         a programmer pursuing a career in the tech industry.</h2>
                   </div>
 
                   <div className="py-4 md:py-8">
-                        <p id='p1' className={`p-1 py-2 md:p-3 md:py-5
-                            fade-in duration-1000 ease-in-out ${fading['p1'] ? 'opacity-100' : 'opacity-0'}
+                        <p id='p1' className={`${textStyle1} ${fading['p1'] ? 'opacity-100' : 'opacity-0'}
                             ${darkMode ? 'text-yellow-100' : 'text-black'}`}>What makes people feel content with their lives? Owning expensive cars? Living in a mansion? Neither. 
                             It's having a sense of purpose, goals to strive for!
                         </p>
-                      <p id='p2' className={`p-1 py-2 md:p-3 md:py-5
-                            fade-in duration-500 ease-in-out ${fading['p2'] ? 'opacity-100' : 'opacity-0'}
+                      <p id='p2' className={`${textStyle1} ${fading['p2'] ? 'opacity-100' : 'opacity-0'}
                             ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Therefore, I make it a priority to set clear goals for myself and organize my daily activities to achieve them. 
                           For instance, I focus on completing challenges on LeetCode to enhance my coding skills and improve my acceptance rate.
                       </p>
                       
-                      <figure id='img' className={`p-1 py-5 md:p-3 md:py-10
-                        fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                      <figure id='img' className={`p-1 py-5 md:p-3 md:py-10 fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
                             <a href='https://leetcode.com/u/ec23119/'><img src={myImage} alt="LeetCode Profile" style={{ width: '1500px', height: 'auto' }} /></a>
                           <figcaption className='text-mimgcap md:text-imgcap text-gray-600'>LeetCode Profile</figcaption>
                       </figure>
@@ -205,14 +179,12 @@ const Home = () => {
                       fade-in duration-1000 ease-in-out ${fading['title1'] ? 'opacity-100' : 'opacity-0'}
                       ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Academic History:</h3>
 
-                      <p id='p3' className={`p-1 py-2 md:p-3 md:py-4 text-left
-                      fade-in duration-1000 ease-in-out ${fading['p3'] ? 'opacity-100' : 'opacity-0'}
+                      <p id='p3' className={`${textStyle2} ${fading['p3'] ? 'opacity-100' : 'opacity-0'}
                       ${darkMode ? 'text-yellow-100' : 'text-black'}`}>I am currently studying <b style={{ color: colorString }}>Computer Science</b> at <b style={{ color: colorString }}>Queen Mary University of London</b>, where I am exploring programming languages, data structures, and honing my skills as a programmer. 
                           My passion for Computer Science began in secondary school, but I initially pursued Engineering due to not taking the subject at GCSE.
                       </p>
 
-                      <p id='p4' className={`p-1 py-2 md:p-3 md:py-4 text-left
-                      fade-in duration-1000 ease-in-out ${fading['p4'] ? 'opacity-100' : 'opacity-0'}
+                      <p id='p4' className={`${textStyle2} ${fading['p4'] ? 'opacity-100' : 'opacity-0'}
                       ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
                           After a year at the <b style={{ color: colorString }}>University of Oxford</b> studing <b style={{ color: colorString }}>Engineering</b>, I realised my true interest lay in Computer Science, prompting my transfer to Queen Mary. Here, I am excited to deepen my technical 
                           knowledge and gain practical experience, particularly through an individual project in my final year that will allow me to explore my specific interests within the field.
