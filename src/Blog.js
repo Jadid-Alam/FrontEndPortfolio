@@ -4,8 +4,8 @@ import darkModeImage from './images/night-mode.png';
 import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
 import sendIcon from './images/send.png';
-import Cookies from 'js-cookie';
-import downImg from './images/downArrow.png';
+import downImg from './images/downArrowDark.png';
+import downImgDark from './images/downArrow.png';
 
 const Blog = ({darkMode, setDarkMode}) => {
 
@@ -200,8 +200,8 @@ const Blog = ({darkMode, setDarkMode}) => {
           <header className={`${headerStyle} ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
                 <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
                 <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
-                  <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={downImg}/></button>
-                  <ul id='navBarMobile' className={` md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block bg-yellow-50 w-[30%] sm:w-[15%] text-center"}`}>
+                  <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
+                  <ul id='navBarMobile' className={`${darkMode ? 'bg-gray-950' : 'bg-yellow-50'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
                         <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/'>Home</Link></li>
                         <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
                         <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
