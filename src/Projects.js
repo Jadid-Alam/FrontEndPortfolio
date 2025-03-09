@@ -153,7 +153,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                         <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/'>Home</Link></li>
                         <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
                         <li className={`${navlinkStyle} ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}><Link to='/projects'>Projects</Link></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/mini-blog'>Blog</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
                     </ul>
                   </nav>
                   
