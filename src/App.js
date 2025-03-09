@@ -1,12 +1,11 @@
 import './App.css';
-import React , {useState, useEffect} from 'react';
+import React , {useState} from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home';
-import Blog from './Blog';
+import Scramble from './Scramble';
 import Experience from './Experience';
 import Projects from './Projects';
 import ContactMe from './ContactMe';
-import AddPost from './AddPost';
 
 function App() {
 
@@ -22,11 +21,10 @@ function App() {
       <div className='App'> 
           <Switch>
             <Route exact path="/" render={renderWithProps(Home)} />
-            <Route path="/mini-blog" render={renderWithProps(Blog)} />
+            <Route path="/scramble-minigame" render={renderWithProps(Scramble)} />
             <Route path="/experience" render={renderWithProps(Experience)} />
             <Route path="/projects" render={renderWithProps(Projects)} />
             <Route path="/contact-me" render={renderWithProps(ContactMe)} />
-            <Route path="/add-post" component={AddPost} />
           </Switch>
       </div>
     </Router>
