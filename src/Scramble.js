@@ -79,9 +79,11 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const [winner, setWinner] = useState(0);
 
     const connectToMatch = () => {
-        const ws = new WebSocket("ws://127.0.0.1:8080"); // needs to be changed
+        const ws = new WebSocket("wss://13.49.68.112:443"); // needs to be changed
         ws.onopen = () => {
             socketRef.current = ws;
+            console.log("joined");
+            console.log("joined");
         };
 
         ws.onmessage = (event) => {
@@ -276,7 +278,8 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                         ref={inputRef}
                                         onKeyDown={handleKeyDown}
                                         type="text"
-                                        maxLength={7}
+                                        maxLength={5}
+                                        minLength={3}
                                         placeholder="Please input a Guess"
                                     />
                                     <button onClick={handleKeyDown}>submit</button>
