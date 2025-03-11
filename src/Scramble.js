@@ -79,7 +79,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const [winner, setWinner] = useState(0);
 
     const connectToMatch = () => {
-        const ws = new WebSocket("wss://16.171.255.8/ws/"); // ip
+        const ws = new WebSocket("wss://jadid-alam.duckdns.org/ws/");
         ws.onopen = () => {
             socketRef.current = ws;
             console.log("joined");
