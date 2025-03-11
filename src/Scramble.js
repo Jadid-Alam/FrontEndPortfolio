@@ -79,7 +79,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const [winner, setWinner] = useState(0);
 
     const connectToMatch = () => {
-        const ws = new WebSocket("wss://13.49.68.112:443"); // needs to be changed
+        const ws = new WebSocket("wss://16.171.255.8/ws/"); // needs to be changed
         ws.onopen = () => {
             socketRef.current = ws;
             console.log("joined");
