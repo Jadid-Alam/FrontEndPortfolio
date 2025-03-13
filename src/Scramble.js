@@ -11,7 +11,8 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const [color, setColor] = useState({r:64, g:0, b:140});
     const [inverse, setInverse] = useState(false);
     const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
-
+    const [page, setPage] = useState(0);
+    const gameState = useRef(0);
 
     const handleDownload = () => {
         const fileUrl = "/Jadid-Alam-CV.pdf";
@@ -77,12 +78,14 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const [myPts, setMyPts] = useState(0);
     const [oppPts, setOppPts] = useState(0);
     const [winner, setWinner] = useState(0);
+    const [reconnecting, setReconnecting] = useState(0);
 
     const connectToMatch = () => {
         const ws = new WebSocket("wss://jadid-alam.duckdns.org/ws/");
         ws.onopen = () => {
             socketRef.current = ws;
-            console.log("joined");
+            setPage(1)
+            setReconnecting(0)
             console.log("joined");
         };
 
@@ -130,12 +133,20 @@ const Scramble  = ({darkMode, setDarkMode}) => {
 
         ws.onerror = (error) => console.error("WebSocket Error:", error);
         ws.onclose = () => {
-            const interval = setInterval(() => {
+            if (socketRef.current !== null) {
+                const interval = setInterval(() => {
+                    resetGame();
+                }, 5000);
+                return () => {
+                    clearInterval(interval);
+                };
+            } else if (reconnecting < 6) {
+                console.log("reconnecting...");
+                setReconnecting(prev => prev+1);
+                setTimeout(() => connectToMatch(), 1000)
+            } else {
                 resetGame();
-            }, 5000);
-            return () => {
-                clearInterval(interval);
-            };
+            }
         }
     };
 
@@ -150,8 +161,6 @@ const Scramble  = ({darkMode, setDarkMode}) => {
         socketRef.current.send(d);
     };
 
-    const [page, setPage] = useState(0);
-
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             sendMessage("g:"+inputRef.current.value);
@@ -159,7 +168,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
         }
     };
 
-    const gameState = useRef(0);
+
     const [seconds, setSeconds] = useState(0);
 
     useEffect(() => {
@@ -188,7 +197,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     }
 
     useEffect(() => {
-        if (page === 1) {
+        if (page === 3) {
             connectToMatch();
         }
     }, [page]);
@@ -213,7 +222,17 @@ const Scramble  = ({darkMode, setDarkMode}) => {
         setMyPts(0);
         setOppPts(0);
         setWinner(0);
+        setReconnecting(0);
     }
+
+    // styles
+    const mainButtonStyle = `border b-2 block w-[40%] my-10 mx-auto p-4 ${darkMode ? 'text-purple-500' : 'text-black'}`;
+    const gameHeader = `text-gh my-20 mx-auto p-10 text-center ${darkMode ? 'text-purple-500' : 'text-black'}`;
+    const roomStyle = `text-heading m-gt border-2 flex w-full ${darkMode ? 'text-purple-500' : 'text-black'}`
+    const roomName = `border-2 text-left w-full`;
+    const roomFill = `border-2 w-full text-right`;
+    const transitionStyle = `text-center py-[20%] text-heading`;
+    const backButton = `block h-[5%] border-2 mx-2 text-centre`
 
     return (
         <div className={`min-h-screen fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
@@ -242,21 +261,21 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                 <div className='mt-10 md:mt-20 content z-10 text-mnormal md:text-normal w-full h-[90vh] md:h-[80.0vh] bg-white '>
                     {page === 1 ? (
                         <div className="block h-full">
-                            <button className="block" onClick={() => setPage(0)}>Back</button>
+                            <button className={backButton} onClick={() => setPage(0)}>Back</button>
                             {gameState.current === 0 ? (
-                                <ul>
+                                <ul className={`border-2 px-20 py-20 my-20 mx-20 justify-center`}>
                                     {matchNames.map((serverName, index) => {
                                         if (available.charAt(index) === '2') {
                                             return (
-                                                <li key={index} value={available.charAt(index)}>
-                                                    {serverName} : {available.charAt(index)}/2
+                                                <li className={roomStyle} key={index} value={available.charAt(index)}>
+                                                    <p className={roomName}>{serverName}:</p> <p className={roomFill}>{available.charAt(index)}/2</p>
                                                 </li>
                                             )
                                         }
                                         else return (
                                             <li key={index} value={available.charAt(index)}>
-                                                <button onClick={() => WaitingRoom(matchLetters[index])}>
-                                                    {serverName} : {available.charAt(index)}/2
+                                                <button className={roomStyle} onClick={() => WaitingRoom(matchLetters[index])}>
+                                                    <p className={roomName}>{serverName}:</p> <p className={roomFill}>{available.charAt(index)}/2</p>
                                                 </button>
                                             </li>
                                         );
@@ -264,37 +283,48 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                 </ul>
                             ) : gameState.current === 1 ? (
                                 <div>
-                                    <p>Starting in: {seconds}</p>
+                                    <p className={transitionStyle}>Starting in: {seconds}</p>
                                 </div>
                             ) : gameState.current === 2 ? (
-                                <div>
-                                    <p>Time Left: {seconds}</p>
-                                    <p>You</p>
-                                    <p>{myPts}</p>
-                                    <p>Opponent</p>
-                                    <p>{oppPts}</p>
-                                    <p>{anagram}</p>
-                                    <input
-                                        ref={inputRef}
-                                        onKeyDown={handleKeyDown}
-                                        type="text"
-                                        maxLength={5}
-                                        minLength={3}
-                                        placeholder="Please input a Guess"
-                                    />
-                                    <button onClick={handleKeyDown}>submit</button>
+                                <div className={`border-2 h-[95%]`}>
+                                    <p className={`text-center h-[5%]`}>Time Remaining: {seconds}</p>
+                                    <div className={`grid grid-cols-[15%_70%_15%] h-[95%]`}>
+                                        <div className={`text-left ml-2`}>
+                                            <p>You</p>
+                                            <p>{myPts}</p>
+                                            <p>adding pts</p>
+                                        </div>
+                                        <div className={``}>
+                                            <p className={`text-center text-gh font-bold`}>{anagram}</p>
+                                            <input
+                                                className={`block mx-auto w-[90%] h-[10%] text-gt text-center font-bold border-2 m-6`}
+                                                ref={inputRef}
+                                                onKeyDown={handleKeyDown}
+                                                type="text"
+                                                maxLength={anagram.length}
+                                                minLength={3}
+                                                placeholder="Please input a Guess"
+                                            />
+                                            <button className={`block mx-auto border-2 m-6 text-gt font-bold w-[50%] h-[10%]`} onClick={handleKeyDown}>Guess!</button>
+                                        </div>
+                                        <div className={`text-right mr-2`}>
+                                            <p>Opponent</p>
+                                            <p>{oppPts}</p>
+                                            <p>adding pts</p>
+                                        </div>
+                                    </div>
                                 </div>
                             ) : gameState.current === 3 ? (
                                 <div>
-                                    <p>Waiting for the other player to join</p>
+                                    <p className={transitionStyle}>Waiting for the other player to join</p>
                                 </div>
                             ) : gameState.current === 4 ? (
-                                <>
+                                <div className={transitionStyle}>
                                     <p>Opponent has disconnected!</p>
                                     <p>You have won by default!</p>
-                                </>
+                                </div>
                             ) : gameState.current === 5 ? (
-                                <div>
+                                <div className={transitionStyle}>
                                     {winner === 0 ? (
                                         <p>You win!</p>
                                     ) : winner === 1 ? (
@@ -311,13 +341,18 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                         </div>
                     ) : page === 2 ? (
                         <div className="block h-full">
-                            <button className="block" onClick={() => setPage(0)}>Back</button>
+                            <button className={backButton} onClick={() => setPage(0)}>Back</button>
                             <p>Some info about how to play the game...</p>
+                        </div>
+                    ) : page === 3 ? (
+                        <div className={transitionStyle}>
+                            Joining...
                         </div>
                     ) : (
                         <div className="block h-full">
-                            <button className="block" onClick={() => setPage(1)}>Join</button>
-                            <button className="block" onClick={() => setPage(2)}>How to play?</button>
+                            <p className={gameHeader}>1v1 Scramble</p>
+                            <button className={mainButtonStyle} onClick={() => setPage(3)}>Join</button>
+                            <button className={mainButtonStyle} onClick={() => setPage(2)}>How to play?</button>
                         </div>
                     )}
                 </div>
