@@ -18,6 +18,8 @@ module.exports = {
         'mh3': '1.5rem',
         'none': '0rem',
         'small': '0.75rem',
+        'gt' : '2rem',
+        'gh' : '5rem'
       },
     },
   },
