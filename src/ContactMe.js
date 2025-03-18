@@ -120,24 +120,24 @@ const ContactMe = ({darkMode, setDarkMode}) => {
         }
         , [window.innerWidth]);
   return (
-      <div className={` fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
+      <div className={` fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
         <div className={`${darkMode ? 'gradient-dark' : 'gradient'}`} style={fadingCircle}></div>
-        <header className={`${headerStyle} ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
+        <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
               <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
               <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
                   <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
-                  <ul id='navBarMobile' className={`${darkMode ? 'bg-gray-950' : 'bg-yellow-50'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  sm:w-[15%] text-center"}`}>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/'>Home</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
+                  <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  sm:w-[15%] text-center"}`}>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/'>Home</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/experience'>Experience</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
                   </ul>
                 </nav>
                 
                 <nav className="mr-1 items-end sm:mr-2 md:mr-4">
                   <ul className="flex justify-end">
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLinkCurr' : 'navLinkCurr'}`}>
                         <Link to='/contact-me'>Contact Me</Link>
                       </li>
                       <button onClick={() => setDarkMode(prevMode => !prevMode)}><img  src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' alt='DarkMode button' /></button>
@@ -151,14 +151,14 @@ const ContactMe = ({darkMode, setDarkMode}) => {
                 <div>
                     <h2 id='title' className={`py-20 p-2 text-mheading md:p-3 md:py-64 md:text-heading 
                       fade-in duration-1000 ease-in-out ${fading['title'] || 1==1 ? 'opacity-100' : 'opacity-0'} 
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Interested in <b style={{color: colorString}}>collaborating</b> or have any inquiries? Feel free to <b style={{color: colorString}}>reach out</b>.</h2>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Interested in <b style={{color: colorString}}>collaborating</b> or have any inquiries? Feel free to <b style={{color: colorString}}>reach out</b>.</h2>
                 </div>
 
                 <div className="pb-16 md:py-40 grid grid-cols-2 grid-rows-2">
                     
                     <figure id='gmail' className={`p-5 py-4 md:p-10 md:py-5
                       fade-in duration-1000 ease-in-out 
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a id='gmail-link' href='mailto:jadid.alam.08@gmail.com'>
                             <img id='gmail-img' src={gmailImage} 
                             alt="Email: jadid.alam.08@gmail.com" style={{ width: '200px', height: 'auto' }} />
@@ -168,21 +168,21 @@ const ContactMe = ({darkMode, setDarkMode}) => {
 
                     <figure id='github' className={`p-5 py-4 md:p-10 md:py-5
                       fade-in duration-1000 ease-in-out 
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a href='https://github.com/Jadid-Alam?tab=repositories'><img src={githubImage} alt="My GitHub repository" style={{ width: '200px', height: 'auto' }} /></a>
                         <figcaption className='text-mimgcap md:text-imgcap text-gray-500'>My GitHub repository</figcaption>
                     </figure>
 
                     <figure id='linkedin' className={`p-5 py-4 md:p-10 md:py-5
                       fade-in duration-1000 ease-in-out 
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a href='https://www.linkedin.com/in/jadid-alam-b57a112a5/'><img src={linkedinImage} alt="My Linked-in Profile" style={{ width: '200px', height: 'auto' }} /></a>
                         <figcaption className='text-mimgcap md:text-imgcap text-gray-500'>My Linked-in Profile</figcaption>
                     </figure>
 
                     <figure id='phone' className={`p-5 py-4 md:p-10 md:py-5
                       fade-in duration-1000 ease-in-out 
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a href='tel:+447491277476'><img src={phoneImage} alt="Phone: +447491277476" style={{ width: '200px', height: 'auto' }} /></a>
                         <figcaption className='text-mimgcap md:text-imgcap text-gray-500'>Phone: +447491277476</figcaption>
                     </figure>
@@ -192,7 +192,7 @@ const ContactMe = ({darkMode, setDarkMode}) => {
           </main>
 
           <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'text-black'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
+                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
           </footer>
       </div>
   );

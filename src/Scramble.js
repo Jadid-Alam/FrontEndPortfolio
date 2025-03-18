@@ -5,6 +5,8 @@ import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
 import downImg from './images/downArrowDark.png';
 import downImgDark from './images/downArrow.png';
+import loading from './images/loading.gif';
+import {motion , useAnimation} from 'framer-motion';
 
 const Scramble  = ({darkMode, setDarkMode}) => {
 
@@ -13,6 +15,10 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
     const [page, setPage] = useState(0);
     const gameState = useRef(0);
+    const guessInputAnim = useAnimation();
+    const pointAddAnim = useAnimation();
+    const pointAddAnim1 = useAnimation();
+    const timerEndAnim = useAnimation();
 
     const handleDownload = () => {
         const fileUrl = "/Jadid-Alam-CV.pdf";
@@ -32,12 +38,6 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const logoStyle = 'p-1 max-w-40 md:p-2';
     const navlinkStyle = 'p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
     const [hideNav, setHideNav] = useState(true);
-    useEffect(() => {
-            if (window.innerWidth > 768) {
-                setHideNav(true);
-            }
-        }
-        , [window.innerWidth]);
 
     const changeColor = () => {
         setColor((color) => {
@@ -78,14 +78,16 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const [myPts, setMyPts] = useState(0);
     const [oppPts, setOppPts] = useState(0);
     const [winner, setWinner] = useState(0);
-    const [reconnecting, setReconnecting] = useState(0);
+    const reconnecting = useRef(0)
+    const [maxMyPts, setMaxMyPts] = useState(0);
+    const [maxOppPts, setMaxOppPts] = useState(0);
 
     const connectToMatch = () => {
         const ws = new WebSocket("wss://jadid-alam.duckdns.org/ws/");
+        //const ws = new WebSocket("ws://127.0.0.1:8080");
         ws.onopen = () => {
             socketRef.current = ws;
             setPage(1)
-            setReconnecting(0)
             console.log("joined");
         };
 
@@ -104,11 +106,16 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                     StartGame();
                 }
                 else if (s[0] === 'p') {
-                    setMyPts(parseInt(s[1],10));
+                    const t = (100*parseInt(s[1],10));
+                    if (t === 0) {
+                        wrongGuess();
+                    }
+                    setMaxMyPts(t);
                 }
                 else if (s[0] === 'o') {
-                    setOppPts(parseInt(s[1],10));  // add animation of increasing.
-                }                                       /// left at d ... also need to make won section.
+                    const t = (100*parseInt(s[1],10));
+                    setMaxOppPts(t);
+                }
                 else if (s[0] === 'f') {
                     if (s[1] === 'u') {
                         setWinner(0)
@@ -133,6 +140,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
 
         ws.onerror = (error) => console.error("WebSocket Error:", error);
         ws.onclose = () => {
+            console.log("WebSocket Closed");
             if (socketRef.current !== null) {
                 const interval = setInterval(() => {
                     resetGame();
@@ -140,9 +148,8 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                 return () => {
                     clearInterval(interval);
                 };
-            } else if (reconnecting < 6) {
-                console.log("reconnecting...");
-                setReconnecting(prev => prev+1);
+            } else if (reconnecting.current < 6) {
+                reconnecting.current += 1;
                 setTimeout(() => connectToMatch(), 1000)
             } else {
                 resetGame();
@@ -168,6 +175,26 @@ const Scramble  = ({darkMode, setDarkMode}) => {
         }
     };
 
+    useEffect(() => {
+        if (myPts < maxMyPts) {
+            const diff = maxMyPts - myPts;
+            const interval = setInterval(() => {
+                setMyPts((prev) => prev+1);
+                addPointsAnimation();
+            }, (500/diff));
+            return () => clearInterval(interval);
+        }
+    },[maxMyPts, myPts]);
+    useEffect(() => {
+        if (oppPts < maxOppPts) {
+            const diff = 500/(maxOppPts - oppPts);
+            const interval = setInterval(() => {
+                setOppPts((prev) => prev+1);
+                addPointsAnimation1();
+            }, (diff));
+            return () => clearInterval(interval);
+        }
+    },[maxOppPts, oppPts]);
 
     const [seconds, setSeconds] = useState(0);
 
@@ -175,6 +202,9 @@ const Scramble  = ({darkMode, setDarkMode}) => {
         if (seconds > 0) {
             const interval = setInterval(() => {
                 setSeconds((prev) => prev - 1);
+                if (seconds <= 5) {
+                    startRedTimerAnimation();
+                }
             }, 1000);
             return () => clearInterval(interval); // Cleanup on unmount
         }
@@ -216,68 +246,241 @@ const Scramble  = ({darkMode, setDarkMode}) => {
 
     const resetGame = () => {
         gameState.current = 0;
+        if (socketRef.current !== null) {
+            socketRef.current.close()
+        }
         socketRef.current = null;
         setPage(0);
         setAnagram("Anagram");
         setMyPts(0);
         setOppPts(0);
         setWinner(0);
-        setReconnecting(0);
+        reconnecting.current = 0;
+        window.location.reload();
     }
 
     // styles
-    const mainButtonStyle = `border b-2 block w-[40%] my-10 mx-auto p-4 ${darkMode ? 'text-purple-500' : 'text-black'}`;
-    const gameHeader = `text-gh my-20 mx-auto p-10 text-center ${darkMode ? 'text-purple-500' : 'text-black'}`;
-    const roomStyle = `text-heading m-gt border-2 flex w-full ${darkMode ? 'text-purple-500' : 'text-black'}`
-    const roomName = `border-2 text-left w-full`;
-    const roomFill = `border-2 w-full text-right`;
+    const mainButtonStyle = `border rounded-[5px] font-bold block w-[40%] my-10 mx-auto p-4`;
+    const gameHeader = `text-gh font-bold my-20 mx-auto p-10 text-center`;
+    const roomStyle = `text-heading m-gt border flex w-full `
+    const roomName = `p-2 text-left w-full`;
+    const roomFill = `p-2 w-full text-right`;
+    const roomList = `my-2 border`;
     const transitionStyle = `text-center py-[20%] text-heading`;
-    const backButton = `block h-[5%] border-2 mx-2 text-centre`
+    const backButton = `block border rounded-[5px] mx-[1%] my-[1%] pb-1 px-2 text-centre`
+    const gameBgStyle = `text-blue-950 rounded-[10px] mt-10 md:mt-20 content z-10 text-mnormal md:text-normal w-full h-[90vh] md:h-[80.0vh] bg-[#e0e0e0] font-bold`;
+    const rulesStyle = `p-[1%]`;
+
+    const buttonAnim = {
+        initial: {
+            backgroundColor: "#60a5fa",
+            borderColor: "#60a5fa",
+            scale: 0,
+        },
+        hover: {
+            scale: 1.2, // Enlarges on hover
+            backgroundColor: "#3d93fc",
+            transition: { duration: 0.5 },
+        },
+        animate: {
+            borderColor: ["#60a5fa", "#3d93fc"],
+            scale: [0,1.2,1],
+            transition: {
+                borderColor: {
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                    duration: 2,
+                    ease: "easeInOut",
+                },
+            },
+        },
+    };
+
+    const backButtonAnim = {
+        initial: {
+            backgroundColor: "#60a5fa",
+            borderColor: "#3d93fc",
+            scale: 0,
+        },
+        hover: {
+            scale: 1.1,
+            backgroundColor: "#3d93fc",
+            transition: { duration: 0.5 },
+        },
+        animate: {
+            scale: [0,1.1,1],
+            transition: {
+                duration: 1,
+                ease: "easeInOut",
+            },
+        },
+    };
+
+    const guessButtonAnim = {
+        initial: {
+            backgroundColor: "#60a5fa",
+            borderColor: "#3d93fc",
+            scale: 1,
+        },
+        hover: {
+            scale: 1.05,
+            backgroundColor: "#3d93fc",
+            transition: { duration: 0.3 },
+        },
+    };
+
+    const listAnimL = {
+        initial: {
+            backgroundColor: "#60a5fa",
+            borderColor: "#3d93fc",
+            scale: 1,
+        },
+        hover: {
+            scale: 1.1,
+            backgroundColor: "#3d93fc",
+            transition: { duration: 0.5 },
+        },
+        animate: {
+            x: [0,-3,0,0,0,0],
+            rotate: [0,-0.3,0,0,0,0],
+            transition: {
+                repeat: Infinity,
+                repeatType: "mirror",
+                duration: 1,
+                ease: "easeInOut",
+            },
+        },
+    }
+
+    const listAnimR = {
+        initial: {
+            backgroundColor: "#60a5fa",
+            borderColor: "#3d93fc",
+            scale: 1,
+        },
+        hover: {
+            scale: 1.1,
+            backgroundColor: "#3d93fc",
+            transition: { duration: 0.5, ease: "easeInOut", },
+        },
+        animate: {
+            x: [0,3,0,0,0,0],
+            rotate: [0,0.3,0,0,0,0],
+            transition: {
+                repeat: Infinity,
+                repeatType: "mirror",
+                duration: 1,
+                ease: "easeInOut",
+            },
+        },
+    }
+
+    const wrongGuess = () => {
+        guessInputAnim.start({
+            x: [0,-5,5,-2,2,0],
+            rotate: [0,-1,1,-1,1,0],
+            scale: [1,1.05,1],
+            borderColor: ['#3d93fc','#FF0000','#3d93fc'],
+            transition: {
+                duration: 0.5,
+                ease: "easeInOut",
+            }
+        })
+    }
+
+    const addPointsAnimation = () => {
+        pointAddAnim.start({
+            x: [0,-3,0,3,0,-2,0,2,0],
+            rotate: [0,-1,0,1,0,-1,0,1,0],
+            scale: [1,1.05,1],
+            color: ['#172554','#018c01','#172554'],
+            transition: {
+                duration: 0.1,
+                ease: "easeInOut",
+            }
+        })
+    }
+    const addPointsAnimation1 = () => {
+        pointAddAnim1.start({
+            x: [0,-3,0,3,0,-2,0,2,0],
+            rotate: [0,-1,0,1,0,-1,0,1,0],
+            scale: [1,1.05,1],
+            color: ['#172554','#800101','#172554'],
+            transition: {
+                duration: 0.1,
+                ease: "easeInOut",
+            }
+        })
+    }
+
+    const startRedTimerAnimation = () => {
+        timerEndAnim.start({
+            scale: [1,1.1,1],
+            color: ['#172554','#FF0000','#172554'],
+            transition: {
+                duration: 1,
+                ease: "easeInOut",
+            }
+        })
+    }
 
     return (
-        <div className={`min-h-screen fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
-            <header className={`${headerStyle} ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
+        <div className={`min-h-screen fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
+            <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
                 <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
                 <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
                     <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
-                    <ul id='navBarMobile' className={`${darkMode ? 'bg-gray-950' : 'bg-yellow-50'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
-                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/'>Home</Link></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
+                    <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
+                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/'>Home</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/experience'>Experience</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLinkCurr' : 'navLinkCurr'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
                     </ul>
                 </nav>
 
                 <nav className="mr-1 items-end sm:mr-2 md:mr-4">
                     <ul className="flex justify-end">
-                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
+                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/contact-me'>Contact Me</Link></li>
                         <button onClick={() => setDarkMode(prevMode => !prevMode)}><img src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' /></button>
                     </ul>
                 </nav>
             </header>
 
             <main>
-                <div className='mt-10 md:mt-20 content z-10 text-mnormal md:text-normal w-full h-[90vh] md:h-[80.0vh] bg-white '>
+                <div className={gameBgStyle}>
                     {page === 1 ? (
                         <div className="block h-full">
-                            <button className={backButton} onClick={() => setPage(0)}>Back</button>
+                            <motion.button variants={backButtonAnim}
+                                           initial="initial"
+                                           whileHover="hover"
+                                           animate="animate"
+                                           className={backButton} onClick={resetGame}>Exit</motion.button>
                             {gameState.current === 0 ? (
-                                <ul className={`border-2 px-20 py-20 my-20 mx-20 justify-center`}>
+                                <ul className={`px-[5%] pb-[5%] pt-[2%] m-[5%] justify-center`}>
+                                    <p className={`text-6xl mb-6`}>Please choose a room to join:</p>
                                     {matchNames.map((serverName, index) => {
                                         if (available.charAt(index) === '2') {
                                             return (
-                                                <li className={roomStyle} key={index} value={available.charAt(index)}>
+                                                <motion.li variants={index % 2 === 0 ? listAnimL : listAnimR}
+                                                           initial="initial"
+                                                           whileHover="hover"
+                                                           animate="animate"
+                                                           className={`${roomStyle} ${roomList}`} key={index} value={available.charAt(index)}>
                                                     <p className={roomName}>{serverName}:</p> <p className={roomFill}>{available.charAt(index)}/2</p>
-                                                </li>
+                                                </motion.li>
                                             )
                                         }
                                         else return (
-                                            <li key={index} value={available.charAt(index)}>
+                                            <motion.li variants={index % 2 === 0 ? listAnimL : listAnimR}
+                                                       initial="initial"
+                                                       whileHover="hover"
+                                                       animate="animate"
+                                                       className={roomList} key={index} value={available.charAt(index)}>
                                                 <button className={roomStyle} onClick={() => WaitingRoom(matchLetters[index])}>
                                                     <p className={roomName}>{serverName}:</p> <p className={roomFill}>{available.charAt(index)}/2</p>
                                                 </button>
-                                            </li>
+                                            </motion.li>
                                         );
                                     })}
                                 </ul>
@@ -286,31 +489,36 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                     <p className={transitionStyle}>Starting in: {seconds}</p>
                                 </div>
                             ) : gameState.current === 2 ? (
-                                <div className={`border-2 h-[95%]`}>
-                                    <p className={`text-center h-[5%]`}>Time Remaining: {seconds}</p>
+                                <div className={`h-[95%] px-[1%]`}>
+                                    <motion.p animate={timerEndAnim} className={`text-center text-3xl`}>Time Remaining: {seconds}</motion.p>
                                     <div className={`grid grid-cols-[15%_70%_15%] h-[95%]`}>
-                                        <div className={`text-left ml-2`}>
+                                        <div className={`text-left text-4xl`}>
                                             <p>You</p>
-                                            <p>{myPts}</p>
-                                            <p>adding pts</p>
+                                            <motion.p animate={pointAddAnim}>{myPts}</motion.p>
                                         </div>
                                         <div className={``}>
-                                            <p className={`text-center text-gh font-bold`}>{anagram}</p>
-                                            <input
-                                                className={`block mx-auto w-[90%] h-[10%] text-gt text-center font-bold border-2 m-6`}
-                                                ref={inputRef}
-                                                onKeyDown={handleKeyDown}
-                                                type="text"
-                                                maxLength={anagram.length}
-                                                minLength={3}
-                                                placeholder="Please input a Guess"
-                                            />
-                                            <button className={`block mx-auto border-2 m-6 text-gt font-bold w-[50%] h-[10%]`} onClick={handleKeyDown}>Guess!</button>
+                                            <form onSubmit={e => e.preventDefault()} onKeyDown={handleKeyDown}>
+                                                <p className={`text-center text-gh font-bold`}>{anagram}</p>
+                                                <motion.input
+                                                    animate={guessInputAnim}
+                                                    className={`block mx-auto w-[90%] p-[2%] text-gt text-center font-bold border border-[#3d93fc] rounded-[5px] m-6`}
+                                                    ref={inputRef}
+                                                    onKeyDown={handleKeyDown}
+                                                    type="text"
+                                                    maxLength={anagram.length}
+                                                    minLength={3}
+                                                    placeholder="Please input a Guess"
+                                                />
+                                                <motion.button variants={guessButtonAnim}
+                                                               initial="initial"
+                                                               whileHover="hover"
+                                                               animate="animate"
+                                                               className={`block mx-auto border rounded-[5px] m-6 text-gt font-bold w-[50%] p-[1%]`} onClick={handleKeyDown}>Guess!</motion.button>
+                                            </form>
                                         </div>
-                                        <div className={`text-right mr-2`}>
-                                            <p>Opponent</p>
-                                            <p>{oppPts}</p>
-                                            <p>adding pts</p>
+                                        <div className={`text-right text-4xl`}>
+                                            <p>Foe</p>
+                                            <motion.p animate={pointAddAnim1}>{oppPts}</motion.p>
                                         </div>
                                     </div>
                                 </div>
@@ -326,11 +534,50 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                             ) : gameState.current === 5 ? (
                                 <div className={transitionStyle}>
                                     {winner === 0 ? (
-                                        <p>You win!</p>
+                                        <div className={`celebration h-[90%]`}>
+                                            <p>You win!</p>
+                                            <div className={`flex justify-center mx-auto`}>
+                                                <div>
+                                                    <p>You:</p>
+                                                    <p>{myPts}</p>
+                                                </div>
+                                                <p className={`mx-[10%]`}>-</p>
+                                                <div>
+                                                    <p>Foe:</p>
+                                                    <p>{oppPts}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     ) : winner === 1 ? (
-                                        <p>Opponent wins!</p>
+                                        <>
+                                            <p>Opponent's win!</p>
+                                            <div className={`flex justify-center mx-auto`}>
+                                                <div>
+                                                    <p>You:</p>
+                                                    <p>{myPts}</p>
+                                                </div>
+                                                <p className={`mx-[10%]`}>-</p>
+                                                <div>
+                                                    <p>Foe:</p>
+                                                    <p>{oppPts}</p>
+                                                </div>
+                                            </div>
+                                        </>
                                     ) : winner === 2 ? (
-                                        <p>Draw!</p>
+                                        <>
+                                            <p>You Drew!</p>
+                                            <div className={`flex justify-center mx-auto`}>
+                                                <div>
+                                                    <p>You:</p>
+                                                    <p>{myPts}</p>
+                                                </div>
+                                                <p className={`mx-[10%]`}>-</p>
+                                                <div>
+                                                    <p>Foe:</p>
+                                                    <p>{oppPts}</p>
+                                                </div>
+                                            </div>
+                                        </>
                                     ) : (
                                         <p>Error with Game display</p>
                                     )}
@@ -341,25 +588,61 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                         </div>
                     ) : page === 2 ? (
                         <div className="block h-full">
-                            <button className={backButton} onClick={() => setPage(0)}>Back</button>
-                            <p>Some info about how to play the game...</p>
+                            <motion.button variants={backButtonAnim}
+                                           initial="initial"
+                                           whileHover="hover"
+                                           animate="animate"
+                                           className={backButton} onClick={() => setPage(0)}>Back</motion.button>
+                            <p className={rulesStyle}>Rules:</p>
+                            <p className={rulesStyle}>1) You will be given a word with 8 letters.</p>
+                            <p className={rulesStyle}>2) Your aim is to guess as many words as possible by using each letter only once.</p>
+                            <p className={rulesStyle}>3) Guessed words can not be shorter than 3 letters.</p>
+                            <p className={rulesStyle}>4) Whoever has the most points at the end wins!</p>
                         </div>
                     ) : page === 3 ? (
                         <div className={transitionStyle}>
-                            Joining...
+                            Joining
+                            <img className={`mx-auto w-[150px]`} src={loading}/>
                         </div>
                     ) : (
                         <div className="block h-full">
-                            <p className={gameHeader}>1v1 Scramble</p>
-                            <button className={mainButtonStyle} onClick={() => setPage(3)}>Join</button>
-                            <button className={mainButtonStyle} onClick={() => setPage(2)}>How to play?</button>
+                            <motion.p
+                                initial={{
+                                  scale: 0,
+                                }}
+                                animate={{
+                                    scale: [0,1.2,1],
+                                    transition: {
+                                        duration: 1,
+                                    }
+                                }}
+                                className={gameHeader}>
+                                1v1 Scramble
+                            </motion.p>
+                            <motion.button
+                                variants={buttonAnim}
+                                initial="initial"
+                                whileHover="hover"
+                                animate="animate"
+                                className={mainButtonStyle} onClick={() => setPage(3)}
+                            >
+                                Join
+                            </motion.button>
+                            <motion.button
+                                variants={buttonAnim}
+                                initial="initial"
+                                whileHover="hover"
+                                animate="animate"
+                                className={mainButtonStyle} onClick={() => setPage(2)}>
+                                How to play?
+                            </motion.button>
                         </div>
                     )}
                 </div>
             </main>
 
             <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'text-black'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
+                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
             </footer>
         </div>
     );

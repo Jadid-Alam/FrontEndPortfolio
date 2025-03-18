@@ -1,5 +1,5 @@
 import './App.css';
-import React , {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home';
 import Scramble from './Scramble';
@@ -9,12 +9,18 @@ import ContactMe from './ContactMe';
 
 function App() {
 
-  const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        return sessionStorage.getItem('darkMode') === 'true';
+    });
 
   const renderWithProps = (Component) => (props) => {
     window.scrollTo(0, 0);
     return <Component {...props} darkMode={darkMode} setDarkMode={setDarkMode} />;
   };
+
+  useEffect(() => {
+      sessionStorage.setItem('darkMode',darkMode.toString());
+  }, [darkMode]);
 
   return (
     <Router>

@@ -122,24 +122,24 @@ const Experience = ({darkMode, setDarkMode}) => {
         , [window.innerWidth]);
 
   return (
-      <div className={` fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
+      <div className={` fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
         
-        <header className={`${headerStyle} ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
+        <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
               <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
               <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
                   <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
-                  <ul id='navBarMobile' className={`${darkMode ? 'bg-gray-950' : 'bg-yellow-50'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
-                  <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/'>Home</Link></li>
-                  <li className={`${navlinkStyle} ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}><Link to='/experience'>Experience</Link></li>
-                  <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
-                  <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
+                  <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
+                  <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/'>Home</Link></li>
+                  <li className={`${navlinkStyle} ${darkMode ? 'darkNavLinkCurr' : 'navLinkCurr'}`}><Link to='/experience'>Experience</Link></li>
+                  <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
+                  <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
                 </ul>
               </nav>
               
               <nav className="mr-1 items-end sm:mr-2 md:mr-4">
                 <ul className="flex justify-end">
-                    <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
-                    <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
+                    <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
+                    <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/contact-me'>Contact Me</Link></li>
                     <button onClick={() => setDarkMode(prevMode => !prevMode)}><img className='w-[15px] md:w-[35px] h-auto' src={darkMode ? lightModeImage : darkModeImage} /></button>
                 </ul>
               </nav>
@@ -152,18 +152,18 @@ const Experience = ({darkMode, setDarkMode}) => {
                 <div className={`py-4 md:py-8 exp-left ${borderColor}`}>
                   <h3 id='title1' className={`p-1 py-1 text-mh3 md:text-h3 md:p-3 md:py-2 
                     fade-in duration-1000 ease-in-out ${fading['title1'] ? 'opacity-100' : 'opacity-0'}
-                    ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Web Developer</h3>
+                    ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Web Developer</h3>
                   
                     <p id='sp1' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                         fade-in duration-1000 ease-in-out ${fading['sp1'] ? 'opacity-100' : 'opacity-0'}
-                        ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                        ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           Over the Summer holidays, I worked as a <b style={{ color: colorString }}>Freelance Web Developer </b>for a company called London Science College.
                           Where I was responsible for creating a website for the company through Wix Website Builder. I was able to create a website that was both visually
                            appealing and user-friendly using mainly JavaScript.
                     </p>
                     <p id='bp1' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                           fade-in duration-500 ease-in-out ${fading['bp1'] ? 'opacity-100' : 'opacity-0'}
-                          ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                          ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                             I was also was volunteering at London Science College, where I learned how to use <b style={{ color: colorString }}>WordPress</b> to create a website using custom JavaScript and php.
                              I also learned how to use the plugins to add functionality to the website.
                     </p>
@@ -176,18 +176,18 @@ const Experience = ({darkMode, setDarkMode}) => {
                   <div className={`py-4 md:py-8 exp-right ${borderColor}`}>
                     <h3 id='title2' className={`p-1 py-1 text-mh3 md:text-h3 md:p-3 md:py-2 
                       fade-in duration-1000 ease-in-out ${fading['title2'] ? 'opacity-100' : 'opacity-0'}
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Software Engineer</h3>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Software Engineer</h3>
                     
                       <p id='sp2' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                           fade-in duration-1000 ease-in-out ${fading['sp2'] ? 'opacity-100' : 'opacity-0'}
-                          ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                          ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                             Over the Summer holidays, I also worked as a <b style={{ color: colorString }}>Freelance Software Engineer </b>for a company called London Science College.
                              Where I was responsible for creating an application that allows the company to create customer objects and store them in a database. Then the customer information can be retrieved to make
                              invoices with ease.
                       </p>
                       <p id='bp2' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                             fade-in duration-500 ease-in-out ${fading['bp2'] ? 'opacity-100' : 'opacity-0'}
-                            ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                            ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                               Through this experience, I was able to learn how to use <b style={{ color: colorString }}>Java FX</b> and APIs to build pdf files and a dropbox API that send and
                                load data from dropbox.
                       </p>
@@ -198,17 +198,17 @@ const Experience = ({darkMode, setDarkMode}) => {
                 <div className={`py-4 md:py-8 exp-left ${borderColor}`}>
                   <h3 id='title3' className={`p-1 py-1 text-mh3 md:text-h3 md:p-3 md:py-2 
                     fade-in duration-1000 ease-in-out ${fading['title3'] ? 'opacity-100' : 'opacity-0'}
-                    ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Computer Science Tutor</h3>
+                    ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Computer Science Tutor</h3>
                   
                     <p id='sp3' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                         fade-in duration-1000 ease-in-out ${fading['sp3'] ? 'opacity-100' : 'opacity-0'}
-                        ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                        ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           I worked as a summer camp tutor for a month with <b style={{ color: colorString }}>FunTech</b>, Where I was trained to teach Python 
                           and Unity Game Coder. 
                     </p>
                     <p id='bp3' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                           fade-in duration-500 ease-in-out ${fading['bp3'] ? 'opacity-100' : 'opacity-0'}
-                          ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                          ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                             During the employment I oversaw teaching course content, following a tight schedule to boost the student's learning ability and setting up tech devices to be ready for teaching. 
                             This opportunity has developed my organisation skills along with my communication skills through the repeated planning with the team of tutors.
                     </p>
@@ -221,16 +221,16 @@ const Experience = ({darkMode, setDarkMode}) => {
                   <div className={`py-4 md:py-8 exp-right ${borderColor}`}>
                     <h3 id='title4' className={`p-1 py-1 text-mh3 md:text-h3 md:p-3 md:py-2 
                       fade-in duration-1000 ease-in-out ${fading['title4'] ? 'opacity-100' : 'opacity-0'}
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>GCSE Tutor</h3>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>GCSE Tutor</h3>
                     
                       <p id='sp4' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                           fade-in duration-1000 ease-in-out ${fading['sp4'] ? 'opacity-100' : 'opacity-0'}
-                          ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                          ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                             I thought GCSE Students on Maths and Physics for more than 2 years with <b style={{ color: colorString }}>London Science College. </b>
                       </p>
                       <p id='bp4' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                             fade-in duration-500 ease-in-out ${fading['bp4'] ? 'opacity-100' : 'opacity-0'}
-                            ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                            ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                               This helped develop my communication skills and enhanced my ability to express my ideas and it enhanced my teamworking skills by working with other tutors.
                       </p>
                   </div>
@@ -240,16 +240,16 @@ const Experience = ({darkMode, setDarkMode}) => {
                 <div className={`py-4 md:py-8 exp-left ${borderColor}`}>
                   <h3 id='title5' className={`p-1 py-1 text-mh3 md:text-h3 md:p-3 md:py-2 
                     fade-in duration-1000 ease-in-out ${fading['title5'] ? 'opacity-100' : 'opacity-0'}
-                    ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Counter-Service Assistant</h3>
+                    ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Counter-Service Assistant</h3>
                   
                     <p id='sp5' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                         fade-in duration-1000 ease-in-out ${fading['sp5'] ? 'opacity-100' : 'opacity-0'}
-                        ${darkMode ? 'text-yellow-100' : 'text-black'}`}> I worked in customer service in <b style={{ color: colorString }}>The Co-operative Group</b>, where I interacted with customers
+                        ${darkMode ? 'text-yellow-100' : 'navLink'}`}> I worked in customer service in <b style={{ color: colorString }}>The Co-operative Group</b>, where I interacted with customers
                         providing excellent service.
                     </p>
                     <p id='bp5' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                           fade-in duration-500 ease-in-out ${fading['bp5'] ? 'opacity-100' : 'opacity-0'}
-                          ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                          ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                             This role helped me develop my patience and communication skills further, as I had to deal with a variety of customers and their queries.
                     </p>
                 </div>
@@ -261,17 +261,17 @@ const Experience = ({darkMode, setDarkMode}) => {
                   <div className={`py-4 md:py-8 exp-right ${borderColor}`}>
                     <h3 id='title6' className={`p-1 py-1 text-mh3 md:text-h3 md:p-3 md:py-2 
                       fade-in duration-1000 ease-in-out ${fading['title6'] ? 'opacity-100' : 'opacity-0'}
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Pharmacy Assistant</h3>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Pharmacy Assistant</h3>
                     
                       <p id='sp6' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                           fade-in duration-1000 ease-in-out ${fading['sp6'] ? 'opacity-100' : 'opacity-0'}
-                          ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                          ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                             I volunteered at <b style={{ color: colorString }}>Boots Pharmacy</b>, where I was responsible for assisting the pharmacist in inputting precriptions in the NHS system and
                              providing excellent customer service.
                       </p>
                       <p id='bp6' className={`p-1 py-1 md:p-3 md:py-2 text-mnormal md:text-normal
                             fade-in duration-500 ease-in-out ${fading['bp6'] ? 'opacity-100' : 'opacity-0'}
-                            ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                            ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                               I was also responsible for calling customers to inform them that their prescriptions were ready for collection.
                                This role helped me develop my communication skills and my ability to work in a team.
                       </p>
@@ -281,7 +281,7 @@ const Experience = ({darkMode, setDarkMode}) => {
           </main>
 
           <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'text-black'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
+                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
           </footer>
       </div>
   );

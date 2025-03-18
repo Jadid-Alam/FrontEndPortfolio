@@ -120,26 +120,26 @@ const Home = ({darkMode, setDarkMode}) => {
     , [window.innerWidth]);
 
   return (
-      <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}> 
+      <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
 
         <div className={`${darkMode ? 'gradient-dark' : 'gradient'}`} style={fadingCircle}></div>
 
-          <header className={`${headerStyle} ${darkMode ? 'bg-gray-950' : 'bg-yellow-50'}`}>
+          <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
                 <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
                 <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
                   <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto mt-auto' src={darkMode ? downImg : downImgDark}/></button>
-                  <ul id='navBarMobile' className={`${darkMode ? 'bg-gray-950' : 'bg-yellow-50'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  w-[30%] sm:w-[15%] text-center"}`}>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-300' : 'text-purple-700'}`}><Link to='/'>Home</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/experience'>Experience</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/projects'>Projects</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
+                  <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  w-[30%] sm:w-[15%] text-center"}`}>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLinkCurr' : 'navLinkCurr'}`}><Link to='/'>Home</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/experience'>Experience</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
                   </ul>
                 </nav>
                 
                 <nav className="mr-1 items-end sm:mr-2 md:mr-4">
                   <ul className="flex justify-end">
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><a onClick={handleDownload}>Resume</a></li>  
-                      <li className={`${navlinkStyle} ${darkMode ? 'text-purple-500' : 'text-black'}`}><Link to='/contact-me'>Contact Me</Link></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
+                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/contact-me'>Contact Me</Link></li>
                       <button onClick={() => setDarkMode(prevMode => !prevMode)}>
                         <img className='w-[15px] md:w-[35px] h-auto' src={darkMode ? lightModeImage : darkModeImage}/>
                       </button>
@@ -152,21 +152,21 @@ const Home = ({darkMode, setDarkMode}) => {
                 <div className='content z-10 text-center text-mnormal md:text-normal'>
                   <div>
                       <h2 id='title' className={`${textStyle} ${fading['title'] ? 'opacity-100' : 'opacity-0'} 
-                        ${darkMode ? 'text-yellow-100' : 'text-black'}`}>I am <b style={{ color: colorString }}>Jadid Alam</b>, 
+                        ${darkMode ? 'text-yellow-100' : 'navLink'}`}>I am <b style={{ color: colorString }}>Jadid Alam</b>,
                         a programmer pursuing a career in the tech industry.</h2>
                   </div>
 
                   <div className="py-4 md:py-8">
                         <p id='p1' className={`${textStyle1} ${fading['p1'] ? 'opacity-100' : 'opacity-0'}
-                            ${darkMode ? 'text-yellow-100' : 'text-black'}`}>What makes people feel content with their lives? Owning expensive cars? Living in a mansion? Neither. 
+                            ${darkMode ? 'text-yellow-100' : 'navLink'}`}>What makes people feel content with their lives? Owning expensive cars? Living in a mansion? Neither.
                             It's having a sense of purpose, goals to strive for!
                         </p>
                       <p id='p2' className={`${textStyle1} ${fading['p2'] ? 'opacity-100' : 'opacity-0'}
-                            ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Therefore, I make it a priority to set clear goals for myself and organize my daily activities to achieve them. 
+                            ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Therefore, I make it a priority to set clear goals for myself and organize my daily activities to achieve them.
                           For instance, I focus on completing challenges on LeetCode to enhance my coding skills and improve my acceptance rate.
                       </p>
                       
-                      <figure id='img' className={`p-1 py-5 md:p-3 md:py-10 fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                      <figure id='img' className={`p-1 py-5 md:p-3 md:py-10 fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                             <a href='https://leetcode.com/u/ec23119/'><img src={myImage} alt="LeetCode Profile" style={{ width: '1500px', height: 'auto' }} /></a>
                           <figcaption className='text-mimgcap md:text-imgcap text-gray-600'>LeetCode Profile</figcaption>
                       </figure>
@@ -176,15 +176,15 @@ const Home = ({darkMode, setDarkMode}) => {
 
                       <h3 id='title1' className={`p-1 py-2 text-mh3 md:text-h3 md:p-3 md:py-4 text-left 
                       fade-in duration-1000 ease-in-out ${fading['title1'] ? 'opacity-100' : 'opacity-0'}
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>Academic History:</h3>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Academic History:</h3>
 
                       <p id='p3' className={`${textStyle2} ${fading['p3'] ? 'opacity-100' : 'opacity-0'}
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>I am currently studying <b style={{ color: colorString }}>Computer Science</b> at <b style={{ color: colorString }}>Queen Mary University of London</b>, where I am exploring programming languages, data structures, and honing my skills as a programmer. 
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>I am currently studying <b style={{ color: colorString }}>Computer Science</b> at <b style={{ color: colorString }}>Queen Mary University of London</b>, where I am exploring programming languages, data structures, and honing my skills as a programmer.
                           My passion for Computer Science began in secondary school, but I initially pursued Engineering due to not taking the subject at GCSE.
                       </p>
 
                       <p id='p4' className={`${textStyle2} ${fading['p4'] ? 'opacity-100' : 'opacity-0'}
-                      ${darkMode ? 'text-yellow-100' : 'text-black'}`}>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           After a year at the <b style={{ color: colorString }}>University of Oxford</b> studing <b style={{ color: colorString }}>Engineering</b>, I realised my true interest lay in Computer Science, prompting my transfer to Queen Mary. Here, I am excited to deepen my technical 
                           knowledge and gain practical experience, particularly through an individual project in my final year that will allow me to explore my specific interests within the field.
                       </p>
@@ -193,7 +193,7 @@ const Home = ({darkMode, setDarkMode}) => {
             </main>
 
             <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'text-black'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
+                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
             </footer>
       </div>
   );
