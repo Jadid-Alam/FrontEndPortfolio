@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+.expand-proj {
+  animation: expandHeight 2s forwards;
+}
+
+@keyframes expandHeight {
+  0% {
+    height: 0%;
+  }
+  100% {
+    height: 100%;
+  }
+
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
 .dark {
   background: #2b2e36;
 }
@@ -153,43 +174,8 @@ code {
     grid-template-columns: 1fr 1fr;
   }
 
-  .proj-span {
-    grid-column: 1 / span 2;
-    width: 50%;                 
-    animation: expandWidth 2s forwards;  
-  }
 
-  @keyframes expandWidth {
-    0% {
-        width: 50%;  
-    }
-    100% {
-        width: 100%;   
-    }
 
-    from {
-      opacity: 0; 
-    }
-    to {
-        opacity: 1;
-    }
-  }
-
-  .proj-fade {
-      opacity: 0; 
-      animation: projfadeIn 2s forwards; 
-  }
-
-  @keyframes projfadeIn {
-      from {
-          opacity: 0; 
-      }
-      to {
-          opacity: 1;
-      }
-  }
-
-  
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
