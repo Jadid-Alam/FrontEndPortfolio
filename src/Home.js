@@ -6,6 +6,7 @@ import lightModeImage from './images/day-mode.png';
 import { Link } from 'react-router-dom';
 import downImgDark from './images/downArrow.png';
 import downImg from './images/downArrowDark.png';
+import {motion} from "framer-motion";
 
 const Home = ({darkMode, setDarkMode}) => { 
     const [color, setColor] = useState({r:64, g:0, b:140});
@@ -119,13 +120,28 @@ const Home = ({darkMode, setDarkMode}) => {
     }
     , [window.innerWidth]);
 
+    const shining = {
+        animate: {
+            color: ['#bf00e1','#2f0077','#bf00e1'],
+            transition: {
+                repeat: Infinity,
+                repeatType: "mirror",
+                duration: 3,
+                ease: "easeInOut",
+            },
+        }
+    }
+
   return (
       <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
 
         <div className={`${darkMode ? 'gradient-dark' : 'gradient'}`} style={fadingCircle}></div>
 
           <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
-                <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
+                <motion.h4
+                    variants={shining}
+                    animate="animate"
+                    className={logoStyle}>Jadid Alam</motion.h4>
                 <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
                   <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto mt-auto' src={darkMode ? downImg : downImgDark}/></button>
                   <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  w-[30%] sm:w-[15%] text-center"}`}>

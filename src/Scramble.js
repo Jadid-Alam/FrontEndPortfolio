@@ -34,10 +34,17 @@ const Scramble  = ({darkMode, setDarkMode}) => {
 
     // styles
     const colorString = `rgb(${color.r}, ${color.g}, ${color.b})`;
-    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold md:text-nav md:font-semibold fade-in duration-1000 ease-in-out';
-    const logoStyle = 'p-1 max-w-40 md:p-2';
-    const navlinkStyle = 'p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
+    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold lg:text-nav lg:font-semibold fade-in duration-1000 ease-in-out';
+    const logoStyle = 'p-1 max-w-40 lg:p-2';
+    const navlinkStyle = 'p-1 lg:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
     const [hideNav, setHideNav] = useState(true);
+
+    useEffect(() => {
+            if (window.innerWidth > 768) {
+                setHideNav(true);
+            }
+        }
+        , [window.innerWidth]);
 
     const changeColor = () => {
         setColor((color) => {
@@ -260,15 +267,15 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     }
 
     // styles
-    const mainButtonStyle = `border rounded-[5px] font-bold block w-[40%] my-10 mx-auto p-4`;
-    const gameHeader = `text-gh font-bold my-20 mx-auto p-10 text-center`;
-    const roomStyle = `text-heading m-gt border flex w-full `
+    const mainButtonStyle = `border rounded-[5px] font-bold block w-[60%] lg:w-[40%] my-10 mx-auto p-4`;
+    const gameHeader = `text-5xl lg:text-gh font-bold my-20 mx-auto p-10 text-center`;
+    const roomStyle = `text-1xl lg:text-heading m-gt border flex w-full `
     const roomName = `p-2 text-left w-full`;
     const roomFill = `p-2 w-full text-right`;
     const roomList = `my-2 border`;
     const transitionStyle = `text-center py-[20%] text-heading`;
     const backButton = `block border rounded-[5px] mx-[1%] my-[1%] pb-1 px-2 text-centre`
-    const gameBgStyle = `text-blue-950 rounded-[10px] mt-10 md:mt-20 content z-10 text-mnormal md:text-normal w-full h-[90vh] md:h-[80.0vh] bg-[#e0e0e0] font-bold`;
+    const gameBgStyle = `text-blue-950 rounded-[10px] mt-10 lg:mt-20 content z-10 text-m lg:text-normal w-full h-[90vh] lg:h-[80.0vh] bg-[#e0e0e0] font-bold`;
     const rulesStyle = `p-[1%]`;
 
     const buttonAnim = {
@@ -425,12 +432,12 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     }
 
     return (
-        <div className={`min-h-screen fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
+        <div className={`min-h-screen h-full fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
             <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
                 <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
-                <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
-                    <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
-                    <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
+                <nav className="mr-auto my-auto lg:my-0 lg:mr-auto lg:flex">
+                    <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='lg:hidden lg:w-[0px] lg:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
+                    <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} lg:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
                         <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/'>Home</Link></li>
                         <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/experience'>Experience</Link></li>
                         <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
@@ -438,11 +445,11 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                     </ul>
                 </nav>
 
-                <nav className="mr-1 items-end sm:mr-2 md:mr-4">
+                <nav className="mr-1 items-end sm:mr-2 lg:mr-4">
                     <ul className="flex justify-end">
                         <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
                         <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/contact-me'>Contact Me</Link></li>
-                        <button onClick={() => setDarkMode(prevMode => !prevMode)}><img src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' /></button>
+                        <button onClick={() => setDarkMode(prevMode => !prevMode)}><img src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] lg:w-[35px] h-auto' /></button>
                     </ul>
                 </nav>
             </header>
@@ -450,7 +457,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
             <main>
                 <div className={gameBgStyle}>
                     {page === 1 ? (
-                        <div className="block h-full">
+                        <div className="block h-full mt-4 lg:mt-0">
                             <motion.button variants={backButtonAnim}
                                            initial="initial"
                                            whileHover="hover"
@@ -458,7 +465,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                            className={backButton} onClick={resetGame}>Exit</motion.button>
                             {gameState.current === 0 ? (
                                 <ul className={`px-[5%] pb-[5%] pt-[2%] m-[5%] justify-center`}>
-                                    <p className={`text-6xl mb-6`}>Please choose a room to join:</p>
+                                    <p className={`text-3xl lg:text-6xl mb-6`}>Please choose a room to join:</p>
                                     {matchNames.map((serverName, index) => {
                                         if (available.charAt(index) === '2') {
                                             return (
@@ -490,18 +497,18 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                 </div>
                             ) : gameState.current === 2 ? (
                                 <div className={`h-[95%] px-[1%]`}>
-                                    <motion.p animate={timerEndAnim} className={`text-center text-3xl`}>Time Remaining: {seconds}</motion.p>
+                                    <motion.p animate={timerEndAnim} className={`text-center text-mnormal lg:text-3xl`}>Time Remaining: {seconds}</motion.p>
                                     <div className={`grid grid-cols-[15%_70%_15%] h-[95%]`}>
-                                        <div className={`text-left text-4xl`}>
+                                        <div className={`text-left text-mnormal lg:text-4xl`}>
                                             <p>You</p>
                                             <motion.p animate={pointAddAnim}>{myPts}</motion.p>
                                         </div>
                                         <div className={``}>
                                             <form onSubmit={e => e.preventDefault()} onKeyDown={handleKeyDown}>
-                                                <p className={`text-center text-gh font-bold`}>{anagram}</p>
+                                                <p className={`text-center text-4xl lg:text-gh font-bold`}>{anagram}</p>
                                                 <motion.input
                                                     animate={guessInputAnim}
-                                                    className={`block mx-auto w-[90%] p-[2%] text-gt text-center font-bold border border-[#3d93fc] rounded-[5px] m-6`}
+                                                    className={`block mx-auto w-[100%] lg:w-[90%] p-[2%] text-1xl lg:text-gt text-center font-bold border border-[#3d93fc] rounded-[5px] m-6`}
                                                     ref={inputRef}
                                                     onKeyDown={handleKeyDown}
                                                     type="text"
@@ -513,10 +520,10 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                                                initial="initial"
                                                                whileHover="hover"
                                                                animate="animate"
-                                                               className={`block mx-auto border rounded-[5px] m-6 text-gt font-bold w-[50%] p-[1%]`} onClick={handleKeyDown}>Guess!</motion.button>
+                                                               className={`block mx-auto border rounded-[5px] m-6 text-2xl lg:text-gt font-bold w-[80%] lg:w-[50%] p-[1%]`} onClick={handleKeyDown}>Guess!</motion.button>
                                             </form>
                                         </div>
-                                        <div className={`text-right text-4xl`}>
+                                        <div className={`text-right text-mnormal lg:text-4xl`}>
                                             <p>Foe</p>
                                             <motion.p animate={pointAddAnim1}>{oppPts}</motion.p>
                                         </div>
@@ -642,7 +649,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
             </main>
 
             <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
+                <h6 className={`content z-10 mt-8 mb-2 text-center lg:mt-16 lg:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
             </footer>
         </div>
     );
