@@ -9,6 +9,7 @@ import horseGif from './images/HorseRacingGif.gif';
 import hwPortal from './images/hwPortalGif.gif';
 import downImg from './images/downArrowDark.png';
 import downImgDark from './images/downArrow.png';
+import {motion} from "framer-motion";
 
 const Projects = ({darkMode, setDarkMode}) => {
 
@@ -140,13 +141,29 @@ const Projects = ({darkMode, setDarkMode}) => {
           }
         }
         , [window.innerWidth]);
+
+    const shining = {
+        animate: {
+            color: ['#bf00e1','#2f0077','#bf00e1'],
+            transition: {
+                repeat: Infinity,
+                repeatType: "mirror",
+                duration: 3,
+                ease: "easeInOut",
+            },
+        }
+    }
+
   return (
       <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
 
         <div className={`${darkMode ? 'gradient-dark' : 'gradient'}`} style={fadingCircle}></div>
 
           <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
-                <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
+              <motion.h4
+                  variants={shining}
+                  animate="animate"
+                  className={logoStyle}>Jadid Alam</motion.h4>
                 <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
                   <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
                   <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block sm:w-[15%] text-center"}`}>
@@ -181,7 +198,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                         <p id='descipton1' className={`p-1 py-2 md:p-3 md:py-4 text-left
                           fade-in duration-1000 ease-in-out ${fading['descipton1'] ? 'opacity-100' : 'opacity-0'}
                           ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                          This personal project is a <b style={{ color: colorString }}>full-stack portfolio</b> that showcases my resume, skills, 
+                          This personal project is a <b style={{ color: colorString }}>full-stack portfolio</b> that showcases my resume, skills,
                           experience and my Dynamic Web Development Skills. Including a mini-blog of my professional journey.
                         </p>
 
@@ -192,7 +209,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                           Click to View More Detail
                         </small>
                       </div>
-                      
+
                       <figure id='img' className={`p-1 py-5 md:p-3 md:py-10 z-10 ${clicked['b1'] ? 'block' : 'hidden' }
                         fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <img src={portfolioImage} alt="LeetCode Profile" style={{ width: '500px', height: 'auto' }} />
@@ -202,7 +219,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                       <p id='p1' className={`p-1 py-2 md:p-3 md:py-4 text-left z-10 ${clicked['b1'] ? 'block' : 'hidden' }
                         fade-in duration-1000 ease-in-out ${fading['p1'] ? 'opacity-100' : 'opacity-0'}
                         ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                        This project was developed using <b style={{ color: colorString }}>React JS, Tailwind CSS, Django </b> and <b style={{ color: colorString }}>MongoDB </b> 
+                        This project was developed using <b style={{ color: colorString }}>React JS, Tailwind CSS, Django </b> and <b style={{ color: colorString }}>MongoDB </b>
                          and is hosted on <b style={{ color: colorString }}>Vercel</b>. I made use of reacts hooks to manage states and cause effects such as the dark mode toggle,
                          elements fading in and dynamic colour changing elements.
                       </p>
@@ -229,8 +246,8 @@ const Projects = ({darkMode, setDarkMode}) => {
                         <p id='descipton2' className={`p-1 py-2 md:p-3 md:py-4 text-left
                           fade-in duration-1000 ease-in-out ${fading['descipton2'] ? 'opacity-100' : 'opacity-0'}
                           ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                          This is a <b style={{ color: colorString }}>Commissioned Project </b>that I developed for a client. The project is a <b style={{ color: colorString }}>Invoice Builder </b> 
-                          that allows the user to create invoices for their customer, that can be added to the system, with minimal effort. 
+                          This is a <b style={{ color: colorString }}>Commissioned Project </b>that I developed for a client. The project is a <b style={{ color: colorString }}>Invoice Builder </b>
+                          that allows the user to create invoices for their customer, that can be added to the system, with minimal effort.
                         </p>
                         <small id='small2' className={`text-small
                           fade-in duration-1000 ease-in-out ${fading['small2'] ? 'opacity-100' : 'opacity-0'}
@@ -239,7 +256,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                           Click to View More Detail
                         </small>
                       </div>
-                      
+
                       <figure id='img2' className={`p-1 py-5 md:p-3 md:py-10 z-10 ${clicked['b2'] ? 'block' : 'hidden' }
                         fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <img src={invoiceGif} alt="Invoice builder gif" style={{ width: '500px', height: 'auto' }} />
@@ -249,14 +266,14 @@ const Projects = ({darkMode, setDarkMode}) => {
                       <p id='p3' className={`p-1 py-2 md:p-3 md:py-4 text-left z-10 ${clicked['b2'] ? 'block' : 'hidden' }
                         fade-in duration-1000 ease-in-out ${fading['p3'] ? 'opacity-100' : 'opacity-0'}
                         ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                          This project was developed using <b style={{ color: colorString }}>Java Fx </b> and APIs such as <b style={{ color: colorString }}>iText </b>and 
+                          This project was developed using <b style={{ color: colorString }}>Java Fx </b> and APIs such as <b style={{ color: colorString }}>iText </b>and
                           <b style={{ color: colorString }}> Dropbox API </b>to generate PDFs and store the data in a connected Dropbox account.
                       </p>
 
                       <p id='p4' className={`p-1 py-2 md:p-3 md:py-4 text-left z-10 ${clicked['b2'] ? 'block' : 'hidden' }
                         fade-in duration-1000 ease-in-out ${fading['p4'] ? 'opacity-100' : 'opacity-0'}
                         ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                        During the development of this project, I have learned the importance of using compatible development kits and runtime environments to avoid issues during launch. 
+                        During the development of this project, I have learned the importance of using compatible development kits and runtime environments to avoid issues during launch.
                         I also learned how to use APIs to interact with other services and how to use Java Fx to create a user-friendly interface.
                       </p>
                   </button>
@@ -285,7 +302,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                           Click to View More Detail
                         </small>
                       </div>
-                      
+
                       <figure id='img3' className={`p-1 py-5 md:p-3 md:py-10 z-10 ${clicked['b3'] ? 'block' : 'hidden' }
                         fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <img src={horseGif} alt="Horse Racing Simulator" style={{ width: '500px', height: 'auto' }} />
@@ -332,7 +349,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                           Click to View More Detail
                         </small>
                       </div>
-                      
+
                       <figure id='img4' className={`p-1 py-5 md:p-3 md:py-10 z-10 ${clicked['b4'] ? 'block' : 'hidden' }
                         fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <img src={hwPortal} alt="LSC Homework Portal" style={{ width: '500px', height: 'auto' }} />
@@ -354,7 +371,7 @@ const Projects = ({darkMode, setDarkMode}) => {
                          use Wix's documentation to understand how to use their APIs, however the Wix documentation was outdated, meaning I had to use various online sources to
                          understand each API and how to use them.
                       </p>
-                  </button>       
+                  </button>
 
               </div>
             </main>

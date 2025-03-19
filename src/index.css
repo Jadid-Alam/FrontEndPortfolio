@@ -86,7 +86,7 @@ code {
 .exp-left-gradient {
   animation: fade-in 5s ease-in-out;
   width: 5%;
-  background: linear-gradient(to left, #ffffff, #d1d5db);
+  background: linear-gradient(to left, #e0e0e0, #d1d5db);
   grid-column: 2;
   
 }
@@ -95,7 +95,7 @@ code {
   animation: fade-in 5s ease-in-out;
   justify-self: end;
   width: 5%;
-  background: linear-gradient(to right, #ffffff, #d1d5db  );
+  background: linear-gradient(to right, #e0e0e0, #d1d5db  );
   grid-column: 1;
   
 }
