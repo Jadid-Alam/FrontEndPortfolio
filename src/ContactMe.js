@@ -12,12 +12,8 @@ import downImgDark from './images/downArrow.png';
 import {motion} from "framer-motion";
 
 const ContactMe = ({darkMode, setDarkMode}) => {
-
-    const [color, setColor] = useState({r:64, g:0, b:140});
-    const [inverse, setInverse] = useState(false);
     const [mouse, setMouse] = useState({x:0, y:0});
     const [fading, setFading] = useState({});
-    const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
 
     const handleDownload = () => {
       const fileUrl = "/Jadid-Alam-CV.pdf";
@@ -30,36 +26,6 @@ const ContactMe = ({darkMode, setDarkMode}) => {
       link.click();
       document.body.removeChild(link);
     };
-
-    
-    const changeColor = () => {
-        setColor((color) => {
-            if (color.r > colours[0].r && color.b > colours[0].b) {
-                setInverse(true);
-            }
-            else if (color.r < colours[1].r && color.b < colours[1].b) {
-                setInverse(false);
-            }
-
-            if (!inverse) {
-                const rn = color.r + 8;
-                const bn = color.b + 13;
-                return {r:rn, g:color.g, b:bn};
-            }
-            else
-            {
-                const rn = color.r - 8;
-                const bn = color.b - 13;
-                return {r:rn, g:color.g, b:bn};
-            }
-
-        });
-    };
-
-    useEffect(() => {
-        const interval = setInterval(changeColor, 70);
-        return () => clearInterval(interval);
-    }, [color.r]);
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -108,11 +74,9 @@ const ContactMe = ({darkMode, setDarkMode}) => {
         borderRadius: '50%',
         pointerEvents: 'none',
     };
-
-    const colorString = `rgb(${color.r}, ${color.g}, ${color.b})`;
-    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold md:text-nav md:font-semibold fade-in duration-1000 ease-in-out';
-    const logoStyle = 'p-1 max-w-40 md:p-2';
-    const navlinkStyle = 'p-1 md:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
+    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold lg:text-nav lg:font-semibold fade-in duration-1000 ease-in-out';
+    const logoStyle = 'p-1 max-w-40 lg:p-2';
+    const navlinkStyle = 'p-1 lg:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
     const [hideNav, setHideNav] = useState(true);
         useEffect(() => {
           if (window.innerWidth > 768) {
@@ -141,9 +105,9 @@ const ContactMe = ({darkMode, setDarkMode}) => {
                 variants={shining}
                 animate="animate"
                 className={logoStyle}>Jadid Alam</motion.h4>
-              <nav className="mr-auto my-auto md:my-0 md:mr-auto md:flex">
-                  <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='md:hidden md:w-[0px] md:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
-                  <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} md:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  sm:w-[15%] text-center"}`}>
+              <nav className="mr-auto my-auto lg:my-0 lg:mr-auto lg:flex">
+                  <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='lg:hidden lg:w-[0px] lg:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
+                  <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} lg:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  sm:w-[15%] text-center"}`}>
                       <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/'>Home</Link></li>
                       <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/experience'>Experience</Link></li>
                       <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
@@ -151,57 +115,57 @@ const ContactMe = ({darkMode, setDarkMode}) => {
                   </ul>
                 </nav>
                 
-                <nav className="mr-1 items-end sm:mr-2 md:mr-4">
+                <nav className="mr-1 items-end sm:mr-2 lg:mr-4">
                   <ul className="flex justify-end">
                       <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
                       <li className={`${navlinkStyle} ${darkMode ? 'darkNavLinkCurr' : 'navLinkCurr'}`}>
                         <Link to='/contact-me'>Contact Me</Link>
                       </li>
-                      <button onClick={() => setDarkMode(prevMode => !prevMode)}><img  src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] md:w-[35px] h-auto' alt='DarkMode button' /></button>
+                      <button onClick={() => setDarkMode(prevMode => !prevMode)}><img  src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] lg:w-[35px] h-auto' alt='DarkMode button' /></button>
                       
                   </ul>
                 </nav>
           </header>
 
           <main>
-              <div className='content text-center text-mnormal md:text-normal split z-10'> 
+              <div className='content text-center text-mnormal lg:text-normal split z-10'>
                 <div>
-                    <h2 id='title' className={`py-20 p-2 text-mheading md:p-3 md:py-64 md:text-heading 
+                    <h2 id='title' className={`py-20 p-2 text-mheading lg:p-3 lg:py-64 lg:text-heading 
                       fade-in duration-1000 ease-in-out ${fading['title'] || 1==1 ? 'opacity-100' : 'opacity-0'} 
-                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Interested in <b style={{color: colorString}}>collaborating</b> or have any inquiries? Feel free to <b style={{color: colorString}}>reach out</b>.</h2>
+                      ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Interested in <motion.span className={`font-bold`} variants={shining} animate='animate'>collaborating</motion.span> or have any inquiries? Feel free to <motion.span className={`font-bold`} variants={shining} animate='animate'>reach out</motion.span>.</h2>
                 </div>
 
-                <div className="pb-16 md:py-40 grid grid-cols-2 grid-rows-2">
+                <div className="pb-16 lg:py-40 grid grid-cols-2 grid-rows-2">
                     
-                    <figure id='gmail' className={`p-5 py-4 md:p-10 md:py-5
+                    <figure id='gmail' className={`p-5 py-4 lg:p-10 lg:py-5
                       fade-in duration-1000 ease-in-out 
                       ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a id='gmail-link' href='mailto:jadid.alam.08@gmail.com'>
                             <img id='gmail-img' src={gmailImage} 
                             alt="Email: jadid.alam.08@gmail.com" style={{ width: '200px', height: 'auto' }} />
                           </a>
-                        <figcaption id='gmail-cap' className='text-mimgcap md:text-imgcap text-gray-500'>Email: jadid.alam.08@gmail.com</figcaption>
+                        <figcaption id='gmail-cap' className='text-mimgcap lg:text-imgcap text-gray-500'>Email: jadid.alam.08@gmail.com</figcaption>
                     </figure>
 
-                    <figure id='github' className={`p-5 py-4 md:p-10 md:py-5
+                    <figure id='github' className={`p-5 py-4 lg:p-10 lg:py-5
                       fade-in duration-1000 ease-in-out 
                       ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a href='https://github.com/Jadid-Alam?tab=repositories'><img src={githubImage} alt="My GitHub repository" style={{ width: '200px', height: 'auto' }} /></a>
-                        <figcaption className='text-mimgcap md:text-imgcap text-gray-500'>My GitHub repository</figcaption>
+                        <figcaption className='text-mimgcap lg:text-imgcap text-gray-500'>My GitHub repository</figcaption>
                     </figure>
 
-                    <figure id='linkedin' className={`p-5 py-4 md:p-10 md:py-5
+                    <figure id='linkedin' className={`p-5 py-4 lg:p-10 lg:py-5
                       fade-in duration-1000 ease-in-out 
                       ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a href='https://www.linkedin.com/in/jadid-alam-b57a112a5/'><img src={linkedinImage} alt="My Linked-in Profile" style={{ width: '200px', height: 'auto' }} /></a>
-                        <figcaption className='text-mimgcap md:text-imgcap text-gray-500'>My Linked-in Profile</figcaption>
+                        <figcaption className='text-mimgcap lg:text-imgcap text-gray-500'>My Linked-in Profile</figcaption>
                     </figure>
 
-                    <figure id='phone' className={`p-5 py-4 md:p-10 md:py-5
+                    <figure id='phone' className={`p-5 py-4 lg:p-10 lg:py-5
                       fade-in duration-1000 ease-in-out 
                       ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
                           <a href='tel:+447491277476'><img src={phoneImage} alt="Phone: +447491277476" style={{ width: '200px', height: 'auto' }} /></a>
-                        <figcaption className='text-mimgcap md:text-imgcap text-gray-500'>Phone: +447491277476</figcaption>
+                        <figcaption className='text-mimgcap lg:text-imgcap text-gray-500'>Phone: +447491277476</figcaption>
                     </figure>
                 </div>
 
@@ -209,7 +173,7 @@ const ContactMe = ({darkMode, setDarkMode}) => {
           </main>
 
           <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center md:mt-16 md:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
+                <h6 className={`content z-10 mt-8 mb-2 text-center lg:mt-16 lg:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
           </footer>
       </div>
   );
