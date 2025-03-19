@@ -172,7 +172,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
             console.log("WebSocket Connection Closed");
             return;
         }
-        socketRef.current.send(d);
+        socketRef.current.send(d.toLocaleLowerCase());
     };
 
     const handleKeyDown = (e) => {
@@ -497,7 +497,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                 </div>
                             ) : gameState.current === 2 ? (
                                 <div className={`h-[95%] px-[1%]`}>
-                                    <motion.p animate={timerEndAnim} className={`text-center text-mnormal lg:text-3xl`}>Time Remaining: {seconds}</motion.p>
+                                    <motion.p animate={timerEndAnim} className={`text-center text-mnormal lg:text-3xl lg:pb-6`}>Time Remaining: {seconds}</motion.p>
                                     <div className={`grid grid-cols-[15%_70%_15%] h-[95%]`}>
                                         <div className={`text-left text-mnormal lg:text-4xl`}>
                                             <p>You</p>
