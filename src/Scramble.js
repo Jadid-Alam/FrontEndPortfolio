@@ -177,9 +177,14 @@ const Scramble  = ({darkMode, setDarkMode}) => {
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
-            sendMessage("g:"+inputRef.current.value);
-            inputRef.current.value = "";
+            handleSubmit(e);
         }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        sendMessage("g:"+inputRef.current.value);
+        inputRef.current.value = "";
     };
 
     useEffect(() => {
@@ -269,7 +274,7 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     // styles
     const mainButtonStyle = `border rounded-[5px] font-bold block w-[60%] lg:w-[40%] my-10 mx-auto p-4`;
     const gameHeader = `text-5xl lg:text-gh font-bold my-20 mx-auto p-10 text-center`;
-    const roomStyle = `text-1xl lg:text-heading m-gt border flex w-full `
+    const roomStyle = `resp-text lg:text-heading m-gt border flex w-full `
     const roomName = `p-2 text-left w-full`;
     const roomFill = `p-2 w-full text-right`;
     const roomList = `my-2 border`;
@@ -497,15 +502,15 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                 </div>
                             ) : gameState.current === 2 ? (
                                 <div className={`h-[95%] px-[1%]`}>
-                                    <motion.p animate={timerEndAnim} className={`text-center text-mnormal lg:text-3xl lg:pb-6`}>Time Remaining: {seconds}</motion.p>
+                                    <motion.p animate={timerEndAnim} className={`text-center text-mnormal lg:text-3xl lg:pb-[2%]`}>Time Remaining: {seconds}</motion.p>
                                     <div className={`grid grid-cols-[15%_70%_15%] h-[95%]`}>
                                         <div className={`text-left text-mnormal lg:text-4xl`}>
                                             <p>You</p>
                                             <motion.p animate={pointAddAnim}>{myPts}</motion.p>
                                         </div>
                                         <div className={``}>
-                                            <form onSubmit={e => e.preventDefault()} onKeyDown={handleKeyDown}>
-                                                <p className={`text-center text-4xl lg:text-gh font-bold`}>{anagram}</p>
+                                            <form onSubmit={handleSubmit}>
+                                                <p className={`text-center lg:mb-[7%] text-4xl lg:text-gh font-bold`}>{anagram}</p>
                                                 <motion.input
                                                     animate={guessInputAnim}
                                                     className={`block mx-auto w-[100%] lg:w-[90%] p-[2%] text-1xl lg:text-gt text-center font-bold border border-[#3d93fc] rounded-[5px] m-6`}
@@ -520,7 +525,8 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                                                                initial="initial"
                                                                whileHover="hover"
                                                                animate="animate"
-                                                               className={`block mx-auto border rounded-[5px] m-6 text-2xl lg:text-gt font-bold w-[80%] lg:w-[50%] p-[1%]`} onClick={handleKeyDown}>Guess!</motion.button>
+                                                               type={'submit'}
+                                                               className={`block mx-auto border rounded-[5px] m-6 text-2xl lg:text-gt font-bold w-[80%] lg:w-[50%] p-[1%]`}>Guess!</motion.button>
                                             </form>
                                         </div>
                                         <div className={`text-right text-mnormal lg:text-4xl`}>

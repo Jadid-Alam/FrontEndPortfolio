@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (min-height: 900px) {
+  .resp-text {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-height: 899px) {
+  .resp-text {
+    font-size: 0.85rem;
+  }
+}
+
+
 .expand-proj {
   animation: expandHeight 2s forwards;
 }
