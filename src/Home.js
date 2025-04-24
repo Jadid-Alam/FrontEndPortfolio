@@ -168,7 +168,7 @@ const Home = ({darkMode, setDarkMode}) => {
 
                       <p id='p4' className={`${textStyle2} ${fading['p4'] ? 'opacity-100' : 'opacity-0'}
                       ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                          After a year at the <motion.span className={`font-bold`} variants={shining} animate="animate">University of Oxford</motion.span> studing <motion.span className={`font-bold`} variants={shining} animate="animate">Engineering</motion.span>, I realised my true interest lay in Computer Science, prompting my transfer to Queen Mary. Here, I am excited to deepen my technical
+                          After a year at the <motion.span className={`font-bold`} variants={shining} animate="animate">University of Oxford</motion.span> studying <motion.span className={`font-bold`} variants={shining} animate="animate">Engineering</motion.span>, I realised my true interest lay in Computer Science, prompting my transfer to Queen Mary. Here, I am excited to deepen my technical
                           knowledge and gain practical experience, particularly through an individual project in my final year that will allow me to explore my specific interests within the field.
                       </p>
                   </div>
