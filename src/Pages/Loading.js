@@ -14,13 +14,19 @@ const Loading = ({darkMode, setDarkMode}) => {
         return () => clearTimeout(timer); 
     }, [history]);
 
-    const loadingAnimation = {
-        initial: {
-            scale: 1,
-        },
+    const backgroundAnimation = {
         animate: {
-            scale: [1,0.5,1],
-            rotate: [0,360],
+            x: [100,-5,0],
+            transition: {
+                duration: 1,
+                ease: "easeInOut",
+            },
+        },
+    };
+
+    const letterAnimation = {
+        animate: {
+            x: [-200,10,0],
             transition: {
                 duration: 1,
                 ease: "easeInOut",
@@ -30,11 +36,13 @@ const Loading = ({darkMode, setDarkMode}) => {
 
     return (
         <main className={`fixed inset-0 flex items-center justify-center overflow-hidden z-40 ${darkMode ? 'dark' : 'light'}`}>
-            <motion.h1 variants={loadingAnimation}
-                initial='initial'
+            <motion.h1 variants={backgroundAnimation}
                 animate='animate' className={`z-40 w-20 h-20 bg-purple-600 rounded-lg text-center align-middle text-heading font-bold 
                 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                J
+                <motion.p
+                variants={letterAnimation}
+                animate='animate'
+                >J</motion.p>
             </motion.h1>
         </main>
     );
