@@ -1,79 +1,15 @@
-import './index.css';
-import React , {useState, useEffect, useRef} from 'react';
-import darkModeImage from './images/night-mode.png';
-import lightModeImage from './images/day-mode.png';
-import { Link } from 'react-router-dom';
-import downImg from './images/downArrowDark.png';
-import downImgDark from './images/downArrow.png';
-import loading from './images/loading.gif';
+import '../index.css';
+import {useState, useEffect, useRef} from 'react';
+import loading from '../images/loading.gif';
 import {motion , useAnimation} from 'framer-motion';
 
-const Scramble  = ({darkMode, setDarkMode}) => {
-
-    const [color, setColor] = useState({r:64, g:0, b:140});
-    const [inverse, setInverse] = useState(false);
-    const colours = [{r:119, g:0, b:225}, {r:47, g:0, b:99}];
+const Scramble  = ({darkMode}) => {
     const [page, setPage] = useState(0);
     const gameState = useRef(0);
     const guessInputAnim = useAnimation();
     const pointAddAnim = useAnimation();
     const pointAddAnim1 = useAnimation();
     const timerEndAnim = useAnimation();
-
-    const handleDownload = () => {
-        const fileUrl = "/Jadid-Alam-CV.pdf";
-        const link = document.createElement('a');
-
-        link.href = fileUrl;
-        link.download = "Jadid-Alam-CV.pdf";
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    // styles
-    const colorString = `rgb(${color.r}, ${color.g}, ${color.b})`;
-    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold lg:text-nav lg:font-semibold fade-in duration-1000 ease-in-out';
-    const logoStyle = 'p-1 max-w-40 lg:p-2';
-    const navlinkStyle = 'p-1 lg:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
-    const [hideNav, setHideNav] = useState(true);
-
-    useEffect(() => {
-            if (window.innerWidth > 768) {
-                setHideNav(true);
-            }
-        }
-        , [window.innerWidth]);
-
-    const changeColor = () => {
-        setColor((color) => {
-            if (color.r > colours[0].r && color.b > colours[0].b) {
-                setInverse(true);
-            }
-            else if (color.r < colours[1].r && color.b < colours[1].b) {
-                setInverse(false);
-            }
-
-            if (!inverse) {
-                const rn = color.r + 8;
-                const bn = color.b + 13;
-                return {r:rn, g:color.g, b:bn};
-            }
-            else
-            {
-                const rn = color.r - 8;
-                const bn = color.b - 13;
-                return {r:rn, g:color.g, b:bn};
-            }
-
-        });
-    };
-
-    useEffect(() => {
-        const interval = setInterval(changeColor, 70);
-        return () => clearInterval(interval);
-    }, [color.r]);
 
     // backend connection and game logic
     const socketRef = useRef(null);
@@ -90,8 +26,8 @@ const Scramble  = ({darkMode, setDarkMode}) => {
     const [maxOppPts, setMaxOppPts] = useState(0);
 
     const connectToMatch = () => {
-        const ws = new WebSocket("wss://jadid-alam.duckdns.org/ws/");
-        //const ws = new WebSocket("ws://127.0.0.1:8080");
+        //const ws = new WebSocket("wss://jadid-alam.duckdns.org/ws/");
+        const ws = new WebSocket("ws://127.0.0.1:8080");
         ws.onopen = () => {
             socketRef.current = ws;
             setPage(1)
@@ -438,27 +374,6 @@ const Scramble  = ({darkMode, setDarkMode}) => {
 
     return (
         <div className={`min-h-screen h-full fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
-            <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
-                <h4 className={logoStyle} style={{ color: colorString }}>Jadid Alam</h4>
-                <nav className="mr-auto my-auto lg:my-0 lg:mr-auto lg:flex">
-                    <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='lg:hidden lg:w-[0px] lg:h-0 w-[15px] h-auto' src={darkMode ? downImg : downImgDark}/></button>
-                    <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} lg:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block w-[30%] sm:w-[15%] text-center"}`}>
-                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/'>Home</Link></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/experience'>Experience</Link></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLinkCurr' : 'navLinkCurr'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
-                    </ul>
-                </nav>
-
-                <nav className="mr-1 items-end sm:mr-2 lg:mr-4">
-                    <ul className="flex justify-end">
-                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
-                        <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/contact-me'>Contact Me</Link></li>
-                        <button onClick={() => setDarkMode(prevMode => !prevMode)}><img src={darkMode ? lightModeImage : darkModeImage} className='w-[15px] lg:w-[35px] h-auto' /></button>
-                    </ul>
-                </nav>
-            </header>
-
             <main>
                 <div className={gameBgStyle}>
                     {page === 1 ? (
@@ -653,10 +568,6 @@ const Scramble  = ({darkMode, setDarkMode}) => {
                     )}
                 </div>
             </main>
-
-            <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center lg:mt-16 lg:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
-            </footer>
         </div>
     );
 }
