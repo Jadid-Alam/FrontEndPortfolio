@@ -1,37 +1,12 @@
-import './index.css';
-import React , {useState, useEffect} from 'react';
-import myImage from './images/LeetcodeProfile.PNG';
-import darkModeImage from './images/night-mode.png';
-import lightModeImage from './images/day-mode.png';
-import { Link } from 'react-router-dom';
-import downImgDark from './images/downArrow.png';
-import downImg from './images/downArrowDark.png';
+import '../index.css';
+import {useState, useEffect} from 'react';
+import myImage from '../images/LeetcodeProfile.png';
 import {motion} from "framer-motion";
 
-const Home = ({darkMode, setDarkMode}) => {
-    const [mouse, setMouse] = useState({x:0, y:0});
+
+const Home = ({darkMode}) => {
+    
     const [fading, setFading] = useState({});
-    const [hideNav, setHideNav] = useState(true);
-
-    const handleDownload = () => {
-      const fileUrl = "/Jadid-Alam-CV.pdf";
-      const link = document.createElement('a');
-
-      link.href = fileUrl;
-      link.download = "Jadid-Alam-CV.pdf"; 
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
-
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            setMouse({x: e.clientX, y: e.clientY});
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, [mouse.x, mouse.y]);
 
     useEffect(() => {
         const elements = document.querySelectorAll('.fade-in');
@@ -62,30 +37,9 @@ const Home = ({darkMode, setDarkMode}) => {
         };
       }, []);
 
-    const fadingCircle = {
-        position: 'fixed',
-        top: mouse.y - 1500,
-        left: mouse.x - 1500,
-        zIndex: 0,
-        width: '3000px',
-        height: '3000px',
-        borderRadius: '50%',
-        pointerEvents: 'none',
-    };
-
-    const headerStyle = 'fixed z-20 top-0 left-0 w-full text-mnav font-semibold lg:text-nav lg:font-semibold fade-in duration-1000 ease-in-out';
-    const logoStyle = 'p-1 max-w-40 lg:p-2';
-    const navlinkStyle = 'p-1 lg:p-2 transform transition hover:text-purple-600 hover:translate-y-1 hover:transform hover:transition';
     const textStyle = 'py-96 p-2 text-mheading lg:p-3 lg:py-96 lg:text-heading fade-in duration-1000 ease-in-out';
     const textStyle1 = 'p-1 py-2 lg:p-3 lg:py-5 fade-in duration-1000 ease-in-out';
     const textStyle2 = 'p-1 py-2 lg:p-3 lg:py-4 text-left fade-in duration-1000 ease-in-out';
-
-    useEffect(() => {
-      if (window.innerWidth > 768) {
-        setHideNav(true);
-      }
-    }
-    , [window.innerWidth]);
 
     const shining = {
         animate: {
@@ -102,34 +56,6 @@ const Home = ({darkMode, setDarkMode}) => {
   return (
       <div className={`fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
 
-        <div className={`${darkMode ? 'gradient-dark' : 'gradient'}`} style={fadingCircle}></div>
-
-          <header className={`${headerStyle} ${darkMode ? 'dark' : 'light'}`}>
-                <motion.h4
-                    variants={shining}
-                    animate="animate"
-                    className={logoStyle}>Jadid Alam</motion.h4>
-                <nav className="mr-auto my-auto lg:my-0 lg:mr-auto lg:flex">
-                  <button onClick={() => setHideNav (prevMode => !prevMode)}><img className='lg:hidden lg:w-[0px] lg:h-0 w-[15px] h-auto mt-auto' src={darkMode ? downImg : downImgDark}/></button>
-                  <ul id='navBarMobile' className={`${darkMode ? 'dark' : 'light'} lg:flex fade-in duration-1000 ease-in-out ${hideNav ? "hidden" : "absolute block  w-[30%] sm:w-[15%] text-center"}`}>
-                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLinkCurr' : 'navLinkCurr'}`}><Link to='/'>Home</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/experience'>Experience</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/projects'>Projects</Link></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/scramble-minigame'>1v1 Scramble</Link></li>
-                  </ul>
-                </nav>
-                
-                <nav className="mr-1 items-end sm:mr-2 lg:mr-4">
-                  <ul className="flex justify-end">
-                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><a onClick={handleDownload}>Resume</a></li>
-                      <li className={`${navlinkStyle} ${darkMode ? 'darkNavLink' : 'navLink'}`}><Link to='/contact-me'>Contact Me</Link></li>
-                      <button onClick={() => setDarkMode(prevMode => !prevMode)}>
-                        <img className='w-[15px] lg:w-[35px] h-auto' src={darkMode ? lightModeImage : darkModeImage}/>
-                      </button>
-                  </ul>
-                </nav>
-                
-            </header>
 
             <main>
                 <div className='content z-10 text-center text-mnormal lg:text-normal'>
@@ -145,12 +71,11 @@ const Home = ({darkMode, setDarkMode}) => {
                             It's having a sense of purpose, goals to strive for!
                         </p>
                       <p id='p2' className={`${textStyle1} ${fading['p2'] ? 'opacity-100' : 'opacity-0'}
-                            ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Therefore, I make it a priority to set clear goals for myself and organize my daily activities to achieve them.
-                          For instance, I focus on completing challenges on LeetCode to enhance my coding skills and improve my acceptance rate.
+                            ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Therefore, I make it a priority to set clear goals for myself and organize my daily activities to achieve them. For instance, I often challenge myself using LeetCode to enhance my problem-solving skills and improve my understanding of coding.
                       </p>
                       
                       <figure id='img' className={`p-1 py-5 lg:p-3 lg:py-10 fade-in duration-1000 ease-in-out ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                            <a href='https://leetcode.com/u/ec23119/'><img src={myImage} alt="LeetCode Profile" style={{ width: '1500px', height: 'auto' }} /></a>
+                            <a href='https://leetcode.com/u/jadid-alam/'><img src={myImage} alt="LeetCode Profile" style={{ width: '1500px', height: 'auto' }} /></a>
                           <figcaption className='text-mimgcap lg:text-imgcap text-gray-600'>LeetCode Profile</figcaption>
                       </figure>
                   </div>
@@ -175,9 +100,7 @@ const Home = ({darkMode, setDarkMode}) => {
                 </div>
             </main>
 
-            <footer>
-                <h6 className={`content z-10 mt-8 mb-2 text-center lg:mt-16 lg:mb-4 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>&copy; {(new Date).getFullYear()} Jadid Alam. All rights reserved.</h6>
-            </footer>
+            
       </div>
   );
 }
