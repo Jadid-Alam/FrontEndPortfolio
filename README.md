@@ -41,6 +41,9 @@ This is my personal portfolio website, designed to showcase my projects, skills,
 - Expand project details with interactive demos
 - Add blog section for technical articles
 
+## Note
+- there are some vulnerabilities that can't be fixed since it will break the project
+
 ## License
 This project is personal and not licensed under any specific open-source license.
 
