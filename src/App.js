@@ -27,7 +27,7 @@ function App() {
   }, [darkMode]);
 
   return (
-    <Router className={`fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
+    <Router className={`h-screen fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
       <TopPanel darkMode={darkMode} setDarkMode={setDarkMode} selectedNav={selectedNav} setSelectedNav={setSelectedNav}/>
       <BackgroundEffect darkMode={darkMode} selectedNav={selectedNav}/>
       <div className='App'> 

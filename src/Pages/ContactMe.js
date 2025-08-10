@@ -6,7 +6,7 @@ import githubImage from '../images/github.png';
 import phoneImage from '../images/telephone.png';
 import {motion} from "framer-motion";
 
-const ContactMe = ({darkMode, setDarkMode}) => {
+const ContactMe = ({darkMode}) => {
     const [fading, setFading] = useState({});
 
     useEffect(() => {
@@ -52,10 +52,10 @@ const ContactMe = ({darkMode, setDarkMode}) => {
     }
 
   return (
-    <main>
-        <div className='content text-center text-mnormal lg:text-normal split z-10'>
+    <main className={`h-screen ${darkMode ? 'dark' : 'light'}`}>
+        <div className={`content text-center text-mnormal lg:text-normal split z-10 `}>
           <div>
-              <h2 id='title' className={`py-20 p-2 text-mheading lg:p-3 lg:py-64 lg:text-heading 
+              <h2 id='title' className={`py-16 p-2 text-mheading lg:p-3 lg:py-64 lg:text-heading 
                 fade-in duration-1000 ease-in-out ${fading['title'] || 1==1 ? 'opacity-100' : 'opacity-0'} 
                 ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Interested in <motion.span className={`font-bold`} variants={shining} animate='animate'>collaborating</motion.span> or have any inquiries? Feel free to <motion.span className={`font-bold`} variants={shining} animate='animate'>reach out</motion.span>.</h2>
           </div>
