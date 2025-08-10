@@ -26,8 +26,7 @@ const Scramble  = ({darkMode}) => {
     const [maxOppPts, setMaxOppPts] = useState(0);
 
     const connectToMatch = () => {
-        //const ws = new WebSocket("wss://jadid-alam.duckdns.org/ws/");
-        const ws = new WebSocket("wss://127.0.0.1:8080");
+        const ws = new WebSocket("wss://jadid-alam.com/ws");
         ws.onopen = () => {
             socketRef.current = ws;
             setPage(1)
