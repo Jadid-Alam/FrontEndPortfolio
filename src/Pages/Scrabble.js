@@ -3,7 +3,12 @@ import {useState, useEffect, useRef} from 'react';
 import loading from '../images/loading.gif';
 import {motion , useAnimation} from 'framer-motion';
 
-const Scramble  = ({darkMode}) => {
+const Scramble = ({darkMode}) => {
+    const [rerender,SetRerender] = useState(true);
+    useEffect(() => {
+        //console.log("rerendering");
+    },[rerender])
+
     const [page, setPage] = useState(0);
     const gameState = useRef(0);
     const guessInputAnim = useAnimation();
@@ -27,6 +32,7 @@ const Scramble  = ({darkMode}) => {
 
     const connectToMatch = () => {
         const ws = new WebSocket("wss://jadid-alam.com/ws");
+        //const ws = new WebSocket("ws://127.0.0.1:8080");
         ws.onopen = () => {
             socketRef.current = ws;
             setPage(1)
@@ -34,6 +40,7 @@ const Scramble  = ({darkMode}) => {
         };
 
         ws.onmessage = (event) => {
+            //console.log(event.data)
             let s =  "";
             if (event.data === "ping") {
                 sendMessage("pong")
@@ -158,17 +165,20 @@ const Scramble  = ({darkMode}) => {
     }, [seconds]);
 
     const WaitingRoom = (c) => {
+        SetRerender(!rerender);
         sendMessage(c)
         gameState.current = 3;
     }
 
     const StartGame = () => {
+        SetRerender(!rerender);
         gameState.current = 1;
         setSeconds(5)
         setTimeout(() => OngoingGame(), 5500)
     }
 
     const OngoingGame = () => {
+        SetRerender(!rerender);
         gameState.current = 2;
         setSeconds(60)
     }
