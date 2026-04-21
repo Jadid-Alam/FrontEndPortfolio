@@ -1,100 +1,202 @@
-import { motion } from "framer-motion";
-import '../index.css';
+import { useState } from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
 
-const ProjectButton = ({ 
-  project, 
-  darkMode, 
-  clicked, 
-  fading, 
-  toggleClick,
-  projStyle,
-  imgDevIcn,
-  imageStyle,
-  pStyle,
-  defFade
-}) => {
+const ProjectButton = ({ project, darkMode, index }) => {
+  const [expanded, setExpanded] = useState(false);
+  const theme = useTheme();
+
   return (
-    <button 
-      id={project.id} 
-      className={`${projStyle}
-        ${darkMode ? ' border-gray-950 ' : ' border-yellow-50 '}
-        ${darkMode ? 'hover:border-purple-900' : 'hover:border-b-purple-300'}`} 
-      onClick={toggleClick}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
     >
-      <div className={`z-10`}>
-        <h3 
-          id={`title${project.id}`} 
-          className={`p-1 pt-10 text-mh3 lg:text-h3 lg:p-3 lg:pt-16 text-left
-            ${defFade}  ${fading[`title${project.id}`] ? 'opacity-100' : 'opacity-0'}
-            ${darkMode ? 'text-yellow-100' : 'navLink'}`}
-        >
-          {project.title}
-        </h3>
-        <div className={imgDevIcn}>
-          {project.images.map((img, index) => (
-            <img key={index} src={img} className={imageStyle} />
-          ))}
-        </div>
-        <p 
-          id={`descipton${project.id}`} 
-          className={`p-1 py-2 lg:p-3 lg:py-4 text-left
-            ${defFade}  ${fading[`descipton${project.id}`] ? 'opacity-100' : 'opacity-0'}
-            ${darkMode ? 'text-yellow-100' : 'navLink'}`}
-        >
-          {project.description}
-        </p>
-        <small 
-          id={`small${project.id}`} 
-          className={`text-small
-            ${defFade}  ${fading[`small${project.id}`] ? 'opacity-100' : 'opacity-0'}
-            ${clicked[project.id] ? 'hidden' : '' }
-            ${darkMode ? 'text-yellow-100' : 'navLink'}`}
-        >
-          Click to View More Detail
-        </small>
-      </div>
-      <motion.div
-        initial={{ height: '0%', opacity: 0 }}
-        animate={{ 
-          height: clicked[project.id] ? ['0%','auto'] : ['auto',"0"], 
-          opacity: clicked[project.id] ? [0,1] : [1,0] 
+      <Card
+        elevation={0}
+        onClick={() => setExpanded(!expanded)}
+        sx={{
+          cursor: 'pointer',
+          height: '100%',
+          background: darkMode
+            ? 'rgba(17, 24, 39, 0.5)'
+            : 'rgba(255, 255, 255, 0.7)',
+          backdropFilter: 'blur(20px)',
+          border: `1px solid ${darkMode ? 'rgba(148,163,184,0.08)' : 'rgba(15,23,42,0.06)'}`,
+          borderRadius: 3,
+          transition: 'all 0.3s ease',
+          position: 'relative',
+          overflow: 'hidden',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: darkMode
+              ? '0 20px 40px rgba(139, 92, 246, 0.12)'
+              : '0 20px 40px rgba(0, 0, 0, 0.08)',
+            borderColor: darkMode ? 'rgba(139, 92, 246, 0.3)' : 'rgba(124, 58, 237, 0.2)',
+          },
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: 'linear-gradient(90deg, #8b5cf6, #06b6d4)',
+            opacity: expanded ? 1 : 0,
+            transition: 'opacity 0.3s ease',
+          },
         }}
-        transition={{ duration: project.transitionDuration, ease: "easeInOut" }}
-        className={`overflow-hidden`}
       >
-        <figure 
-          id={`img${project.id}`} 
-          className={`p-1 py-5 lg:p-3 lg:py-10 z-10 ${clicked[project.id] ? 'block' : 'hidden' } 
-            ${fading[`img${project.id}`] ? 'opacity-100' : 'opacity-0'}
-            ${defFade}  ${darkMode ? 'text-yellow-100' : 'navLink'}`}
-        >
-          <img 
-            src={project.detailImage.src} 
-            alt={project.detailImage.alt} 
-            style={{ width: '500px', height: 'auto' }} 
-          />
-          <figcaption className='text-mimgcap lg:text-imgcap text-left text-gray-600'>
-            {project.detailImage.caption}
-          </figcaption>
-        </figure>
-        {project.paragraphs.map((paragraph, index) => {
-          const paragraphId = `p${project.id.replace('b', '')}${index + 1}`;
-          return (
-            <p 
-              key={index}
-              id={paragraphId} 
-              className={`${pStyle} 
-                ${defFade}  ${clicked[project.id] ? 'block' : 'hidden' } 
-                ${fading[paragraphId] ? 'opacity-100' : 'opacity-0'}
-                ${darkMode ? 'text-yellow-100' : 'navLink'}`}
+        <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
+          {/* Title row */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                fontSize: { xs: '1rem', md: '1.1rem' },
+                color: theme.palette.text.primary,
+                flex: 1,
+                pr: 1,
+              }}
             >
-              {paragraph}
-            </p>
-          );
-        })}
-      </motion.div>
-    </button>
+              {project.title}
+            </Typography>
+            <IconButton
+              size="small"
+              sx={{
+                transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.3s ease',
+                color: theme.palette.text.secondary,
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpanded(!expanded);
+              }}
+            >
+              <ExpandMoreIcon fontSize="small" />
+            </IconButton>
+          </Box>
+
+          {/* Tech stack pills */}
+          {project.images.length > 0 && (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
+              {project.images.map((img, i) => (
+                <Box
+                  key={i}
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 1.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                    border: `1px solid ${darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      background: `${theme.palette.primary.main}15`,
+                      borderColor: `${theme.palette.primary.main}40`,
+                      transform: 'scale(1.15)',
+                    },
+                  }}
+                >
+                  <img src={img} alt="" style={{ width: 18, height: 18, objectFit: 'contain' }} />
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          {/* Description */}
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.palette.text.secondary,
+              lineHeight: 1.7,
+              fontSize: '0.85rem',
+            }}
+          >
+            {project.description}
+          </Typography>
+
+          {!expanded && (
+            <Typography
+              variant="caption"
+              sx={{
+                display: 'block',
+                mt: 2,
+                color: theme.palette.primary.main,
+                fontWeight: 500,
+                fontSize: '0.75rem',
+              }}
+            >
+              Click to view details →
+            </Typography>
+          )}
+
+          {/* Expandable Detail */}
+          <Collapse in={expanded} timeout={400}>
+            <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${theme.palette.divider}` }}>
+              {project.detailImage?.src && (
+                <Box
+                  sx={{
+                    mb: 2,
+                    borderRadius: 2,
+                    overflow: 'hidden',
+                    border: `1px solid ${theme.palette.divider}`,
+                  }}
+                >
+                  <img
+                    src={project.detailImage.src}
+                    alt={project.detailImage.alt}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                  />
+                  {project.detailImage.caption && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        display: 'block',
+                        p: 1,
+                        color: theme.palette.text.secondary,
+                        textAlign: 'center',
+                        fontSize: '0.7rem',
+                      }}
+                    >
+                      {project.detailImage.caption}
+                    </Typography>
+                  )}
+                </Box>
+              )}
+
+              {project.paragraphs.map((paragraph, i) => (
+                <Typography
+                  key={i}
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    mb: 1.5,
+                    lineHeight: 1.7,
+                    fontSize: '0.85rem',
+                    '&:last-child': { mb: 0 },
+                  }}
+                >
+                  {paragraph}
+                </Typography>
+              ))}
+            </Box>
+          </Collapse>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 
-export default ProjectButton
+export default ProjectButton;
