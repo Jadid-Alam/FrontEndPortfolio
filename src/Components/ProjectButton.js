@@ -27,10 +27,10 @@ const ProjectButton = ({ project, darkMode, index }) => {
           cursor: 'pointer',
           height: '100%',
           background: darkMode
-            ? 'rgba(17, 24, 39, 0.5)'
+            ? 'rgba(42, 71, 89, 0.5)'
             : 'rgba(255, 255, 255, 0.7)',
           backdropFilter: 'blur(20px)',
-          border: `1px solid ${darkMode ? 'rgba(148,163,184,0.08)' : 'rgba(15,23,42,0.06)'}`,
+          border: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.08)' : 'rgba(42, 71, 89, 0.06)'}`,
           borderRadius: 3,
           transition: 'all 0.3s ease',
           position: 'relative',
@@ -38,9 +38,9 @@ const ProjectButton = ({ project, darkMode, index }) => {
           '&:hover': {
             transform: 'translateY(-4px)',
             boxShadow: darkMode
-              ? '0 20px 40px rgba(139, 92, 246, 0.12)'
+              ? '0 20px 40px rgba(223, 128, 87, 0.12)'
               : '0 20px 40px rgba(0, 0, 0, 0.08)',
-            borderColor: darkMode ? 'rgba(139, 92, 246, 0.3)' : 'rgba(124, 58, 237, 0.2)',
+            borderColor: darkMode ? 'rgba(223, 128, 87, 0.3)' : 'rgba(223, 128, 87, 0.2)',
           },
           '&::before': {
             content: '""',
@@ -49,7 +49,7 @@ const ProjectButton = ({ project, darkMode, index }) => {
             left: 0,
             right: 0,
             height: '3px',
-            background: 'linear-gradient(90deg, #8b5cf6, #06b6d4)',
+            background: 'linear-gradient(90deg, #DF8057, #3B637C)',
             opacity: expanded ? 1 : 0,
             transition: 'opacity 0.3s ease',
           },

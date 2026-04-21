@@ -49,7 +49,7 @@ const ContactMe = ({ darkMode }) => {
     <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', py: { xs: 4, md: 0 } }}>
       <Container maxWidth="md">
         <Grid container spacing={6} alignItems="center">
-          {/* Left side — heading */}
+          {/* Left side - heading */}
           <Grid item xs={12} md={5}>
             <motion.div
               initial={{ opacity: 0, x: -40 }}
@@ -104,10 +104,10 @@ const ContactMe = ({ darkMode }) => {
                           textDecoration: 'none',
                           display: 'block',
                           background: darkMode
-                            ? 'rgba(17, 24, 39, 0.5)'
+                            ? 'rgba(42, 71, 89, 0.5)'
                             : 'rgba(255, 255, 255, 0.7)',
                           backdropFilter: 'blur(20px)',
-                          border: `1px solid ${darkMode ? 'rgba(148,163,184,0.08)' : 'rgba(15,23,42,0.06)'}`,
+                          border: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.08)' : 'rgba(42, 71, 89, 0.06)'}`,
                           borderRadius: 3,
                           transition: 'all 0.3s ease',
                           cursor: 'pointer',

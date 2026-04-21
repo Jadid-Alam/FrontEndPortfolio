@@ -4,29 +4,29 @@ export const getTheme = (mode) => createTheme({
   palette: {
     mode,
     ...(mode === 'dark' ? {
-      primary: { main: '#8b5cf6', light: '#a78bfa', dark: '#7c3aed' },
-      secondary: { main: '#06b6d4', light: '#22d3ee', dark: '#0891b2' },
+      primary: { main: '#DF8057', light: '#F79B72', dark: '#B55D3A' },
+      secondary: { main: '#DDDDDD', light: '#EEEEEE', dark: '#B0B0B0' },
       background: {
-        default: '#0a0e17',
-        paper: '#111827',
+        default: '#1E3340',
+        paper: '#2A4759',
       },
       text: {
-        primary: '#f1f5f9',
-        secondary: '#94a3b8',
+        primary: '#EEEEEE',
+        secondary: '#DDDDDD',
       },
-      divider: 'rgba(148, 163, 184, 0.12)',
+      divider: 'rgba(238, 238, 238, 0.12)',
     } : {
-      primary: { main: '#7c3aed', light: '#a78bfa', dark: '#6d28d9' },
-      secondary: { main: '#0891b2', light: '#06b6d4', dark: '#0e7490' },
+      primary: { main: '#DF8057', light: '#F79B72', dark: '#B55D3A' },
+      secondary: { main: '#2A4759', light: '#3B637C', dark: '#1E3340' },
       background: {
-        default: '#f1f5f9',
-        paper: '#ffffff',
+        default: '#EEEEEE',
+        paper: '#DDDDDD',
       },
       text: {
-        primary: '#0f172a',
-        secondary: '#64748b',
+        primary: '#2A4759',
+        secondary: '#4A6B80',
       },
-      divider: 'rgba(15, 23, 42, 0.08)',
+      divider: 'rgba(42, 71, 89, 0.08)',
     }),
   },
   typography: {

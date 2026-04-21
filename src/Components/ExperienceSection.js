@@ -25,18 +25,18 @@ const ExperienceSection = ({ experience, darkMode, index }) => {
           mb: 3,
           p: 0,
           background: darkMode
-            ? 'rgba(17, 24, 39, 0.5)'
+            ? 'rgba(42, 71, 89, 0.5)'
             : 'rgba(255, 255, 255, 0.7)',
           backdropFilter: 'blur(20px)',
-          border: `1px solid ${darkMode ? 'rgba(148,163,184,0.08)' : 'rgba(15,23,42,0.06)'}`,
+          border: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.08)' : 'rgba(42, 71, 89, 0.06)'}`,
           borderRadius: 3,
           transition: 'all 0.3s ease',
           '&:hover': {
             transform: 'translateY(-4px)',
             boxShadow: darkMode
-              ? '0 20px 40px rgba(139, 92, 246, 0.1)'
+              ? '0 20px 40px rgba(223, 128, 87, 0.1)'
               : '0 20px 40px rgba(0, 0, 0, 0.08)',
-            borderColor: darkMode ? 'rgba(139, 92, 246, 0.3)' : 'rgba(124, 58, 237, 0.2)',
+            borderColor: darkMode ? 'rgba(223, 128, 87, 0.3)' : 'rgba(223, 128, 87, 0.2)',
           },
         }}
       >

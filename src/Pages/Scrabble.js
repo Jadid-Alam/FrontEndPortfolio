@@ -219,25 +219,25 @@ const Scramble = ({ darkMode }) => {
 
   // ── Shared styles ──────────────────────────────
   const cardSx = {
-    background: darkMode ? 'rgba(17, 24, 39, 0.7)' : 'rgba(255, 255, 255, 0.85)',
+    background: darkMode ? 'rgba(42, 71, 89, 0.7)' : 'rgba(255, 255, 255, 0.85)',
     backdropFilter: 'blur(20px)',
-    border: `1px solid ${darkMode ? 'rgba(148,163,184,0.1)' : 'rgba(15,23,42,0.08)'}`,
+    border: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.1)' : 'rgba(42, 71, 89, 0.08)'}`,
     borderRadius: 3,
   };
 
   const neonButtonSx = {
-    background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+    background: 'linear-gradient(135deg, #DF8057, #3B637C)',
     color: '#fff',
     fontWeight: 700,
     fontSize: { xs: '1rem', md: '1.1rem' },
     py: 1.5,
     px: 4,
     borderRadius: 2,
-    boxShadow: '0 4px 20px rgba(139, 92, 246, 0.3)',
+    boxShadow: '0 4px 20px rgba(223, 128, 87, 0.3)',
     transition: 'all 0.3s',
     '&:hover': {
       transform: 'translateY(-2px)',
-      boxShadow: '0 8px 30px rgba(139, 92, 246, 0.5)',
+      boxShadow: '0 8px 30px rgba(223, 128, 87, 0.5)',
     },
   };
 
@@ -302,7 +302,7 @@ const Scramble = ({ darkMode }) => {
                               onClick={() => !isFull && WaitingRoom(matchLetters[index])}
                               sx={{
                                 borderRadius: 2,
-                                border: `1px solid ${darkMode ? 'rgba(139, 92, 246, 0.2)' : 'rgba(124, 58, 237, 0.15)'}`,
+                                border: `1px solid ${darkMode ? 'rgba(223, 128, 87, 0.2)' : 'rgba(223, 128, 87, 0.15)'}`,
                                 py: 2,
                                 px: 3,
                                 transition: 'all 0.2s',
@@ -344,7 +344,7 @@ const Scramble = ({ darkMode }) => {
                         sx={{
                           fontWeight: 900,
                           fontSize: '5rem',
-                          background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+                          background: 'linear-gradient(135deg, #DF8057, #3B637C)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
                         }}
@@ -369,7 +369,7 @@ const Scramble = ({ darkMode }) => {
                           height: '100%',
                           borderRadius: 2,
                           width: `${(seconds / 60) * 100}%`,
-                          background: seconds <= 10 ? '#ef4444' : 'linear-gradient(90deg, #8b5cf6, #06b6d4)',
+                          background: seconds <= 10 ? '#ef4444' : 'linear-gradient(90deg, #DF8057, #3B637C)',
                           transition: 'width 1s linear, background 0.3s',
                         }}
                       />
@@ -384,7 +384,7 @@ const Scramble = ({ darkMode }) => {
                             fontWeight: 900,
                             fontSize: { xs: '2rem', md: '3rem' },
                             letterSpacing: '0.1em',
-                            background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+                            background: 'linear-gradient(135deg, #DF8057, #FFB88C)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             mb: 3,
@@ -524,7 +524,7 @@ const Scramble = ({ darkMode }) => {
                       mb: 6,
                       textAlign: 'center',
                       fontSize: { xs: '2.5rem', md: '4rem' },
-                      background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+                      background: 'linear-gradient(135deg, #DF8057, #3B637C)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                     }}
