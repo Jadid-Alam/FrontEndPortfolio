@@ -6,21 +6,21 @@
    DESIGN TOKENS
    ═══════════════════════════════════════════ */
 :root {
-  --bg-dark: #0a0e17;
-  --bg-dark-surface: #111827;
-  --bg-dark-elevated: #1e293b;
-  --bg-light: #f1f5f9;
-  --bg-light-surface: #ffffff;
-  --primary: #8b5cf6;
-  --primary-glow: rgba(139, 92, 246, 0.3);
-  --secondary: #06b6d4;
-  --accent: #f59e0b;
-  --gradient-start: #8b5cf6;
-  --gradient-end: #06b6d4;
-  --glass-bg-dark: rgba(17, 24, 39, 0.6);
-  --glass-bg-light: rgba(255, 255, 255, 0.6);
-  --glass-border-dark: rgba(148, 163, 184, 0.1);
-  --glass-border-light: rgba(15, 23, 42, 0.06);
+  --bg-dark: #1E3340;
+  --bg-dark-surface: #2A4759;
+  --bg-dark-elevated: #3B637C;
+  --bg-light: #EEEEEE;
+  --bg-light-surface: #DDDDDD;
+  --primary: #DF8057;
+  --primary-glow: rgba(223, 128, 87, 0.3);
+  --secondary: #DDDDDD;
+  --accent: #DF8057;
+  --gradient-start: #DF8057;
+  --gradient-end: #3B637C;
+  --glass-bg-dark: rgba(42, 71, 89, 0.6);
+  --glass-bg-light: rgba(238, 238, 238, 0.6);
+  --glass-border-dark: rgba(238, 238, 238, 0.1);
+  --glass-border-light: rgba(42, 71, 89, 0.06);
 }
 
 /* ═══════════════════════════════════════════
@@ -88,7 +88,7 @@ body {
 }
 
 .gradient-text-animated {
-  background: linear-gradient(135deg, #8b5cf6, #06b6d4, #8b5cf6, #06b6d4);
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end), var(--gradient-start), var(--gradient-end));
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -116,21 +116,21 @@ body {
 .orb-1 {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(223, 128, 87, 0.35), transparent 70%);
   animation: orbFloat1 20s ease-in-out infinite;
 }
 
 .orb-2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.25), transparent 70%);
+  background: radial-gradient(circle, rgba(59, 99, 124, 0.25), transparent 70%);
   animation: orbFloat2 25s ease-in-out infinite;
 }
 
 .orb-3 {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(223, 128, 87, 0.15), transparent 70%);
   animation: orbFloat3 18s ease-in-out infinite;
 }
 
@@ -177,7 +177,7 @@ body {
 
 .card-glow:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 20px 40px rgba(223, 128, 87, 0.15);
 }
 
 /* ═══════════════════════════════════════════
@@ -196,7 +196,7 @@ body {
 
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 5px var(--primary-glow); }
-  50% { box-shadow: 0 0 20px var(--primary-glow), 0 0 40px rgba(139, 92, 246, 0.1); }
+  50% { box-shadow: 0 0 20px var(--primary-glow), 0 0 40px rgba(223, 128, 87, 0.1); }
 }
 
 .animate-fade-in-up {

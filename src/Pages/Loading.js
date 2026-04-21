@@ -21,7 +21,7 @@ const Loading = ({ darkMode }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: darkMode ? '#0a0e17' : '#f1f5f9',
+        background: darkMode ? '#1E3340' : '#EEEEEE',
         zIndex: 9999,
       }}
     >
@@ -38,7 +38,7 @@ const Loading = ({ darkMode }) => {
           width: 80,
           height: 80,
           borderRadius: 16,
-          background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+          background: 'linear-gradient(135deg, #DF8057, #3B637C)',
         }}
       />
 
@@ -56,11 +56,11 @@ const Loading = ({ darkMode }) => {
           width: 72,
           height: 72,
           borderRadius: 16,
-          background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+          background: 'linear-gradient(135deg, #DF8057, #3B637C)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 20px 60px rgba(139, 92, 246, 0.4)',
+          boxShadow: '0 20px 60px rgba(223, 128, 87, 0.4)',
         }}
       >
         <motion.span

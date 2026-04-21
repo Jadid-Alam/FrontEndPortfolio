@@ -93,9 +93,9 @@ const Home = ({ darkMode }) => {
                   sx={{
                     fontSize: '0.8rem',
                     fontWeight: 500,
-                    background: darkMode ? 'rgba(139, 92, 246, 0.1)' : 'rgba(124, 58, 237, 0.08)',
+                    background: darkMode ? 'rgba(223, 128, 87, 0.1)' : 'rgba(223, 128, 87, 0.08)',
                     color: theme.palette.primary.light,
-                    border: `1px solid ${darkMode ? 'rgba(139, 92, 246, 0.2)' : 'rgba(124, 58, 237, 0.15)'}`,
+                    border: `1px solid ${darkMode ? 'rgba(223, 128, 87, 0.2)' : 'rgba(223, 128, 87, 0.15)'}`,
                     transition: 'all 0.2s',
                     '&:hover': {
                       background: `${theme.palette.primary.main}25`,
@@ -123,9 +123,9 @@ const Home = ({ darkMode }) => {
           <Card
             elevation={0}
             sx={{
-              background: darkMode ? 'rgba(17, 24, 39, 0.5)' : 'rgba(255, 255, 255, 0.7)',
+              background: darkMode ? 'rgba(42, 71, 89, 0.5)' : 'rgba(255, 255, 255, 0.7)',
               backdropFilter: 'blur(20px)',
-              border: `1px solid ${darkMode ? 'rgba(148,163,184,0.08)' : 'rgba(15,23,42,0.06)'}`,
+              border: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.08)' : 'rgba(42, 71, 89, 0.06)'}`,
               borderRadius: 3,
               overflow: 'hidden',
             }}

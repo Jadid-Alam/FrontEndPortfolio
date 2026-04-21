@@ -49,8 +49,8 @@ const TopPanel = ({ darkMode, setDarkMode }) => {
         elevation={0}
         sx={{
           background: darkMode
-            ? 'rgba(10, 14, 23, 0.7)'
-            : 'rgba(241, 245, 249, 0.7)',
+            ? 'rgba(30, 51, 64, 0.8)'
+            : 'rgba(238, 238, 238, 0.8)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           borderBottom: `1px solid ${darkMode ? 'rgba(148,163,184,0.08)' : 'rgba(15,23,42,0.06)'}`,
@@ -67,7 +67,7 @@ const TopPanel = ({ darkMode, setDarkMode }) => {
               textDecoration: 'none',
               fontWeight: 800,
               fontSize: { xs: '1.1rem', md: '1.3rem' },
-              background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+              background: 'linear-gradient(135deg, #DF8057, #3B637C)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -100,7 +100,7 @@ const TopPanel = ({ darkMode, setDarkMode }) => {
                       transform: 'translateX(-50%)',
                       width: location.pathname === link.path ? '60%' : '0%',
                       height: '2px',
-                      background: 'linear-gradient(90deg, #8b5cf6, #06b6d4)',
+                      background: 'linear-gradient(90deg, #DF8057, #3B637C)',
                       borderRadius: '1px',
                       transition: 'width 0.3s ease',
                     },
@@ -183,8 +183,8 @@ const TopPanel = ({ darkMode, setDarkMode }) => {
         PaperProps={{
           sx: {
             width: 260,
-            background: darkMode ? '#111827' : '#ffffff',
-            borderLeft: `1px solid ${darkMode ? 'rgba(148,163,184,0.1)' : 'rgba(15,23,42,0.06)'}`,
+            background: theme.palette.background.paper,
+            borderLeft: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.1)' : 'rgba(42, 71, 89, 0.06)'}`,
           },
         }}
       >
@@ -194,7 +194,7 @@ const TopPanel = ({ darkMode, setDarkMode }) => {
             sx={{
               fontWeight: 800,
               mb: 3,
-              background: 'linear-gradient(135deg, #8b5cf6, #06b6d4)',
+              background: 'linear-gradient(135deg, #DF8057, #3B637C)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
