@@ -1,585 +1,579 @@
-import '../index.css';
-import {useState, useEffect, useRef} from 'react';
-import loading from '../images/loading.gif';
-import {motion , useAnimation} from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CircularProgress from '@mui/material/CircularProgress';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useTheme } from '@mui/material/styles';
+import { motion, useAnimation } from 'framer-motion';
 
-const Scramble = ({darkMode}) => {
-    const [rerender,SetRerender] = useState(true);
-    useEffect(() => {
-        //console.log("rerendering");
-    },[rerender])
 
-    const [page, setPage] = useState(0);
-    const gameState = useRef(0);
-    const guessInputAnim = useAnimation();
-    const pointAddAnim = useAnimation();
-    const pointAddAnim1 = useAnimation();
-    const timerEndAnim = useAnimation();
+const Scramble = ({ darkMode }) => {
+  const theme = useTheme();
+  const [rerender, SetRerender] = useState(true);
+  useEffect(() => {}, [rerender]);
 
-    // backend connection and game logic
-    const socketRef = useRef(null);
-    const [available, setAvailable] = useState(String("0000"));
-    const matchNames = ["Alpaca","Bridge","Clam","Dilly"]
-    const matchLetters = ['a','b','c','d']
-    const inputRef = useRef(null);
-    const [anagram, setAnagram] = useState("Anagram");
-    const [myPts, setMyPts] = useState(0);
-    const [oppPts, setOppPts] = useState(0);
-    const [winner, setWinner] = useState(0);
-    const reconnecting = useRef(0)
-    const [maxMyPts, setMaxMyPts] = useState(0);
-    const [maxOppPts, setMaxOppPts] = useState(0);
+  const [page, setPage] = useState(0);
+  const gameState = useRef(0);
+  const guessInputAnim = useAnimation();
+  const pointAddAnim = useAnimation();
+  const pointAddAnim1 = useAnimation();
+  const timerEndAnim = useAnimation();
 
-    const connectToMatch = () => {
-        const ws = new WebSocket("wss://jadid-alam.com/ws");
-        //const ws = new WebSocket("ws://127.0.0.1:8080");
-        ws.onopen = () => {
-            socketRef.current = ws;
-            setPage(1)
-            console.log("joined");
-        };
+  // backend connection and game logic
+  const socketRef = useRef(null);
+  const [available, setAvailable] = useState(String('0000'));
+  const matchNames = ['Alpaca', 'Bridge', 'Clam', 'Dilly'];
+  const matchLetters = ['a', 'b', 'c', 'd'];
+  const inputRef = useRef(null);
+  const [anagram, setAnagram] = useState('Anagram');
+  const [myPts, setMyPts] = useState(0);
+  const [oppPts, setOppPts] = useState(0);
+  const [winner, setWinner] = useState(0);
+  const reconnecting = useRef(0);
+  const [maxMyPts, setMaxMyPts] = useState(0);
+  const [maxOppPts, setMaxOppPts] = useState(0);
 
-        ws.onmessage = (event) => {
-            //console.log(event.data)
-            let s =  "";
-            if (event.data === "ping") {
-                sendMessage("pong")
-            }
-            else {
-                s = event.data.toString().split(':');
-                if (s[0] === 'a') {
-                    setAvailable(s[1]);
-                }
-                else if (s[0] === 's') {
-                    setAnagram(s[1]);
-                    StartGame();
-                }
-                else if (s[0] === 'p') {
-                    const t = (100*parseInt(s[1],10));
-                    if (t === 0) {
-                        wrongGuess();
-                    }
-                    setMaxMyPts(t);
-                }
-                else if (s[0] === 'o') {
-                    const t = (100*parseInt(s[1],10));
-                    setMaxOppPts(t);
-                }
-                else if (s[0] === 'f') {
-                    if (s[1] === 'u') {
-                        setWinner(0)
-                        gameState.current = 5;
-                    }
-                    else if (s[1] === 'o') {
-                        setWinner(1)
-                        gameState.current = 5;
-                    }
-                    else if (s[1] === 'd') {
-                        setWinner(2)
-                        gameState.current = 5;
-                    }
-                    else if (s[1] === 'x') {
-                        gameState.current = 4;
-                    }
-                    setTimeout(() => resetGame(), 5000)
-                }
-            }
-
-        };
-
-        ws.onerror = (error) => console.error("WebSocket Error:", error);
-        ws.onclose = () => {
-            console.log("WebSocket Closed");
-            if (socketRef.current !== null) {
-                const interval = setInterval(() => {
-                    resetGame();
-                }, 5000);
-                return () => {
-                    clearInterval(interval);
-                };
-            } else if (reconnecting.current < 6) {
-                reconnecting.current += 1;
-                setTimeout(() => connectToMatch(), 1000)
-            } else {
-                resetGame();
-            }
-        }
+  const connectToMatch = () => {
+    const ws = new WebSocket('wss://jadid-alam.com/ws');
+    ws.onopen = () => {
+      socketRef.current = ws;
+      setPage(1);
     };
 
-    const sendMessage = (d) => {
-        if (!socketRef.current) {
-            return;
+    ws.onmessage = (event) => {
+      let s = '';
+      if (event.data === 'ping') {
+        sendMessage('pong');
+      } else {
+        s = event.data.toString().split(':');
+        if (s[0] === 'a') {
+          setAvailable(s[1]);
+        } else if (s[0] === 's') {
+          setAnagram(s[1]);
+          StartGame();
+        } else if (s[0] === 'p') {
+          const t = 100 * parseInt(s[1], 10);
+          if (t === 0) wrongGuess();
+          setMaxMyPts(t);
+        } else if (s[0] === 'o') {
+          const t = 100 * parseInt(s[1], 10);
+          setMaxOppPts(t);
+        } else if (s[0] === 'f') {
+          if (s[1] === 'u') { setWinner(0); gameState.current = 5; }
+          else if (s[1] === 'o') { setWinner(1); gameState.current = 5; }
+          else if (s[1] === 'd') { setWinner(2); gameState.current = 5; }
+          else if (s[1] === 'x') { gameState.current = 4; }
+          setTimeout(() => resetGame(), 5000);
         }
-        if (socketRef.current.readyState !== WebSocket.OPEN) {
-            console.log("WebSocket Connection Closed");
-            return;
-        }
-        socketRef.current.send(d.toLocaleLowerCase());
+      }
     };
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            handleSubmit(e);
-        }
+    ws.onerror = (error) => console.error('WebSocket Error:', error);
+    ws.onclose = () => {
+      if (socketRef.current !== null) {
+        const interval = setInterval(() => { resetGame(); }, 5000);
+        return () => clearInterval(interval);
+      } else if (reconnecting.current < 6) {
+        reconnecting.current += 1;
+        setTimeout(() => connectToMatch(), 1000);
+      } else {
+        resetGame();
+      }
     };
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        sendMessage("g:"+inputRef.current.value);
-        inputRef.current.value = "";
-    };
+  const sendMessage = (d) => {
+    if (!socketRef.current) return;
+    if (socketRef.current.readyState !== WebSocket.OPEN) return;
+    socketRef.current.send(d.toLocaleLowerCase());
+  };
 
-    useEffect(() => {
-        if (myPts < maxMyPts) {
-            const diff = maxMyPts - myPts;
-            const interval = setInterval(() => {
-                setMyPts((prev) => prev+1);
-                addPointsAnimation();
-            }, (500/diff));
-            return () => clearInterval(interval);
-        }
-    },[maxMyPts, myPts]);
-    useEffect(() => {
-        if (oppPts < maxOppPts) {
-            const diff = 500/(maxOppPts - oppPts);
-            const interval = setInterval(() => {
-                setOppPts((prev) => prev+1);
-                addPointsAnimation1();
-            }, (diff));
-            return () => clearInterval(interval);
-        }
-    },[maxOppPts, oppPts]);
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleSubmit(e);
+  };
 
-    const [seconds, setSeconds] = useState(0);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage('g:' + inputRef.current.value);
+    inputRef.current.value = '';
+  };
 
-    useEffect(() => {
-        if (seconds > 0) {
-            const interval = setInterval(() => {
-                setSeconds((prev) => prev - 1);
-                if (seconds <= 5) {
-                    startRedTimerAnimation();
-                }
-            }, 1000);
-            return () => clearInterval(interval); // Cleanup on unmount
-        }
-    }, [seconds]);
-
-    const WaitingRoom = (c) => {
-        SetRerender(!rerender);
-        sendMessage(c)
-        gameState.current = 3;
+  useEffect(() => {
+    if (myPts < maxMyPts) {
+      const diff = maxMyPts - myPts;
+      const interval = setInterval(() => {
+        setMyPts((prev) => prev + 1);
+        addPointsAnimation();
+      }, 500 / diff);
+      return () => clearInterval(interval);
     }
+  }, [maxMyPts, myPts]);
 
-    const StartGame = () => {
-        SetRerender(!rerender);
-        gameState.current = 1;
-        setSeconds(5)
-        setTimeout(() => OngoingGame(), 5500)
+  useEffect(() => {
+    if (oppPts < maxOppPts) {
+      const diff = 500 / (maxOppPts - oppPts);
+      const interval = setInterval(() => {
+        setOppPts((prev) => prev + 1);
+        addPointsAnimation1();
+      }, diff);
+      return () => clearInterval(interval);
     }
+  }, [maxOppPts, oppPts]);
 
-    const OngoingGame = () => {
-        SetRerender(!rerender);
-        gameState.current = 2;
-        setSeconds(60)
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    if (seconds > 0) {
+      const interval = setInterval(() => {
+        setSeconds((prev) => prev - 1);
+        if (seconds <= 5) startRedTimerAnimation();
+      }, 1000);
+      return () => clearInterval(interval);
     }
+  }, [seconds]);
 
-    useEffect(() => {
-        if (page === 3) {
-            connectToMatch();
-        }
-    }, [page]);
+  const WaitingRoom = (c) => {
+    SetRerender(!rerender);
+    sendMessage(c);
+    gameState.current = 3;
+  };
 
-    useEffect(() => {
-        let interval;
-        if (page === 1 && gameState.current === 0) {
-            interval = setInterval(() => {
-                sendMessage("r");
-            }, 5000);
-        }
-        return () => {
-            clearInterval(interval);
-        };
-    }, [page, gameState.current]);
+  const StartGame = () => {
+    SetRerender(!rerender);
+    gameState.current = 1;
+    setSeconds(5);
+    setTimeout(() => OngoingGame(), 5500);
+  };
 
-    const resetGame = () => {
-        gameState.current = 0;
-        if (socketRef.current !== null) {
-            socketRef.current.close()
-        }
-        socketRef.current = null;
-        setPage(0);
-        setAnagram("Anagram");
-        setMyPts(0);
-        setOppPts(0);
-        setWinner(0);
-        reconnecting.current = 0;
-        window.location.reload();
+  const OngoingGame = () => {
+    SetRerender(!rerender);
+    gameState.current = 2;
+    setSeconds(60);
+  };
+
+  useEffect(() => {
+    if (page === 3) connectToMatch();
+  }, [page]);
+
+  useEffect(() => {
+    let interval;
+    if (page === 1 && gameState.current === 0) {
+      interval = setInterval(() => { sendMessage('r'); }, 5000);
     }
+    return () => clearInterval(interval);
+  }, [page, gameState.current]);
 
-    // styles
-    const mainButtonStyle = `border rounded-[5px] font-bold block w-[60%] lg:w-[40%] my-10 mx-auto p-4`;
-    const gameHeader = `text-5xl lg:text-gh font-bold my-20 mx-auto p-10 text-center`;
-    const roomStyle = `resp-text lg:text-heading m-gt border flex w-full `
-    const roomName = `p-2 text-left w-full`;
-    const roomFill = `p-2 w-full text-right`;
-    const roomList = `my-2 border`;
-    const transitionStyle = `text-center py-[20%] text-heading`;
-    const backButton = `block border rounded-[5px] mx-[1%] my-[1%] pb-1 px-2 text-centre`
-    const gameBgStyle = `text-blue-950 rounded-[10px] mt-10 lg:mt-20 content z-10 text-m lg:text-normal w-full h-[90vh] lg:h-[80.0vh] bg-[#e0e0e0] font-bold`;
-    const rulesStyle = `p-[1%]`;
+  const resetGame = () => {
+    gameState.current = 0;
+    if (socketRef.current !== null) socketRef.current.close();
+    socketRef.current = null;
+    setPage(0);
+    setAnagram('Anagram');
+    setMyPts(0);
+    setOppPts(0);
+    setWinner(0);
+    reconnecting.current = 0;
+    window.location.reload();
+  };
 
-    const buttonAnim = {
-        initial: {
-            backgroundColor: "#60a5fa",
-            borderColor: "#60a5fa",
-            scale: 0,
-        },
-        hover: {
-            scale: 1.2, // Enlarges on hover
-            backgroundColor: "#3d93fc",
-            transition: { duration: 0.5 },
-        },
-        animate: {
-            borderColor: ["#60a5fa", "#3d93fc"],
-            scale: [0,1.2,1],
-            transition: {
-                borderColor: {
-                    repeat: Infinity,
-                    repeatType: "mirror",
-                    duration: 2,
-                    ease: "easeInOut",
-                },
-            },
-        },
-    };
+  // Animations
+  const wrongGuess = () => {
+    guessInputAnim.start({
+      x: [0, -5, 5, -2, 2, 0],
+      transition: { duration: 0.4 },
+    });
+  };
 
-    const backButtonAnim = {
-        initial: {
-            backgroundColor: "#60a5fa",
-            borderColor: "#3d93fc",
-            scale: 0,
-        },
-        hover: {
-            scale: 1.1,
-            backgroundColor: "#3d93fc",
-            transition: { duration: 0.5 },
-        },
-        animate: {
-            scale: [0,1.1,1],
-            transition: {
-                duration: 1,
-                ease: "easeInOut",
-            },
-        },
-    };
+  const addPointsAnimation = () => {
+    pointAddAnim.start({
+      scale: [1, 1.15, 1],
+      color: [theme.palette.text.primary, '#22c55e', theme.palette.text.primary],
+      transition: { duration: 0.3 },
+    });
+  };
 
-    const guessButtonAnim = {
-        initial: {
-            backgroundColor: "#60a5fa",
-            borderColor: "#3d93fc",
-            scale: 1,
-        },
-        hover: {
-            scale: 1.05,
-            backgroundColor: "#3d93fc",
-            transition: { duration: 0.3 },
-        },
-    };
+  const addPointsAnimation1 = () => {
+    pointAddAnim1.start({
+      scale: [1, 1.15, 1],
+      color: [theme.palette.text.primary, '#ef4444', theme.palette.text.primary],
+      transition: { duration: 0.3 },
+    });
+  };
 
-    const listAnimL = {
-        initial: {
-            backgroundColor: "#60a5fa",
-            borderColor: "#3d93fc",
-            scale: 1,
-        },
-        hover: {
-            scale: 1.1,
-            backgroundColor: "#3d93fc",
-            transition: { duration: 0.5 },
-        },
-        animate: {
-            x: [0,-3,0,0,0,0],
-            rotate: [0,-0.3,0,0,0,0],
-            transition: {
-                repeat: Infinity,
-                repeatType: "mirror",
-                duration: 1,
-                ease: "easeInOut",
-            },
-        },
-    }
+  const startRedTimerAnimation = () => {
+    timerEndAnim.start({
+      scale: [1, 1.15, 1],
+      color: [theme.palette.text.primary, '#ef4444', theme.palette.text.primary],
+      transition: { duration: 0.8 },
+    });
+  };
 
-    const listAnimR = {
-        initial: {
-            backgroundColor: "#60a5fa",
-            borderColor: "#3d93fc",
-            scale: 1,
-        },
-        hover: {
-            scale: 1.1,
-            backgroundColor: "#3d93fc",
-            transition: { duration: 0.5, ease: "easeInOut", },
-        },
-        animate: {
-            x: [0,3,0,0,0,0],
-            rotate: [0,0.3,0,0,0,0],
-            transition: {
-                repeat: Infinity,
-                repeatType: "mirror",
-                duration: 1,
-                ease: "easeInOut",
-            },
-        },
-    }
+  // ── Shared styles ──────────────────────────────
+  const cardSx = {
+    background: darkMode ? 'rgba(42, 71, 89, 0.7)' : 'rgba(255, 255, 255, 0.85)',
+    backdropFilter: 'blur(20px)',
+    border: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.1)' : 'rgba(42, 71, 89, 0.08)'}`,
+    borderRadius: 3,
+  };
 
-    const wrongGuess = () => {
-        guessInputAnim.start({
-            x: [0,-5,5,-2,2,0],
-            rotate: [0,-1,1,-1,1,0],
-            scale: [1,1.05,1],
-            borderColor: ['#3d93fc','#FF0000','#3d93fc'],
-            transition: {
-                duration: 0.5,
-                ease: "easeInOut",
-            }
-        })
-    }
+  const neonButtonSx = {
+    background: 'linear-gradient(135deg, #DF8057, #3B637C)',
+    color: '#fff',
+    fontWeight: 700,
+    fontSize: { xs: '1rem', md: '1.1rem' },
+    py: 1.5,
+    px: 4,
+    borderRadius: 2,
+    boxShadow: '0 4px 20px rgba(223, 128, 87, 0.3)',
+    transition: 'all 0.3s',
+    '&:hover': {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 8px 30px rgba(223, 128, 87, 0.5)',
+    },
+  };
 
-    const addPointsAnimation = () => {
-        pointAddAnim.start({
-            x: [0,-3,0,3,0,-2,0,2,0],
-            rotate: [0,-1,0,1,0,-1,0,1,0],
-            scale: [1,1.05,1],
-            color: ['#172554','#018c01','#172554'],
-            transition: {
-                duration: 0.1,
-                ease: "easeInOut",
-            }
-        })
-    }
-    const addPointsAnimation1 = () => {
-        pointAddAnim1.start({
-            x: [0,-3,0,3,0,-2,0,2,0],
-            rotate: [0,-1,0,1,0,-1,0,1,0],
-            scale: [1,1.05,1],
-            color: ['#172554','#800101','#172554'],
-            transition: {
-                duration: 0.1,
-                ease: "easeInOut",
-            }
-        })
-    }
+  // ── Score display component ──────────────────
+  const ScoreDisplay = ({ label, pts, animCtrl, color }) => (
+    <Box sx={{ textAlign: 'center' }}>
+      <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: 1 }}>
+        {label}
+      </Typography>
+      <motion.div animate={animCtrl}>
+        <Typography variant="h4" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+          {pts}
+        </Typography>
+      </motion.div>
+    </Box>
+  );
 
-    const startRedTimerAnimation = () => {
-        timerEndAnim.start({
-            scale: [1,1.1,1],
-            color: ['#172554','#FF0000','#172554'],
-            transition: {
-                duration: 1,
-                ease: "easeInOut",
-            }
-        })
-    }
+  // ── Result display ──────────────────────────
+  const GameResult = ({ message }) => (
+    <Box sx={{ textAlign: 'center', py: 6 }}>
+      <Typography variant="h3" sx={{ fontWeight: 800, mb: 4, color: theme.palette.text.primary }}>
+        {message}
+      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 6, mb: 4 }}>
+        <ScoreDisplay label="You" pts={myPts} animCtrl={pointAddAnim} />
+        <Typography variant="h4" sx={{ color: theme.palette.text.secondary, alignSelf: 'center' }}>—</Typography>
+        <ScoreDisplay label="Foe" pts={oppPts} animCtrl={pointAddAnim1} />
+      </Box>
+    </Box>
+  );
 
-    return (
-        <div className={`min-h-screen h-full fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
-            <main>
-                <div className={gameBgStyle}>
-                    {page === 1 ? (
-                        <div className="block h-full mt-4 lg:mt-0">
-                            <motion.button variants={backButtonAnim}
-                                           initial="initial"
-                                           whileHover="hover"
-                                           animate="animate"
-                                           className={backButton} onClick={resetGame}>Exit</motion.button>
-                            {gameState.current === 0 ? (
-                                <ul className={`px-[5%] pb-[5%] pt-[2%] m-[5%] justify-center`}>
-                                    <p className={`text-3xl lg:text-6xl mb-6`}>Please choose a room to join:</p>
-                                    {matchNames.map((serverName, index) => {
-                                        if (available.charAt(index) === '2') {
-                                            return (
-                                                <motion.li variants={index % 2 === 0 ? listAnimL : listAnimR}
-                                                           initial="initial"
-                                                           whileHover="hover"
-                                                           animate="animate"
-                                                           className={`${roomStyle} ${roomList}`} key={index} value={available.charAt(index)}>
-                                                    <p className={roomName}>{serverName}:</p> <p className={roomFill}>{available.charAt(index)}/2</p>
-                                                </motion.li>
-                                            )
-                                        }
-                                        else return (
-                                            <motion.li variants={index % 2 === 0 ? listAnimL : listAnimR}
-                                                       initial="initial"
-                                                       whileHover="hover"
-                                                       animate="animate"
-                                                       className={roomList} key={index} value={available.charAt(index)}>
-                                                <button className={roomStyle} onClick={() => WaitingRoom(matchLetters[index])}>
-                                                    <p className={roomName}>{serverName}:</p> <p className={roomFill}>{available.charAt(index)}/2</p>
-                                                </button>
-                                            </motion.li>
-                                        );
-                                    })}
-                                </ul>
-                            ) : gameState.current === 1 ? (
-                                <div>
-                                    <p className={transitionStyle}>Starting in: {seconds}</p>
-                                </div>
-                            ) : gameState.current === 2 ? (
-                                <div className={`h-[95%] px-[1%]`}>
-                                    <motion.p animate={timerEndAnim} className={`text-center text-mnormal lg:text-3xl lg:pb-[2%]`}>Time Remaining: {seconds}</motion.p>
-                                    <div className={`grid grid-cols-[15%_70%_15%] h-[95%]`}>
-                                        <div className={`text-left text-mnormal lg:text-4xl`}>
-                                            <p>You</p>
-                                            <motion.p animate={pointAddAnim}>{myPts}</motion.p>
-                                        </div>
-                                        <div className={``}>
-                                            <form onSubmit={handleSubmit}>
-                                                <p className={`text-center lg:mb-[7%] text-4xl lg:text-gh font-bold`}>{anagram}</p>
-                                                <motion.input
-                                                    animate={guessInputAnim}
-                                                    className={`block mx-auto w-[100%] lg:w-[90%] p-[2%] text-1xl lg:text-gt text-center font-bold border border-[#3d93fc] rounded-[5px] m-6`}
-                                                    ref={inputRef}
-                                                    onKeyDown={handleKeyDown}
-                                                    type="text"
-                                                    maxLength={anagram.length}
-                                                    minLength={3}
-                                                    placeholder="Please input a Guess"
-                                                />
-                                                <motion.button variants={guessButtonAnim}
-                                                               initial="initial"
-                                                               whileHover="hover"
-                                                               animate="animate"
-                                                               type={'submit'}
-                                                               className={`block mx-auto border rounded-[5px] m-6 text-2xl lg:text-gt font-bold w-[80%] lg:w-[50%] p-[1%]`}>Guess!</motion.button>
-                                            </form>
-                                        </div>
-                                        <div className={`text-right text-mnormal lg:text-4xl`}>
-                                            <p>Foe</p>
-                                            <motion.p animate={pointAddAnim1}>{oppPts}</motion.p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : gameState.current === 3 ? (
-                                <div>
-                                    <p className={transitionStyle}>Waiting for the other player to join</p>
-                                </div>
-                            ) : gameState.current === 4 ? (
-                                <div className={transitionStyle}>
-                                    <p>Opponent has disconnected!</p>
-                                    <p>You have won by default!</p>
-                                </div>
-                            ) : gameState.current === 5 ? (
-                                <div className={transitionStyle}>
-                                    {winner === 0 ? (
-                                        <div className={`celebration h-[90%]`}>
-                                            <p>You win!</p>
-                                            <div className={`flex justify-center mx-auto`}>
-                                                <div>
-                                                    <p>You:</p>
-                                                    <p>{myPts}</p>
-                                                </div>
-                                                <p className={`mx-[10%]`}>-</p>
-                                                <div>
-                                                    <p>Foe:</p>
-                                                    <p>{oppPts}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : winner === 1 ? (
-                                        <>
-                                            <p>Opponent's win!</p>
-                                            <div className={`flex justify-center mx-auto`}>
-                                                <div>
-                                                    <p>You:</p>
-                                                    <p>{myPts}</p>
-                                                </div>
-                                                <p className={`mx-[10%]`}>-</p>
-                                                <div>
-                                                    <p>Foe:</p>
-                                                    <p>{oppPts}</p>
-                                                </div>
-                                            </div>
-                                        </>
-                                    ) : winner === 2 ? (
-                                        <>
-                                            <p>You Drew!</p>
-                                            <div className={`flex justify-center mx-auto`}>
-                                                <div>
-                                                    <p>You:</p>
-                                                    <p>{myPts}</p>
-                                                </div>
-                                                <p className={`mx-[10%]`}>-</p>
-                                                <div>
-                                                    <p>Foe:</p>
-                                                    <p>{oppPts}</p>
-                                                </div>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <p>Error with Game display</p>
-                                    )}
-                                </div>
-                            ) : (
-                                <p>Error with Game display</p>
-                            )}
-                        </div>
-                    ) : page === 2 ? (
-                        <div className="block h-full">
-                            <motion.button variants={backButtonAnim}
-                                           initial="initial"
-                                           whileHover="hover"
-                                           animate="animate"
-                                           className={backButton} onClick={() => setPage(0)}>Back</motion.button>
-                            <p className={rulesStyle}>Rules:</p>
-                            <p className={rulesStyle}>1) You will be given a word with 8 letters.</p>
-                            <p className={rulesStyle}>2) Your aim is to guess as many words as possible by using each letter only once.</p>
-                            <p className={rulesStyle}>3) Guessed words can not be shorter than 3 letters.</p>
-                            <p className={rulesStyle}>4) Whoever has the most points at the end wins!</p>
-                        </div>
-                    ) : page === 3 ? (
-                        <div className={transitionStyle}>
-                            Joining
-                            <img className={`mx-auto w-[150px]`} src={loading}/>
-                        </div>
-                    ) : (
-                        <div className="block h-full">
-                            <motion.p
-                                initial={{
-                                  scale: 0,
-                                }}
-                                animate={{
-                                    scale: [0,1.2,1],
-                                    transition: {
-                                        duration: 1,
-                                    }
-                                }}
-                                className={gameHeader}>
-                                1v1 Scramble
-                            </motion.p>
-                            <motion.button
-                                variants={buttonAnim}
-                                initial="initial"
-                                whileHover="hover"
-                                animate="animate"
-                                className={mainButtonStyle} onClick={() => setPage(3)}
+  return (
+    <Box sx={{ minHeight: '100vh', pt: { xs: 4, md: 6 }, pb: 8 }}>
+      <Container maxWidth="md">
+        <Card elevation={0} sx={{ ...cardSx, overflow: 'hidden', minHeight: { xs: '70vh', md: '75vh' } }}>
+          <CardContent sx={{ p: { xs: 2, md: 4 }, height: '100%' }}>
+            {/* ══════ GAME IN SESSION ══════ */}
+            {page === 1 ? (
+              <Box sx={{ height: '100%' }}>
+                <Button
+                  startIcon={<ArrowBackIcon />}
+                  onClick={resetGame}
+                  size="small"
+                  sx={{ color: theme.palette.text.secondary, mb: 2, '&:hover': { color: theme.palette.primary.main } }}
+                >
+                  Exit
+                </Button>
+
+                {/* Room Selection */}
+                {gameState.current === 0 ? (
+                  <Box>
+                    <Typography variant="h5" sx={{ fontWeight: 700, mb: 3, color: theme.palette.text.primary }}>
+                      Choose a room:
+                    </Typography>
+                    <List sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                      {matchNames.map((serverName, index) => {
+                        const isFull = available.charAt(index) === '2';
+                        return (
+                          <ListItem key={index} disablePadding>
+                            <ListItemButton
+                              disabled={isFull}
+                              onClick={() => !isFull && WaitingRoom(matchLetters[index])}
+                              sx={{
+                                borderRadius: 2,
+                                border: `1px solid ${darkMode ? 'rgba(223, 128, 87, 0.2)' : 'rgba(223, 128, 87, 0.15)'}`,
+                                py: 2,
+                                px: 3,
+                                transition: 'all 0.2s',
+                                '&:hover': {
+                                  background: `${theme.palette.primary.main}15`,
+                                  borderColor: theme.palette.primary.main,
+                                  transform: 'translateX(4px)',
+                                },
+                                '&.Mui-disabled': { opacity: 0.4 },
+                              }}
                             >
-                                Join
-                            </motion.button>
-                            <motion.button
-                                variants={buttonAnim}
-                                initial="initial"
-                                whileHover="hover"
-                                animate="animate"
-                                className={mainButtonStyle} onClick={() => setPage(2)}>
-                                How to play?
-                            </motion.button>
-                        </div>
-                    )}
-                </div>
-            </main>
-        </div>
-    );
-}
+                              <ListItemText
+                                primary={serverName}
+                                primaryTypographyProps={{ fontWeight: 600, color: theme.palette.text.primary }}
+                              />
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: isFull ? '#ef4444' : theme.palette.primary.main,
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {available.charAt(index)}/2
+                              </Typography>
+                            </ListItemButton>
+                          </ListItem>
+                        );
+                      })}
+                    </List>
+                  </Box>
+                ) : gameState.current === 1 ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
+                    <Box sx={{ textAlign: 'center' }}>
+                      <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mb: 2 }}>
+                        Starting in
+                      </Typography>
+                      <Typography
+                        variant="h1"
+                        sx={{
+                          fontWeight: 900,
+                          fontSize: '5rem',
+                          background: 'linear-gradient(135deg, #DF8057, #3B637C)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                        }}
+                      >
+                        {seconds}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ) : gameState.current === 2 ? (
+                  /* ═══ ACTIVE GAME ═══ */
+                  <Box>
+                    <motion.div animate={timerEndAnim}>
+                      <Typography variant="body2" sx={{ textAlign: 'center', color: theme.palette.text.secondary, mb: 2 }}>
+                        Time remaining: <strong>{seconds}s</strong>
+                      </Typography>
+                    </motion.div>
 
+                    {/* Timer progress bar */}
+                    <Box sx={{ width: '100%', height: 4, borderRadius: 2, background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', mb: 3, overflow: 'hidden' }}>
+                      <Box
+                        sx={{
+                          height: '100%',
+                          borderRadius: 2,
+                          width: `${(seconds / 60) * 100}%`,
+                          background: seconds <= 10 ? '#ef4444' : 'linear-gradient(90deg, #DF8057, #3B637C)',
+                          transition: 'width 1s linear, background 0.3s',
+                        }}
+                      />
+                    </Box>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+                      <ScoreDisplay label="You" pts={myPts} animCtrl={pointAddAnim} />
+                      <Box sx={{ flex: 1, textAlign: 'center', px: 2 }}>
+                        <Typography
+                          variant="h3"
+                          sx={{
+                            fontWeight: 900,
+                            fontSize: { xs: '2rem', md: '3rem' },
+                            letterSpacing: '0.1em',
+                            background: 'linear-gradient(135deg, #DF8057, #FFB88C)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            mb: 3,
+                          }}
+                        >
+                          {anagram}
+                        </Typography>
+                        <form onSubmit={handleSubmit}>
+                          <motion.div animate={guessInputAnim}>
+                            <TextField
+                              inputRef={inputRef}
+                              onKeyDown={handleKeyDown}
+                              variant="outlined"
+                              placeholder="Type your guess..."
+                              fullWidth
+                              inputProps={{
+                                maxLength: anagram.length,
+                                minLength: 3,
+                                style: {
+                                  textAlign: 'center',
+                                  fontWeight: 700,
+                                  fontSize: '1.2rem',
+                                  letterSpacing: '0.05em',
+                                },
+                              }}
+                              sx={{
+                                mb: 2,
+                                '& .MuiOutlinedInput-root': {
+                                  borderRadius: 2,
+                                  '& fieldset': { borderColor: `${theme.palette.primary.main}40` },
+                                  '&:hover fieldset': { borderColor: theme.palette.primary.main },
+                                  '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                                },
+                              }}
+                            />
+                          </motion.div>
+                          <Button type="submit" fullWidth sx={neonButtonSx}>
+                            Guess!
+                          </Button>
+                        </form>
+                      </Box>
+                      <ScoreDisplay label="Foe" pts={oppPts} animCtrl={pointAddAnim1} />
+                    </Box>
+                  </Box>
+                ) : gameState.current === 3 ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
+                    <Box sx={{ textAlign: 'center' }}>
+                      <CircularProgress sx={{ color: theme.palette.primary.main, mb: 3 }} />
+                      <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                        Waiting for opponent...
+                      </Typography>
+                    </Box>
+                  </Box>
+                ) : gameState.current === 4 ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
+                    <Box sx={{ textAlign: 'center' }}>
+                      <Typography variant="h4" sx={{ fontWeight: 800, color: '#22c55e', mb: 2 }}>
+                        Opponent disconnected!
+                      </Typography>
+                      <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                        You win by default!
+                      </Typography>
+                    </Box>
+                  </Box>
+                ) : gameState.current === 5 ? (
+                  <Box>
+                    {winner === 0 ? (
+                      <Box className={seconds <= 0 ? 'celebration' : ''} sx={{ borderRadius: 3, p: 2 }}>
+                        <GameResult message="🎉 You Win!" />
+                      </Box>
+                    ) : winner === 1 ? (
+                      <GameResult message="Opponent Wins" />
+                    ) : winner === 2 ? (
+                      <GameResult message="It's a Draw!" />
+                    ) : (
+                      <Typography color="error">Error with game display</Typography>
+                    )}
+                  </Box>
+                ) : (
+                  <Typography color="error">Error with game display</Typography>
+                )}
+              </Box>
+            ) : page === 2 ? (
+              /* ═══ RULES ═══ */
+              <Box>
+                <Button
+                  startIcon={<ArrowBackIcon />}
+                  onClick={() => setPage(0)}
+                  size="small"
+                  sx={{ color: theme.palette.text.secondary, mb: 3, '&:hover': { color: theme.palette.primary.main } }}
+                >
+                  Back
+                </Button>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 3, color: theme.palette.text.primary }}>
+                  How to Play
+                </Typography>
+                {[
+                  'You will be given a word with 8 letters.',
+                  'Your aim is to guess as many words as possible by using each letter only once.',
+                  'Guessed words cannot be shorter than 3 letters.',
+                  'Whoever has the most points at the end wins!',
+                ].map((rule, i) => (
+                  <Typography
+                    key={i}
+                    variant="body1"
+                    sx={{
+                      color: theme.palette.text.secondary,
+                      mb: 1.5,
+                      pl: 2,
+                      borderLeft: `2px solid ${theme.palette.primary.main}40`,
+                    }}
+                  >
+                    {i + 1}. {rule}
+                  </Typography>
+                ))}
+              </Box>
+            ) : page === 3 ? (
+              /* ═══ CONNECTING ═══ */
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh', flexDirection: 'column' }}>
+                <CircularProgress sx={{ color: theme.palette.primary.main, mb: 3 }} size={60} />
+                <Typography variant="h6" sx={{ color: theme.palette.text.secondary }}>
+                  Joining game...
+                </Typography>
+              </Box>
+            ) : (
+              /* ═══ MAIN MENU ═══ */
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', py: 8 }}>
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                >
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      fontWeight: 900,
+                      mb: 6,
+                      textAlign: 'center',
+                      fontSize: { xs: '2.5rem', md: '4rem' },
+                      background: 'linear-gradient(135deg, #DF8057, #3B637C)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                  >
+                    1v1 Scramble
+                  </Typography>
+                </motion.div>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: { xs: '80%', md: '50%' } }}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <Button fullWidth sx={neonButtonSx} onClick={() => setPage(3)}>
+                      Join Game
+                    </Button>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      onClick={() => setPage(2)}
+                      sx={{
+                        borderColor: `${theme.palette.primary.main}40`,
+                        color: theme.palette.text.secondary,
+                        py: 1.5,
+                        fontSize: '1rem',
+                        fontWeight: 600,
+                        '&:hover': {
+                          borderColor: theme.palette.primary.main,
+                          background: `${theme.palette.primary.main}10`,
+                        },
+                      }}
+                    >
+                      How to Play?
+                    </Button>
+                  </motion.div>
+                </Box>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
+  );
+};
 
 export default Scramble;
