@@ -82,6 +82,22 @@ const FooterPanel = ({ darkMode }) => {
         >
           <BarChartIcon sx={{ fontSize: 14 }} />
         </IconButton>
+        <IconButton
+          component={Link}
+          to="/admin"
+          size="small"
+          sx={{
+            color: 'transparent',
+            padding: '2px',
+            '&:hover': {
+              color: theme.palette.text.secondary,
+              background: 'transparent',
+            },
+            transition: 'color 0.5s ease',
+          }}
+        >
+          <BarChartIcon sx={{ fontSize: 14 }} />
+        </IconButton>
       </Box>
     </Box>
   );
