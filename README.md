@@ -22,7 +22,8 @@ Personal portfolio website showcasing projects, skills, and experience. Built wi
 |---|---|
 | `npm install` | Install dependencies |
 | `npm start` | Start dev server at `http://localhost:5173` |
-| `npm run build` | Build for production (output → `/var/www/jadid-alam.com`) |
+| `npm run build` | Build for production (output → `dist/`) |
+| `./deploy.sh` | Build and deploy to `/var/www/jadid-alam.com` with correct NGINX permissions |
 | `npm run preview` | Preview the production build locally |
 | `npm test` | Run tests with Vitest |
 
