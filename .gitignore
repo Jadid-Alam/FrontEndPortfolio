@@ -26,3 +26,4 @@ yarn-error.log*
 .vercel
 .env
 .claude
+deploy.sh
