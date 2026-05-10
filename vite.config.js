@@ -7,6 +7,10 @@ export default defineConfig({
     tailwindcss(),
     react(),
   ],
+  build: {
+    outDir: '/var/www/jadid-alam.com',
+    emptyOutDir: true,
+  },
   test: {
     globals: true,
     environment: 'jsdom',
