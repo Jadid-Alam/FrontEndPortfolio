@@ -99,8 +99,8 @@ const ProjectButton = ({ project, darkMode, index }) => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
-                    border: `1px solid ${darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                    background: darkMode ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.9)',
+                    border: `1px solid ${darkMode ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.12)'}`,
                     transition: 'all 0.2s',
                     '&:hover': {
                       background: `${theme.palette.primary.main}15`,
