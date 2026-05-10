@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-size-heading: 3rem;
+  --font-size-mheading: 2rem;
+  --font-size-normal: 1.5rem;
+  --font-size-mnormal: 1rem;
+  --font-size-nav: 1.25rem;
+  --font-size-mnav: 0.875rem;
+  --font-size-imgcap: 0.75rem;
+  --font-size-mimgcap: 0.5rem;
+  --font-size-h3: 2rem;
+  --font-size-mh3: 1.5rem;
+  --font-size-none: 0rem;
+  --font-size-small: 0.75rem;
+  --font-size-gt: 2rem;
+  --font-size-gh: 5rem;
+}
 
 /* ═══════════════════════════════════════════
    DESIGN TOKENS
@@ -207,7 +222,7 @@ body {
    CELEBRATION BACKGROUND (for Scrabble wins)
    ═══════════════════════════════════════════ */
 .celebration {
-  background-image: url('images/celeb.gif');
+  background-image: url('images/photos/celeb.gif');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
