@@ -11,6 +11,7 @@ import Experience from './Pages/Experience';
 import Projects from './Pages/Projects';
 import ContactMe from './Pages/ContactMe';
 import TradingDashboard from './Pages/TradingDashboard';
+import AdminPanel from './Pages/AdminPanel';
 import TopPanel from './Components/TopPanel';
 import FooterPanel from './Components/FooterPanel';
 import BackgroundEffect from './Components/BackgroundEffect';
@@ -18,7 +19,7 @@ import BackgroundEffect from './Components/BackgroundEffect';
 /* Layout wrapper that conditionally hides nav/footer on /dashboard */
 const AppLayout = ({ darkMode, setDarkMode }) => {
   const location = useLocation();
-  const isDashboard = location.pathname === '/dashboard';
+  const isDashboard = location.pathname === '/dashboard' || location.pathname === '/admin';
 
   return (
     <>
@@ -35,6 +36,7 @@ const AppLayout = ({ darkMode, setDarkMode }) => {
           <Route path="/projects" element={<Projects darkMode={darkMode} />} />
           <Route path="/contact-me" element={<ContactMe darkMode={darkMode} />} />
           <Route path="/dashboard" element={<TradingDashboard />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </div>
       {!isDashboard && <FooterPanel darkMode={darkMode} />}
