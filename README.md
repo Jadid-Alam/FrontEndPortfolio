@@ -1,53 +1,78 @@
 # Portfolio
 
 ## Overview
-This is my personal portfolio website, designed to showcase my projects, skills, and experience. It serves as a dynamic and interactive platform for visitors to explore my work and get in touch with me.
+Personal portfolio website showcasing projects, skills, and experience. Built with React + Vite and Material-UI, featuring dark/light mode, smooth animations, and a hidden admin panel for content management.
 
 ## Features
-- **Project Showcase:** Highlights various personal and professional projects.
-- **Interactive UI:** Built with React.js and Tailwind CSS for a modern and responsive design.
-- **Dark Mode Support:** Toggle between light and dark themes.
-- **Scramble Mini-Game:** A real-time multiplayer word scramble game built with Rust and WebSockets.
-- **Performance Optimized:** Efficient routing and rendering for a smooth experience.
+- **Project Showcase** — expandable cards with tech stack icons, images, and detail paragraphs
+- **Experience Timeline** — animated timeline of professional roles
+- **Dark / Light Mode** — persisted across the session
+- **Scramble Mini-Game** — real-time multiplayer word scramble over WebSockets
+- **Admin Panel** — password-protected panel to add/edit/reorder projects and experiences without touching code
+- **Trading Dashboard** — hidden analytics dashboard (password-gated)
 
 ## Technology Stack
-- **Frontend:** HTML, CSS, JavaScript, React.js, Tailwind CSS
-- **Backend:** Rust (previously used Django with MongoDB, but now transitioned to a Rust-based backend for performance and simplicity)
-- **Networking:** WebSockets for real-time communication (Scramble Mini-Game)
-- **Hosting:** Deployed on a cloud-based service
+- **Frontend:** React 19, Vite 6, Material-UI, Framer Motion, Tailwind CSS
+- **Backend:** Rust (WebSocket game server hosted on VPS)
+- **Hosting:** Vercel (frontend) / VPS with NGINX (game backend)
 
-## Installation & Running Locally
-### Prerequisites
-- Node.js and npm installed
-- Rust installed (for backend game server)
+## Commands
 
-### Steps
-1. Clone the repository:
-   git clone <repo-url>
-   cd portfolio
+| Command | Description |
+|---|---|
+| `npm install` | Install dependencies |
+| `npm start` | Start dev server at `http://localhost:5173` |
+| `npm run build` | Build for production (output → `/var/www/jadid-alam.com`) |
+| `npm run preview` | Preview the production build locally |
+| `npm test` | Run tests with Vitest |
 
-2. Install frontend dependencies:
-   npm install
+## Content Management (Admin Panel)
 
-3. Start the development server:
-   npm start
+Project and experience data is stored in JSON files under `public/data/`:
 
-4. If running the Scramble Mini-Game backend:
-   cd scramble-game-backend
-   cargo run
+```
+public/
+  data/
+    projects.json      ← project cards
+    experiences.json   ← experience timeline
+  images/
+    icons/             ← tech stack icons (svg/png)
+    photos/            ← project screenshots & gifs
+```
 
-## Future Improvements
-- More animations and UI refinements
-- Expand project details with interactive demos
-- Add blog section for technical articles
+**To update content:**
+1. Navigate to `/admin` (there is an invisible button in the footer copyright row)
+2. Password: see project notes
+3. Add / edit / reorder / delete entries
+4. Click **Export JSON** to download the updated file
+5. Replace the file in `public/data/` and redeploy
 
-## Note
-- there are some vulnerabilities that can't be fixed since it will break the project
+Changes made in the admin panel are saved to `localStorage` immediately and appear live. To make them permanent, export and replace the JSON files.
+
+**To add new images/icons:**
+- Upload via the admin panel (stored as base64 for quick previewing)
+- For production, add the file to `public/images/icons/` or `public/images/photos/` and reference it by path (e.g. `/images/icons/typescript.svg`)
+
+## Project Structure
+
+```
+src/
+  Pages/
+    Home.jsx
+    Projects.jsx        ← loads from public/data/projects.json
+    Experience.jsx      ← loads from public/data/experiences.json
+    ContactMe.jsx
+    Scrabble.jsx
+    AdminPanel.jsx      ← content management panel
+    TradingDashboard.jsx
+  Components/
+    TopPanel.jsx
+    FooterPanel.jsx     ← hidden nav buttons in copyright row
+    ProjectButton.jsx
+    ExperienceSection.jsx
+    BackgroundEffect.jsx
+  theme.js
+```
 
 ## License
-This project is personal and not licensed under any specific open-source license.
-
-
-
-For any inquiries, feel free to reach out!
-
+Personal project — not open-source licensed.
