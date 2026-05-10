@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid';
 import EmailIcon from '@mui/icons-material/Email';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import PhoneIcon from '@mui/icons-material/Phone';
 import { useTheme } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 
@@ -32,13 +31,6 @@ const contactLinks = [
     value: 'Jadid Alam',
     href: 'https://www.linkedin.com/in/jadid-alam-b57a112a5/',
     hoverColor: '#0A66C2',
-  },
-  {
-    icon: PhoneIcon,
-    label: 'Phone',
-    value: '+44 7491 277476',
-    href: 'tel:+447491277476',
-    hoverColor: '#22c55e',
   },
 ];
 
@@ -84,25 +76,28 @@ const ContactMe = ({ darkMode }) => {
 
           {/* Right side — contact cards */}
           <Grid item xs={12} md={7}>
-            <Grid container spacing={2}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridAutoRows: '1fr', gap: 2 }}>
               {contactLinks.map((contact, index) => {
                 const Icon = contact.icon;
                 return (
-                  <Grid item xs={6} key={contact.label}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                    >
+                  <motion.div
+                    key={contact.label}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                    style={{ height: '100%' }}
+                  >
                       <Card
                         component="a"
                         href={contact.href}
-                        target={contact.label === 'Email' || contact.label === 'Phone' ? undefined : '_blank'}
+                        target="_blank"
                         rel="noopener noreferrer"
                         elevation={0}
                         sx={{
                           textDecoration: 'none',
-                          display: 'block',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          height: '100%',
                           background: darkMode
                             ? 'rgba(42, 71, 89, 0.5)'
                             : 'rgba(255, 255, 255, 0.7)',
@@ -122,7 +117,7 @@ const ContactMe = ({ darkMode }) => {
                           },
                         }}
                       >
-                        <CardContent sx={{ p: { xs: 2, md: 3 }, textAlign: 'center' }}>
+                        <CardContent sx={{ p: { xs: 2, md: 3 }, textAlign: 'center', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                           <Icon
                             className="contact-icon"
                             sx={{
@@ -149,17 +144,17 @@ const ContactMe = ({ darkMode }) => {
                               color: theme.palette.text.secondary,
                               fontSize: '0.7rem',
                               wordBreak: 'break-all',
+                              display: 'block',
                             }}
                           >
                             {contact.value}
                           </Typography>
                         </CardContent>
                       </Card>
-                    </motion.div>
-                  </Grid>
+                  </motion.div>
                 );
               })}
-            </Grid>
+            </Box>
           </Grid>
         </Grid>
       </Container>
