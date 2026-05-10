@@ -11,7 +11,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import CircularProgress from '@mui/material/CircularProgress';
 import LockIcon from '@mui/icons-material/Lock';
-import { createChart } from 'lightweight-charts';
+import { createChart, createSeriesMarkers } from 'lightweight-charts';
 
 /* ═══════════════════════════════════════════════════════════════════
    BACKEND CONFIG
@@ -356,7 +356,7 @@ const CandlestickPanel = ({ data }) => {
         });
       });
       markers.sort((a, b) => a.time - b.time);
-      candleSeries.setMarkers(markers);
+      createSeriesMarkers(candleSeries, markers);
 
       /*
        * Lines connecting trade open → close:

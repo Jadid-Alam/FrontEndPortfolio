@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
 import { motion } from 'framer-motion';
-import myImage from '../images/LeetcodeProfile.png';
+import myImage from '../images/photos/LeetcodeProfile.png';
 
 const techStack = [
   'React', 'TypeScript', 'Rust', 'C++', 'Python', 'Java',
