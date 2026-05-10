@@ -7,7 +7,8 @@ echo "Building..."
 npm run build
 
 echo "Deploying to $DEST..."
-sudo rsync -a --delete dist/ "$DEST/"
+sudo rm -rf "$DEST"
+sudo cp -r dist/ "$DEST"
 
 echo "Setting permissions..."
 sudo chown -R www-data:www-data "$DEST"
