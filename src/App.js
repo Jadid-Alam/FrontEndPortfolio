@@ -1,47 +1,66 @@
 import './App.css';
-import {useEffect, useState} from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { useMemo, useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { getTheme } from './theme';
 import Loading from './Pages/Loading';
 import Home from './Pages/Home';
 import Scrabble from './Pages/Scrabble';
 import Experience from './Pages/Experience';
 import Projects from './Pages/Projects';
 import ContactMe from './Pages/ContactMe';
+import TradingDashboard from './Pages/TradingDashboard';
 import TopPanel from './Components/TopPanel';
 import FooterPanel from './Components/FooterPanel';
 import BackgroundEffect from './Components/BackgroundEffect';
 
-function App() {
-  const [selectedNav, setSelectedNav] = useState("")
-  const [darkMode, setDarkMode] = useState(() => {
-      return sessionStorage.getItem('darkMode') === 'true';
-  });
-
-  const renderWithProps = (Component) => (props) => {
-    window.scrollTo(0, 0);
-    return <Component {...props} darkMode={darkMode} />;
-  };
-
-  useEffect(() => {
-      sessionStorage.setItem('darkMode',darkMode.toString());
-  }, [darkMode]);
+/* Layout wrapper that conditionally hides nav/footer on /dashboard */
+const AppLayout = ({ darkMode, setDarkMode }) => {
+  const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
 
   return (
-    <Router className={`h-screen fade-in duration-1000 ease-in-out ${darkMode ? 'dark' : 'light'}`}>
-      <TopPanel darkMode={darkMode} setDarkMode={setDarkMode} selectedNav={selectedNav} setSelectedNav={setSelectedNav}/>
-      <BackgroundEffect darkMode={darkMode} selectedNav={selectedNav}/>
-      <div className='App'> 
-          <Switch>
-            <Route exact path="/" render={renderWithProps(Loading)} />
-            <Route exact path="/home" render={renderWithProps(Home)} />
-            <Route path="/scrabble-minigame" render={renderWithProps(Scrabble)} />
-            <Route path="/experience" render={renderWithProps(Experience)} />
-            <Route path="/projects" render={renderWithProps(Projects)} />
-            <Route path="/contact-me" render={renderWithProps(ContactMe)} />
-          </Switch>
+    <>
+      {!isDashboard && (
+        <TopPanel darkMode={darkMode} setDarkMode={setDarkMode} />
+      )}
+      {!isDashboard && <BackgroundEffect darkMode={darkMode} />}
+      <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh' }}>
+        <Routes>
+          <Route path="/" element={<Loading darkMode={darkMode} />} />
+          <Route path="/home" element={<Home darkMode={darkMode} />} />
+          <Route path="/scrabble-minigame" element={<Scrabble darkMode={darkMode} />} />
+          <Route path="/experience" element={<Experience darkMode={darkMode} />} />
+          <Route path="/projects" element={<Projects darkMode={darkMode} />} />
+          <Route path="/contact-me" element={<ContactMe darkMode={darkMode} />} />
+          <Route path="/dashboard" element={<TradingDashboard />} />
+        </Routes>
       </div>
-      <FooterPanel darkMode={darkMode} />
-    </Router>
+      {!isDashboard && <FooterPanel darkMode={darkMode} />}
+    </>
+  );
+};
+
+function App() {
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = sessionStorage.getItem('darkMode');
+    return saved === null ? true : saved === 'true';
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('darkMode', darkMode.toString());
+  }, [darkMode]);
+
+  const theme = useMemo(() => getTheme(darkMode ? 'dark' : 'light'), [darkMode]);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <AppLayout darkMode={darkMode} setDarkMode={setDarkMode} />
+      </Router>
+    </ThemeProvider>
   );
 }
 

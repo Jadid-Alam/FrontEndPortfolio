@@ -1,51 +1,85 @@
-import '../index.css';
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import { motion } from 'framer-motion';
 
-const Loading = ({darkMode, setDarkMode}) => {
-    const history = useHistory();
+const Loading = ({ darkMode }) => {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-        history.push('/home');
-        }, 1500);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate('/home');
+    }, 1800);
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
-        return () => clearTimeout(timer); 
-    }, [history]);
+  return (
+    <Box
+      sx={{
+        position: 'fixed',
+        inset: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: darkMode ? '#1E3340' : '#EEEEEE',
+        zIndex: 9999,
+      }}
+    >
+      {/* Outer ring pulse */}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{
+          scale: [0, 1.8, 2.2],
+          opacity: [0, 0.3, 0],
+        }}
+        transition={{ duration: 1.8, ease: 'easeOut' }}
+        style={{
+          position: 'absolute',
+          width: 80,
+          height: 80,
+          borderRadius: 16,
+          background: 'linear-gradient(135deg, #DF8057, #3B637C)',
+        }}
+      />
 
-    const backgroundAnimation = {
-        animate: {
-            x: [100,-5,0],
-            transition: {
-                duration: 1,
-                ease: "easeInOut",
-            },
-        },
-    };
-
-    const letterAnimation = {
-        animate: {
-            x: [-200,10,0],
-            transition: {
-                duration: 1,
-                ease: "easeInOut",
-            },
-        },
-    };
-
-    return (
-        <main className={`fixed inset-0 flex items-center justify-center overflow-hidden z-40 ${darkMode ? 'dark' : 'light'}`}>
-            <motion.h1 variants={backgroundAnimation}
-                animate='animate' className={`z-40 w-20 h-20 bg-purple-600 rounded-lg text-center align-middle text-heading font-bold 
-                ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                <motion.p
-                variants={letterAnimation}
-                animate='animate'
-                >J</motion.p>
-            </motion.h1>
-        </main>
-    );
-}
+      {/* Logo box */}
+      <motion.div
+        initial={{ scale: 0, rotateZ: -180 }}
+        animate={{ scale: 1, rotateZ: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 200,
+          damping: 15,
+          duration: 0.8,
+        }}
+        style={{
+          width: 72,
+          height: 72,
+          borderRadius: 16,
+          background: 'linear-gradient(135deg, #DF8057, #3B637C)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 20px 60px rgba(223, 128, 87, 0.4)',
+        }}
+      >
+        <motion.span
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
+          style={{
+            color: '#ffffff',
+            fontSize: '2rem',
+            fontWeight: 900,
+            fontFamily: "'Inter', sans-serif",
+            letterSpacing: '-0.02em',
+          }}
+        >
+          J
+        </motion.span>
+      </motion.div>
+    </Box>
+  );
+};
 
 export default Loading;

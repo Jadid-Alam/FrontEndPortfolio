@@ -1,102 +1,170 @@
-import '../index.css';
-import {useState, useEffect} from 'react';
-import gmailImage from '../images/gmail.png';
-import linkedinImage from '../images/linkedin.png';
-import githubImage from '../images/github.png';
-import phoneImage from '../images/telephone.png';
-import {motion} from "framer-motion";
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import EmailIcon from '@mui/icons-material/Email';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import PhoneIcon from '@mui/icons-material/Phone';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
 
-const ContactMe = ({darkMode}) => {
-    const [fading, setFading] = useState({});
+const contactLinks = [
+  {
+    icon: EmailIcon,
+    label: 'Email',
+    value: 'jadid.alam.08@gmail.com',
+    href: 'mailto:jadid.alam.08@gmail.com',
+    hoverColor: '#EA4335',
+  },
+  {
+    icon: GitHubIcon,
+    label: 'GitHub',
+    value: 'Jadid-Alam',
+    href: 'https://github.com/Jadid-Alam?tab=repositories',
+    hoverColor: '#f0f0f0',
+  },
+  {
+    icon: LinkedInIcon,
+    label: 'LinkedIn',
+    value: 'Jadid Alam',
+    href: 'https://www.linkedin.com/in/jadid-alam-b57a112a5/',
+    hoverColor: '#0A66C2',
+  },
+  {
+    icon: PhoneIcon,
+    label: 'Phone',
+    value: '+44 7491 277476',
+    href: 'tel:+447491277476',
+    hoverColor: '#22c55e',
+  },
+];
 
-    useEffect(() => {
-        const elements = document.querySelectorAll('.fade-in');
-    
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setFading((prevState) => ({
-                  ...prevState,
-                  [entry.target.id]: true,
-                }));
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.1 }
-        );
-    
-        elements.forEach((element) => {
-          observer.observe(element);
-        });
-    
-        return () => {
-          elements.forEach((element) => {
-            observer.unobserve(element);
-          });
-        };
-      }, []);
-
-
-    const shining = {
-        animate: {
-            color: ['#bf00e1','#2f0077','#bf00e1'],
-            transition: {
-                repeat: Infinity,
-                repeatType: "mirror",
-                duration: 3,
-                ease: "easeInOut",
-            },
-        }
-    }
+const ContactMe = ({ darkMode }) => {
+  const theme = useTheme();
 
   return (
-    <main className={`h-screen ${darkMode ? 'dark' : 'light'}`}>
-        <div className={`content text-center text-mnormal lg:text-normal split z-10 `}>
-          <div>
-              <h2 id='title' className={`py-16 p-2 text-mheading lg:p-3 lg:py-64 lg:text-heading 
-                fade-in duration-1000 ease-in-out ${fading['title'] || 1==1 ? 'opacity-100' : 'opacity-0'} 
-                ${darkMode ? 'text-yellow-100' : 'navLink'}`}>Interested in <motion.span className={`font-bold`} variants={shining} animate='animate'>collaborating</motion.span> or have any inquiries? Feel free to <motion.span className={`font-bold`} variants={shining} animate='animate'>reach out</motion.span>.</h2>
-          </div>
+    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', py: { xs: 4, md: 0 } }}>
+      <Container maxWidth="md">
+        <Grid container spacing={6} alignItems="center">
+          {/* Left side - heading */}
+          <Grid item xs={12} md={5}>
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 800,
+                  fontSize: { xs: '2rem', md: '2.5rem' },
+                  lineHeight: 1.2,
+                  color: theme.palette.text.primary,
+                  mb: 2,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                Interested in{' '}
+                <Box component="span" className="gradient-text">
+                  collaborating
+                </Box>
+                ?
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: theme.palette.text.secondary, lineHeight: 1.7 }}
+              >
+                Feel free to reach out through any of these channels. I'm always open to new opportunities and conversations.
+              </Typography>
+            </motion.div>
+          </Grid>
 
-          <div className="pb-16 lg:py-40 grid grid-cols-2 grid-rows-2">
-              
-              <figure id='gmail' className={`p-5 py-4 lg:p-10 lg:py-5
-                fade-in duration-1000 ease-in-out 
-                ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                    <a id='gmail-link' href='mailto:jadid.alam.08@gmail.com'>
-                      <img id='gmail-img' src={gmailImage} 
-                      alt="Email: jadid.alam.08@gmail.com" style={{ width: '200px', height: 'auto' }} />
-                    </a>
-                  <figcaption id='gmail-cap' className='text-mimgcap lg:text-imgcap text-gray-500'>Email: jadid.alam.08@gmail.com</figcaption>
-              </figure>
-
-              <figure id='github' className={`p-5 py-4 lg:p-10 lg:py-5
-                fade-in duration-1000 ease-in-out 
-                ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                    <a href='https://github.com/Jadid-Alam?tab=repositories'><img src={githubImage} alt="My GitHub repository" style={{ width: '200px', height: 'auto' }} /></a>
-                  <figcaption className='text-mimgcap lg:text-imgcap text-gray-500'>My GitHub repository</figcaption>
-              </figure>
-
-              <figure id='linkedin' className={`p-5 py-4 lg:p-10 lg:py-5
-                fade-in duration-1000 ease-in-out 
-                ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                    <a href='https://www.linkedin.com/in/jadid-alam-b57a112a5/'><img src={linkedinImage} alt="My Linked-in Profile" style={{ width: '200px', height: 'auto' }} /></a>
-                  <figcaption className='text-mimgcap lg:text-imgcap text-gray-500'>My Linked-in Profile</figcaption>
-              </figure>
-
-              <figure id='phone' className={`p-5 py-4 lg:p-10 lg:py-5
-                fade-in duration-1000 ease-in-out 
-                ${darkMode ? 'text-yellow-100' : 'navLink'}`}>
-                    <a href='tel:+447491277476'><img src={phoneImage} alt="Phone: +447491277476" style={{ width: '200px', height: 'auto' }} /></a>
-                  <figcaption className='text-mimgcap lg:text-imgcap text-gray-500'>Phone: +447491277476</figcaption>
-              </figure>
-          </div>
-
-        </div>
-    </main>
+          {/* Right side — contact cards */}
+          <Grid item xs={12} md={7}>
+            <Grid container spacing={2}>
+              {contactLinks.map((contact, index) => {
+                const Icon = contact.icon;
+                return (
+                  <Grid item xs={6} key={contact.label}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                    >
+                      <Card
+                        component="a"
+                        href={contact.href}
+                        target={contact.label === 'Email' || contact.label === 'Phone' ? undefined : '_blank'}
+                        rel="noopener noreferrer"
+                        elevation={0}
+                        sx={{
+                          textDecoration: 'none',
+                          display: 'block',
+                          background: darkMode
+                            ? 'rgba(42, 71, 89, 0.5)'
+                            : 'rgba(255, 255, 255, 0.7)',
+                          backdropFilter: 'blur(20px)',
+                          border: `1px solid ${darkMode ? 'rgba(238, 238, 238, 0.08)' : 'rgba(42, 71, 89, 0.06)'}`,
+                          borderRadius: 3,
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          '&:hover': {
+                            transform: 'translateY(-6px)',
+                            borderColor: contact.hoverColor + '60',
+                            boxShadow: `0 20px 40px ${contact.hoverColor}15`,
+                            '& .contact-icon': {
+                              color: contact.hoverColor,
+                              transform: 'scale(1.15)',
+                            },
+                          },
+                        }}
+                      >
+                        <CardContent sx={{ p: { xs: 2, md: 3 }, textAlign: 'center' }}>
+                          <Icon
+                            className="contact-icon"
+                            sx={{
+                              fontSize: { xs: 32, md: 40 },
+                              color: theme.palette.text.secondary,
+                              mb: 1.5,
+                              transition: 'all 0.3s ease',
+                            }}
+                          />
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontWeight: 700,
+                              color: theme.palette.text.primary,
+                              mb: 0.5,
+                              fontSize: '0.85rem',
+                            }}
+                          >
+                            {contact.label}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: theme.palette.text.secondary,
+                              fontSize: '0.7rem',
+                              wordBreak: 'break-all',
+                            }}
+                          >
+                            {contact.value}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
-}
+};
 
 export default ContactMe;
