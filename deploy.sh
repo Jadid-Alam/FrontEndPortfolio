@@ -1,18 +1,14 @@
 #!/bin/bash
 set -e
 
+source .env
+
 DEST="/var/www/jadid-alam.com"
 
 echo "Building..."
 npm run build
 
-echo "Deploying to $DEST..."
-sudo rm -rf "$DEST"
-sudo cp -r dist/ "$DEST"
-
-echo "Setting permissions..."
-sudo chown -R www-data:www-data "$DEST"
-sudo find "$DEST" -type d -exec chmod 755 {} \;
-sudo find "$DEST" -type f -exec chmod 644 {} \;
+echo "Deploying to $DEPLOY_USER@$DEPLOY_HOST:$DEST..."
+rsync -az --delete dist/ "$DEPLOY_USER@$DEPLOY_HOST:$DEST"
 
 echo "Done."
