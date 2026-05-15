@@ -18,6 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
+import CircularProgress from '@mui/material/CircularProgress';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -30,7 +31,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-const ADMIN_PASSWORD = 'REDACTED';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const KNOWN_ICONS = [
   { name: 'React', path: '/images/icons/react.svg' },
@@ -263,7 +264,7 @@ function ImageUploader({ value, onChange, label }) {
 }
 
 // ---------- Project Form Dialog ----------
-function ProjectDialog({ open, project, customIcons, onUploadIcon, onSave, onClose }) {
+function ProjectDialog({ open, project, customIcons, onUploadIcon, onSave, onClose, saving }) {
   const [form, setForm] = useState(emptyProject());
 
   useEffect(() => {
@@ -385,14 +386,15 @@ function ProjectDialog({ open, project, customIcons, onUploadIcon, onSave, onClo
       </DialogContent>
 
       <DialogActions sx={{ borderTop: `1px solid ${COLORS.border}`, p: 2, gap: 1 }}>
-        <Button onClick={onClose} variant="outlined" sx={btnSx}>Cancel</Button>
+        <Button onClick={onClose} variant="outlined" sx={btnSx} disabled={saving}>Cancel</Button>
         <Button
           onClick={() => valid && onSave(form)}
           variant="contained"
-          disabled={!valid}
+          disabled={!valid || saving}
+          startIcon={saving ? <CircularProgress size={14} color="inherit" /> : null}
           sx={{ background: COLORS.accent, '&:hover': { background: '#c96f46' } }}
         >
-          Save
+          {saving ? 'Saving…' : 'Save'}
         </Button>
       </DialogActions>
     </Dialog>
@@ -400,7 +402,7 @@ function ProjectDialog({ open, project, customIcons, onUploadIcon, onSave, onClo
 }
 
 // ---------- Experience Form Dialog ----------
-function ExperienceDialog({ open, experience, onSave, onClose }) {
+function ExperienceDialog({ open, experience, onSave, onClose, saving }) {
   const [form, setForm] = useState(emptyExperience());
 
   useEffect(() => {
@@ -489,14 +491,15 @@ function ExperienceDialog({ open, experience, onSave, onClose }) {
       </DialogContent>
 
       <DialogActions sx={{ borderTop: `1px solid ${COLORS.border}`, p: 2, gap: 1 }}>
-        <Button onClick={onClose} variant="outlined" sx={btnSx}>Cancel</Button>
+        <Button onClick={onClose} variant="outlined" sx={btnSx} disabled={saving}>Cancel</Button>
         <Button
           onClick={() => valid && onSave(form)}
           variant="contained"
-          disabled={!valid}
+          disabled={!valid || saving}
+          startIcon={saving ? <CircularProgress size={14} color="inherit" /> : null}
           sx={{ background: COLORS.accent, '&:hover': { background: '#c96f46' } }}
         >
-          Save
+          {saving ? 'Saving…' : 'Save'}
         </Button>
       </DialogActions>
     </Dialog>
@@ -625,122 +628,197 @@ const AdminPanel = () => {
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState(null);
 
+  const [token, setToken] = useState(() => sessionStorage.getItem('adminToken') || '');
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [apiError, setApiError] = useState('');
 
+  // Auto-authenticate if a session token already exists
+  useEffect(() => {
+    if (token) setAuthenticated(true);
+  }, []);
+
+  // Load data from backend once authenticated
   useEffect(() => {
     if (!authenticated) return;
-    const storedProjects = localStorage.getItem('portfolio_admin_projects');
-    const storedExperiences = localStorage.getItem('portfolio_admin_experiences');
+    fetch(`${API_URL}/api/projects`).then((r) => r.json()).then(setProjects).catch(() => {});
+    fetch(`${API_URL}/api/experiences`).then((r) => r.json()).then(setExperiences).catch(() => {});
     const storedIcons = localStorage.getItem('portfolio_admin_custom_icons');
-
-    if (storedProjects) {
-      setProjects(JSON.parse(storedProjects));
-    } else {
-      fetch('/data/projects.json').then((r) => r.json()).then(setProjects);
-    }
-
-    if (storedExperiences) {
-      setExperiences(JSON.parse(storedExperiences));
-    } else {
-      fetch('/data/experiences.json').then((r) => r.json()).then(setExperiences);
-    }
-
-    if (storedIcons) {
-      setCustomIcons(JSON.parse(storedIcons));
-    }
+    if (storedIcons) setCustomIcons(JSON.parse(storedIcons));
   }, [authenticated]);
-
-  function persistProjects(data) {
-    setProjects(data);
-    localStorage.setItem('portfolio_admin_projects', JSON.stringify(data));
-    flashSaved();
-  }
-
-  function persistExperiences(data) {
-    setExperiences(data);
-    localStorage.setItem('portfolio_admin_experiences', JSON.stringify(data));
-    flashSaved();
-  }
 
   function flashSaved() {
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
 
-  function handleLogin(e) {
+  function handleAuthError() {
+    sessionStorage.removeItem('adminToken');
+    setToken('');
+    setAuthenticated(false);
+  }
+
+  async function apiCall(path, method, body) {
+    const res = await fetch(`${API_URL}${path}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+    if (res.status === 401 || res.status === 403) {
+      handleAuthError();
+      throw new Error('Session expired');
+    }
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+    return res.json();
+  }
+
+  async function handleLogin(e) {
     e.preventDefault();
-    if (passwordInput === ADMIN_PASSWORD) {
-      setAuthenticated(true);
-      setPasswordError(false);
-    } else {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        sessionStorage.setItem('adminToken', data.token);
+        setToken(data.token);
+        setAuthenticated(true);
+        setPasswordError(false);
+      } else {
+        setPasswordError(true);
+      }
+    } catch {
       setPasswordError(true);
     }
   }
 
+  function handleLogout() {
+    sessionStorage.removeItem('adminToken');
+    setToken('');
+    setAuthenticated(false);
+  }
+
   // ---- Projects CRUD ----
-  function handleSaveProject(form) {
-    const idx = projects.findIndex((p) => p.id === form.id);
-    const updated = idx >= 0
-      ? projects.map((p) => (p.id === form.id ? form : p))
-      : [...projects, form];
-    persistProjects(updated);
-    setProjectDialogOpen(false);
+  async function handleSaveProject(form) {
+    setSaving(true);
+    setApiError('');
+    try {
+      if (editingProject) {
+        const updated = await apiCall(`/api/projects/${form.id}`, 'PUT', form);
+        setProjects((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+      } else {
+        // Strip the client-generated temp id; backend assigns a real one
+        const { id: _tempId, ...body } = form;
+        const created = await apiCall('/api/projects', 'POST', body);
+        setProjects((prev) => [created, ...prev]);
+      }
+      flashSaved();
+      setProjectDialogOpen(false);
+    } catch (err) {
+      setApiError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function handleDeleteProject(id) {
+  async function handleDeleteProject(id) {
     if (!window.confirm('Delete this project?')) return;
-    persistProjects(projects.filter((p) => p.id !== id));
+    try {
+      await apiCall(`/api/projects/${id}`, 'DELETE');
+      setProjects((prev) => prev.filter((p) => p.id !== id));
+      flashSaved();
+    } catch (err) {
+      setApiError(err.message);
+    }
   }
 
-  function moveProject(index, dir) {
+  async function moveProject(index, dir) {
     const arr = [...projects];
     const target = index + dir;
     if (target < 0 || target >= arr.length) return;
     [arr[index], arr[target]] = [arr[target], arr[index]];
-    persistProjects(arr);
+    setProjects(arr); // optimistic update
+    try {
+      await apiCall('/api/projects/reorder', 'PUT', { orderedIds: arr.map((p) => p.id) });
+      flashSaved();
+    } catch (err) {
+      setApiError(err.message);
+    }
   }
 
   // ---- Experiences CRUD ----
-  function handleSaveExperience(form) {
-    const idx = experiences.findIndex((e) => e.id === form.id);
-    const updated = idx >= 0
-      ? experiences.map((e) => (e.id === form.id ? form : e))
-      : [...experiences, form];
-    persistExperiences(updated);
-    setExperienceDialogOpen(false);
+  async function handleSaveExperience(form) {
+    setSaving(true);
+    setApiError('');
+    try {
+      if (editingExperience) {
+        const updated = await apiCall(`/api/experiences/${form.id}`, 'PUT', form);
+        setExperiences((prev) => prev.map((e) => (e.id === updated.id ? updated : e)));
+      } else {
+        const { id: _tempId, ...body } = form;
+        const created = await apiCall('/api/experiences', 'POST', body);
+        setExperiences((prev) => [created, ...prev]);
+      }
+      flashSaved();
+      setExperienceDialogOpen(false);
+    } catch (err) {
+      setApiError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function handleDeleteExperience(id) {
+  async function handleDeleteExperience(id) {
     if (!window.confirm('Delete this experience?')) return;
-    persistExperiences(experiences.filter((e) => e.id !== id));
+    try {
+      await apiCall(`/api/experiences/${id}`, 'DELETE');
+      setExperiences((prev) => prev.filter((e) => e.id !== id));
+      flashSaved();
+    } catch (err) {
+      setApiError(err.message);
+    }
   }
 
-  function moveExperience(index, dir) {
+  async function moveExperience(index, dir) {
     const arr = [...experiences];
     const target = index + dir;
     if (target < 0 || target >= arr.length) return;
     [arr[index], arr[target]] = [arr[target], arr[index]];
-    persistExperiences(arr);
+    setExperiences(arr); // optimistic update
+    try {
+      await apiCall('/api/experiences/reorder', 'PUT', { orderedIds: arr.map((e) => e.id) });
+      flashSaved();
+    } catch (err) {
+      setApiError(err.message);
+    }
   }
 
-  // ---- Icons ----
+  // ---- Icons (kept in localStorage — base64 blobs don't need backend) ----
   function handleUploadIcon(icon) {
     const updated = [...customIcons, icon];
     setCustomIcons(updated);
     localStorage.setItem('portfolio_admin_custom_icons', JSON.stringify(updated));
   }
 
-  // ---- Reset to JSON ----
-  function handleReset(type) {
-    if (!window.confirm(`Reset ${type} to the JSON file? Any unsaved admin changes will be lost.`)) return;
-    if (type === 'projects') {
-      localStorage.removeItem('portfolio_admin_projects');
-      fetch('/data/projects.json').then((r) => r.json()).then(setProjects);
-    } else {
-      localStorage.removeItem('portfolio_admin_experiences');
-      fetch('/data/experiences.json').then((r) => r.json()).then(setExperiences);
+  // ---- Reload from server ----
+  async function handleReset(type) {
+    if (!window.confirm(`Reload ${type} from the server?`)) return;
+    try {
+      if (type === 'projects') {
+        const data = await fetch(`${API_URL}/api/projects`).then((r) => r.json());
+        setProjects(data);
+      } else {
+        const data = await fetch(`${API_URL}/api/experiences`).then((r) => r.json());
+        setExperiences(data);
+      }
+    } catch (err) {
+      setApiError(err.message);
     }
-    flashSaved();
   }
 
   // ---------- Password Gate ----------
@@ -821,7 +899,12 @@ const AdminPanel = () => {
           Admin Panel
           {saved && (
             <Typography component="span" sx={{ ml: 2, color: COLORS.success, fontSize: '0.78rem', fontWeight: 400 }}>
-              ✓ Saved to browser
+              ✓ Saved
+            </Typography>
+          )}
+          {apiError && (
+            <Typography component="span" sx={{ ml: 2, color: COLORS.danger, fontSize: '0.78rem', fontWeight: 400 }}>
+              ✗ {apiError}
             </Typography>
           )}
         </Typography>
@@ -849,7 +932,7 @@ const AdminPanel = () => {
             </Button>
           </Tooltip>
           <Tooltip title="Logout">
-            <IconButton size="small" onClick={() => setAuthenticated(false)} sx={{ color: COLORS.textMuted, ml: 0.5 }}>
+            <IconButton size="small" onClick={handleLogout} sx={{ color: COLORS.textMuted, ml: 0.5 }}>
               <LogoutIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -882,7 +965,7 @@ const AdminPanel = () => {
                 First project is featured (full-width). Rest are displayed in a grid.
               </Typography>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <Tooltip title="Reset to JSON file">
+                <Tooltip title="Reload from server">
                   <Button
                     size="small"
                     variant="outlined"
@@ -890,7 +973,7 @@ const AdminPanel = () => {
                     onClick={() => handleReset('projects')}
                     sx={{ ...btnSx, fontSize: '0.75rem' }}
                   >
-                    Reset
+                    Reload
                   </Button>
                 </Tooltip>
                 <Button
@@ -934,7 +1017,7 @@ const AdminPanel = () => {
                 Experiences are displayed in order from top to bottom.
               </Typography>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <Tooltip title="Reset to JSON file">
+                <Tooltip title="Reload from server">
                   <Button
                     size="small"
                     variant="outlined"
@@ -942,7 +1025,7 @@ const AdminPanel = () => {
                     onClick={() => handleReset('experiences')}
                     sx={{ ...btnSx, fontSize: '0.75rem' }}
                   >
-                    Reset
+                    Reload
                   </Button>
                 </Tooltip>
                 <Button
@@ -977,23 +1060,6 @@ const AdminPanel = () => {
             )}
           </Box>
         )}
-
-        {/* Export hint */}
-        <Box
-          sx={{
-            mt: 4,
-            p: 2,
-            borderRadius: 2,
-            border: `1px solid ${COLORS.border}`,
-            background: COLORS.surface,
-          }}
-        >
-          <Typography sx={{ color: COLORS.textMuted, fontSize: '0.8rem', lineHeight: 1.7 }}>
-            <strong style={{ color: COLORS.text }}>How to persist changes:</strong> Changes are saved to your browser's localStorage and will appear immediately.
-            To make them permanent, click "Export JSON" above, then replace <code style={{ color: COLORS.accent }}>public/data/projects.json</code> or <code style={{ color: COLORS.accent }}>public/data/experiences.json</code> with the downloaded file and redeploy.
-            Uploaded images are embedded as base64 in the JSON — for production, add them to <code style={{ color: COLORS.accent }}>public/images/</code> and use the path instead.
-          </Typography>
-        </Box>
       </Box>
 
       {/* Dialogs */}
@@ -1004,12 +1070,14 @@ const AdminPanel = () => {
         onUploadIcon={handleUploadIcon}
         onSave={handleSaveProject}
         onClose={() => setProjectDialogOpen(false)}
+        saving={saving}
       />
       <ExperienceDialog
         open={experienceDialogOpen}
         experience={editingExperience}
         onSave={handleSaveExperience}
         onClose={() => setExperienceDialogOpen(false)}
+        saving={saving}
       />
     </Box>
   );
