@@ -60,10 +60,10 @@ const Scramble = ({ darkMode }) => {
         } else if (s[0] === 's') {
           setAnagram(s[1]);
           StartGame();
+        } else if (s[0] === 'w') {
+          wrongGuess();
         } else if (s[0] === 'p') {
-          const t = 100 * parseInt(s[1], 10);
-          if (t === 0) wrongGuess();
-          setMaxMyPts(t);
+          setMaxMyPts(100 * parseInt(s[1], 10));
         } else if (s[0] === 'o') {
           const t = 100 * parseInt(s[1], 10);
           setMaxOppPts(t);
@@ -72,6 +72,7 @@ const Scramble = ({ darkMode }) => {
           else if (s[1] === 'o') { setWinner(1); gameState.current = 5; }
           else if (s[1] === 'd') { setWinner(2); gameState.current = 5; }
           else if (s[1] === 'x') { gameState.current = 4; }
+          SetRerender((r) => !r);
           setTimeout(() => resetGame(), 5000);
         }
       }
@@ -243,12 +244,12 @@ const Scramble = ({ darkMode }) => {
 
   // ── Score display component ──────────────────
   const ScoreDisplay = ({ label, pts, animCtrl, color }) => (
-    <Box sx={{ textAlign: 'center' }}>
+    <Box sx={{ textAlign: 'center', width: 80, flexShrink: 0 }}>
       <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: 1 }}>
         {label}
       </Typography>
       <motion.div animate={animCtrl}>
-        <Typography variant="h4" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+        <Typography variant="h4" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontVariantNumeric: 'tabular-nums' }}>
           {pts}
         </Typography>
       </motion.div>
@@ -375,9 +376,9 @@ const Scramble = ({ darkMode }) => {
                       />
                     </Box>
 
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '80px 1fr 80px', gap: 1, mb: 3, alignItems: 'start' }}>
                       <ScoreDisplay label="You" pts={myPts} animCtrl={pointAddAnim} />
-                      <Box sx={{ flex: 1, textAlign: 'center', px: 2 }}>
+                      <Box sx={{ textAlign: 'center', minWidth: 0 }}>
                         <Typography
                           variant="h3"
                           sx={{
