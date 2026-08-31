@@ -14,20 +14,6 @@
     ]
   },
   {
-    "id": "b9",
-    "title": "strategyTester",
-    "images": [
-      "/images/icons/c++.png",
-      "/images/icons/python.png"
-    ],
-    "description": "A high-performance XAUUSD session-breakout backtesting system combining a C++ tick simulator with Python machine learning, processing over 210 million ticks with FTMO-compliant risk management.",
-    "detailImage": {},
-    "paragraphs": [
-      "The C++ tick simulator uses 32-thread OpenMP parallelism to replay 210 million historical ticks at near-native speed, simulating session breakout entries with configurable stop-loss, take-profit, and trailing logic. Results are exported for ML analysis, where Python models perform rolling validation to identify optimal parameter windows.",
-      "The system enforces FTMO prop-firm risk management rules including daily drawdown limits and maximum loss thresholds. This project combines low-latency systems programming with quantitative analysis, demonstrating proficiency in multithreaded C++, data pipelines, and applied machine learning."
-    ]
-  },
-  {
     "id": "b8",
     "title": "TradingAiForge",
     "images": [
