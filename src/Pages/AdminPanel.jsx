@@ -32,6 +32,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || '';
 
 const KNOWN_ICONS = [
   { name: 'React', path: '/images/icons/react.svg' },

@@ -809,12 +809,11 @@ const Dashboard = ({ token }) => {
 const TradingDashboard = () => {
   const [token, setToken] = useState(() => sessionStorage.getItem('dashboardToken'));
 
-  // Bypassing login for testing
-  // if (!token) {
-  //   return <PasswordGate onAuth={setToken} />;
-  // }
+  if (!token) {
+    return <PasswordGate onAuth={setToken} />;
+  }
 
-  return <Dashboard token={token || 'mock-dev-token'} />;
+  return <Dashboard token={token} />;
 };
 
 export default TradingDashboard;
