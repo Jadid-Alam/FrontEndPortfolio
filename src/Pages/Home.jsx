@@ -9,8 +9,8 @@ import { motion } from 'framer-motion';
 import myImage from '../images/photos/LeetcodeProfile.png';
 
 const techStack = [
-  'React', 'TypeScript', 'Rust', 'C++', 'Python', 'Java',
-  'JavaScript', 'Django', 'AWS', 'Node.js',
+  'React', 'TypeScript', 'Rust', 'C++', 'C', 'Python', 'Java',
+  'JavaScript', 'Django', 'FastAPI', 'Docker', 'Node.js',
 ];
 
 const Home = ({ darkMode }) => {
@@ -69,7 +69,7 @@ const Home = ({ darkMode }) => {
             }}
           >
             Full-stack developer building high-performance systems in Rust, C++, and React.
-            Currently studying Computer Science at Queen Mary University of London.
+            MSci Computer Science at Queen Mary University of London. Previously a Software Engineer Intern at Viator (Tripadvisor).
           </Typography>
         </motion.div>
 
@@ -240,7 +240,7 @@ const Home = ({ darkMode }) => {
               </Typography>
               <Chip label="Computer Science" size="small" sx={{ mb: 1.5, background: `${theme.palette.primary.main}15`, color: theme.palette.primary.light, border: 'none', fontSize: '0.75rem' }} />
               <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.7 }}>
-                Currently studying Computer Science, exploring programming languages, data structures, and honing my skills as a programmer.
+                Studying MSci Computer Science with a predicted First (GPA 4.0). Modules include OOP, Databases, Web Development, Algorithms & Data Structures, and Big Data processing with Hadoop and Spark.
                 My passion for Computer Science began in secondary school, but I initially pursued Engineering due to not taking the subject at GCSE.
               </Typography>
             </Box>

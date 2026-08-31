@@ -1,7 +1,35 @@
 [
   {
+    "id": "b10",
+    "title": "Node.js Timer Subsystem Optimisation",
+    "images": [
+      "/images/icons/c++.png",
+      "/images/icons/javascript.svg"
+    ],
+    "description": "Implemented four alternative data structures in C to replace the min-heap in Node.js's libuv timer subsystem, with a full benchmarking suite comparing CPU overhead, memory usage, and timer accuracy.",
+    "detailImage": {},
+    "paragraphs": [
+      "Built C-level patches modifying core libuv source files (heap-inl.h, timer.c, loop.c) to integrate a Doubly Linked List, AVL Tree, Timing Wheel, and Hierarchical Timing Wheel as alternative timer backends. Each implementation was tested against the original min-heap under realistic workloads to evaluate performance trade-offs.",
+      "Developed a comprehensive benchmarking framework that measures CPU cycles, memory allocation, and timer firing accuracy across thousands of concurrent timers. The project demonstrates low-level systems programming skills, including manual memory management, pointer manipulation, and integration with an existing open-source C codebase."
+    ]
+  },
+  {
+    "id": "b9",
+    "title": "strategyTester",
+    "images": [
+      "/images/icons/c++.png",
+      "/images/icons/python.png"
+    ],
+    "description": "A high-performance XAUUSD session-breakout backtesting system combining a C++ tick simulator with Python machine learning, processing over 210 million ticks with FTMO-compliant risk management.",
+    "detailImage": {},
+    "paragraphs": [
+      "The C++ tick simulator uses 32-thread OpenMP parallelism to replay 210 million historical ticks at near-native speed, simulating session breakout entries with configurable stop-loss, take-profit, and trailing logic. Results are exported for ML analysis, where Python models perform rolling validation to identify optimal parameter windows.",
+      "The system enforces FTMO prop-firm risk management rules including daily drawdown limits and maximum loss thresholds. This project combines low-latency systems programming with quantitative analysis, demonstrating proficiency in multithreaded C++, data pipelines, and applied machine learning."
+    ]
+  },
+  {
     "id": "b8",
-    "title": "TradingAiForge (Work In Progress)",
+    "title": "TradingAiForge",
     "images": [
       "/images/icons/react.svg",
       "/images/icons/css.svg",
@@ -9,26 +37,40 @@
       "/images/icons/rust.svg",
       "/images/icons/c++.png"
     ],
-    "description": "TradingAIForge is a collaborative group project I'm currently developing that enables users to build personalized trading bots based on their unique trading styles. The goal is to deliver an intuitive experience focused on ease of customization, with a target of achieving over 80% positive user feedback.",
+    "description": "A collaborative desktop application that enables users to build personalised trading bots through an intuitive point-and-click interface, with TensorFlow-powered model training and optimised C++ execution.",
     "detailImage": {
       "src": "/images/photos/TradingAiForgeImg.png",
       "alt": "TradingAiForge Image",
       "caption": "TradingAiForge Image"
     },
     "paragraphs": [
-      "The app is built using React and TypeScript for the frontend and leverages Tauri v2 for creating a lightweight, cross-platform desktop application. On the backend, it integrates both Python and C++. Python's Tensorflow library handles the machine learning logic, while C++ is used for performance-critical bot execution, including compatibility with MetaTrader 5 for real-time trading.",
-      "Users can define entry and exit conditions through a simple UI. The system uses these inputs to train a model using TensorFlow, which learns how and when to trade. The resulting bot is then exported as optimized C++ code, ensuring fast execution in live trading environments. The app also supports loading and editing previous bot configurations for continuous improvement."
+      "Built using React and TypeScript for the frontend with Tauri v2 for a lightweight cross-platform desktop shell. The backend integrates Python's TensorFlow for machine learning model training and C++ for performance-critical bot execution, including MetaTrader 5 compatibility for live trading.",
+      "Users define entry and exit conditions through the UI, which are used to train a model that learns trading patterns. The trained bot is exported as optimised C++ code for fast execution in live environments. The app supports loading, editing, and iterating on previous bot configurations."
+    ]
+  },
+  {
+    "id": "b11",
+    "title": "FizzyQuizzy",
+    "images": [
+      "/images/icons/react.svg",
+      "/images/icons/javascript.svg"
+    ],
+    "description": "A real-time multiplayer trivia game with an authoritative server architecture, built with React, TypeScript, Node.js, Socket.IO, and Docker.",
+    "detailImage": {},
+    "paragraphs": [
+      "Developed a 2D real-time trivia game where players compete in live rounds with instant score updates. The frontend is built with React and Vite for a fast, responsive UI, while the backend uses a TypeScript Node.js server with Socket.IO for low-latency WebSocket communication.",
+      "The server uses an authoritative architecture to prevent cheating, validating all answers and game state server-side. The entire stack is containerised with Docker for consistent deployment on a VPS, supporting multiple concurrent game rooms."
     ]
   },
   {
     "id": "b7",
     "title": "VPS Server Hosting",
     "images": [],
-    "description": "I got a VPS to gain hands-on experience with server management and to host both my personal portfolio and the backend for an online game project. It also allowed me to move away from platforms like Vercel and have full control over deployment and performance.",
+    "description": "Self-managed Linux VPS hosting my portfolio, game backends, and web applications with NGINX, hardened SSH, and firewall configuration, maintaining 99.9% uptime.",
     "detailImage": {},
     "paragraphs": [
-      "I configured the VPS from scratch, setting up a secure Linux environment. This included using UFW for firewall management, setting up SSH access with key-based authentication, and disabling password login to enhance security.",
-      "For site hosting, I used NGINX as a reverse proxy and configured DNS records to point to my domain. The server has been optimized to handle 50+ concurrent users and has maintained 99.9% uptime since launch."
+      "Configured a VPS from scratch with a secure Linux environment, including UFW firewall rules, SSH key-based authentication with password login disabled, and SSL certificate management. NGINX serves as a reverse proxy for multiple applications and static sites.",
+      "The server hosts my portfolio website, the multiplayer game backend, and several freelance projects. It has been optimised to handle 50+ concurrent users and has maintained 99.9% uptime since launch, giving me full control over deployment and performance."
     ]
   },
   {
@@ -38,15 +80,15 @@
       "/images/icons/rust.svg",
       "/images/icons/aws.svg"
     ],
-    "description": "Developed a real-time multiplayer game backend in Rust, leveraging WebSockets for ultra-low latency. Hosted on AWS, ensuring fast and smooth gameplay.",
+    "description": "A real-time multiplayer game backend built in Rust with WebSockets, achieving 40% faster response times than the original Python prototype.",
     "detailImage": {
       "src": "/images/icons/aws.png",
       "alt": "AWS Server Status Image",
       "caption": "AWS Server Status Image"
     },
     "paragraphs": [
-      "Originally planned in Python, I chose Rust for its high speed, reducing response times by 40%, crucial for real-time interactions. The backend handles matchmaking, game logic, and seamless synchronization with the front end, ensuring a fluid multiplayer experience.",
-      "This project was a deep dive into low-level programming, requiring adaptation from OOP to Rust's ownership model. I overcame the learning curve through extensive research, leveraging Rust's documentation, Stack Overflow, and Discord communities. The result was a highly scalable backend with efficient word scrambling logic and support for up to 8 concurrent players on AWS Free Tier."
+      "Originally prototyped in Python, I rebuilt the backend in Rust for its performance characteristics, reducing response times by 40%. The server handles matchmaking, game logic, and real-time synchronisation with the React frontend via WebSockets.",
+      "This project required adapting from OOP to Rust's ownership model. The result is a highly scalable backend with efficient word scrambling logic, support for up to 8 concurrent players, and deployment on a VPS with NGINX reverse proxying."
     ]
   },
   {
@@ -60,15 +102,15 @@
       "/images/icons/mysql.svg",
       "/images/icons/python.png"
     ],
-    "description": "Built a full-stack expense management system using React.js, Django, and MySQL to replace inefficient Excel-based expense tracking.",
+    "description": "A full-stack expense management system built with React.js, Django, and MySQL, replacing manual Excel-based tracking and reducing processing time by 70%.",
     "detailImage": {
       "src": "/images/photos/fdm-expense-app.png",
       "alt": "FDM Expense App Page Image",
       "caption": "FDM Expense App Page Image"
     },
     "paragraphs": [
-      "The system streamlined financial workflows by introducing automated form validation, manager approvals, and real-time claim tracking, reducing processing time by 70%. Employees now submit expenses through a structured system, eliminating errors and manual verification delays.",
-      "This was a collaborative project, where I played a key role in ensuring code consistency and best practices. When faced with teammates not following industry standards, I mediated discussions, explained the importance of structured development, and successfully encouraged best practices—leading to a more maintainable and scalable codebase."
+      "Led backend development in a 6-person Agile team, owning the API and database architecture. The system introduced automated form validation, manager approval workflows, and real-time claim tracking, eliminating errors and manual verification delays.",
+      "I played a key role in ensuring code consistency and best practices across the team. When faced with inconsistent coding standards, I facilitated discussions on structured development, leading to a more maintainable and scalable codebase."
     ]
   },
   {
@@ -79,52 +121,34 @@
       "/images/icons/javascript.svg",
       "/images/icons/rust.svg"
     ],
-    "description": "Developed a personal portfolio website showcasing projects, leveraging Django & MongoDB, later transitioning to a Rust backend for performance improvements.",
+    "description": "My personal portfolio website built with React 19, Vite, Material UI, Framer Motion, and Tailwind CSS, featuring dark mode, an admin CMS, a multiplayer mini-game, and a hidden trading dashboard.",
     "detailImage": {
       "src": "/images/photos/portfolioImage.PNG",
       "alt": "Portfolio Image",
       "caption": "Portfolio Page Image"
     },
     "paragraphs": [
-      "This portfolio highlights my technical expertise and adaptability, featuring a modern UI with dark mode and dynamic content updates. Initially built with Django and MongoDB for scalability, I later optimized performance by switching to Rust, ensuring faster response times and enhanced backend efficiency.",
-      "I followed an agile development approach, testing features as I built them to ensure seamless functionality. The site has attracted 50+ visitors, demonstrating its effectiveness as a professional showcase of my work."
-    ]
-  },
-  {
-    "id": "b3",
-    "title": "LSC Homework Portal",
-    "images": [
-      "/images/icons/html.svg",
-      "/images/icons/css.svg",
-      "/images/icons/javascript.svg",
-      "/images/icons/php.svg"
-    ],
-    "description": "Developed a custom homework management system for students and teachers of LSC (London Science College) using CSS, PHP on WordPress and Wix.",
-    "detailImage": {
-      "src": "/images/photos/hwPortalGif.gif",
-      "alt": "LSC Homework Portal Gif",
-      "caption": "LSC Homework Portal Gif"
-    },
-    "paragraphs": [
-      "The portal allowed teachers to assign homework and track student submissions via an interactive calendar. Despite Wix's restrictive environment and outdated documentation, I found creative solutions, testing multiple methodologies until the system functioned optimally.",
-      "Through iterative testing with students, teachers, and the client, I ensured an intuitive and resilient platform. The system is easy to use, hard to break, and enhances academic accountability, benefiting over 100+ students."
+      "This portfolio showcases my work with a modern UI featuring animated transitions, dark/light mode, and dynamic content managed through a built-in admin CMS panel. The site includes a hidden trading dashboard with live chart visualisation and a multiplayer word scramble mini-game powered by a Rust WebSocket backend.",
+      "Built with React 19 and Vite for fast builds, styled with Material UI and Tailwind CSS, and deployed to a self-hosted VPS via rsync. The site has attracted 50+ visitors and serves as a professional showcase of my technical range."
     ]
   },
   {
     "id": "b2",
     "title": "LSC Invoice Builder",
     "images": [
-      "/images/icons/java.svg"
+      "/images/icons/java.svg",
+      "/images/icons/react.svg",
+      "/images/icons/python.png"
     ],
-    "description": "Developed an automated invoice generation tool using JavaFX, optimizing billing processes and reducing manual data entry by 60%.",
+    "description": "An invoice generation tool originally built in JavaFX, then rebuilt as a React.js + FastAPI + MariaDB web app, reducing manual entry by 80% for 500+ customers.",
     "detailImage": {
       "src": "/images/photos/InoviceBuilderProjectGif.gif",
       "alt": "Invoice builder Gif",
       "caption": "LSC Invoice builder Gif"
     },
     "paragraphs": [
-      "Faced with expensive paid APIs for Word document generation, I engineered a custom solution using base APIs, maintaining full functionality without extra costs. This ensured seamless invoice creation, complete with auto-filling features that assume default values when fields are left blank.",
-      "Making the application Mac-compatible was another major challenge. After hours of research, I successfully optimized it for cross-platform usage, ensuring usability across different operating systems. The final product significantly reduced workload and improved financial accuracy for over 500 recurring customers."
+      "Engineered a custom PDF generation solution to avoid costly third-party APIs, with auto-fill features that assume default values for common fields. The JavaFX version was later rebuilt as a full-stack web application with React.js, FastAPI, and MariaDB, hosted on a VPS for remote access.",
+      "The web rebuild introduced real-time database lookups, a modern interface, and significantly improved the billing workflow. The system serves over 500 recurring customers and has reduced manual data entry by 80%, making it a core operational tool for the business."
     ]
   },
   {
@@ -133,15 +157,15 @@
     "images": [
       "/images/icons/java.svg"
     ],
-    "description": "Designed a Java Swing-based betting simulation game, featuring an interactive race experience with an in-game currency system.",
+    "description": "A Java Swing-based betting simulation game with smooth pixel-by-pixel animation, an in-game currency system, and over 100 players.",
     "detailImage": {
       "src": "/images/photos/HorseRacingGif.gif",
       "alt": "Horse Racing Simulator Gif",
       "caption": "Horse Racing Simulator Gif"
     },
     "paragraphs": [
-      "Swing's poor animation handling posed a challenge, but I developed a manual frame update system that emulated smooth movement pixel by pixel, creating a realistic race simulation. Players could place bets and strategize based on race conditions, adding a layer of engagement.",
-      "The game attracted over 100+ players, demonstrating strong user retention and interactivity. By implementing an in-game economy, players had an incentive to continue playing, increasing overall engagement."
+      "Developed a manual frame update system to overcome Swing's limited animation support, creating smooth pixel-by-pixel race movement. Players place bets based on race conditions, with an in-game economy that incentivises continued play.",
+      "The game attracted over 100 players with strong retention, demonstrating effective game design and user engagement. Built entirely in Java Swing with custom rendering logic."
     ]
   }
 ]
